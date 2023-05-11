@@ -5,7 +5,7 @@
 - [X] Simple C++ project
 - [X] Draw Pixel
 - [X] Draw Line
-- [ ] Draw Triangle
+- [X] Draw Triangle
 - [ ] Draw Filled Triangle
 - [ ] ImGUI interface to change Triangle
 - [ ] Draw Cube (Orthographic Projection)

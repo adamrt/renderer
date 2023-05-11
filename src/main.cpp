@@ -49,6 +49,8 @@ auto main() -> int {
         // Render
         window.clear(Colors::Black);
         renderer.draw_line(0, 0, WindowWidth, WindowHeight, Colors::Green);
+        renderer.draw_triangle(0, 0, WindowWidth, WindowHeight / 2, WindowWidth / 3, WindowHeight,
+                               Colors::Red);
         window.render();
     }
 
