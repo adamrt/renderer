@@ -16,6 +16,7 @@ add_compile_options(-pedantic)
 
 add_executable(renderer
   src/main.cpp
+  src/color.cpp
   src/renderer.cpp
   src/window.cpp)
 target_link_libraries(renderer m SDL2)

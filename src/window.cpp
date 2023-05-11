@@ -41,15 +41,15 @@ void Window::render() {
     SDL_RenderPresent(m_renderer);
 }
 
-void Window::clear(Color color) {
+void Window::clear(uint32_t color) {
     for (int i = 0; i < get_size(); i++) {
-        m_color_buffer[i] = color.sdl();
+        m_color_buffer[i] = color;
     }
 }
 
-void Window::set_pixel(int x, int y, Color color) {
+void Window::set_pixel(int x, int y, uint32_t color) {
     if (x < 0 || x >= m_width || y < 0 || y >= m_height) {
         return;
     }
-    m_color_buffer[(m_width * y) + x] = color.sdl();
+    m_color_buffer[(m_width * y) + x] = color;
 }

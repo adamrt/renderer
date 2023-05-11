@@ -2,19 +2,12 @@
 
 #include <cstdint>
 
-struct Color {
-    Color(int r, int g, int b, int a) : r(r), g(g), b(b), a(a){};
-    Color(int r, int g, int b) : r(r), g(g), b(b), a((uint8_t)255){};
-
-    [[nodiscard]] auto sdl() const -> uint32_t { return (r << 24) | (g << 16) | (b << 8) | a; }
-
-    uint8_t r, g, b, a;
-};
+auto color_rgb(int r, int g, int b) -> uint32_t;
 
 namespace Colors {
-const auto Black = Color(0, 0, 0);
-const auto White = Color(255, 255, 255);
-const auto Red = Color(255, 0, 0);
-const auto Green = Color(0, 255, 0);
-const auto Blue = Color(0, 0, 255);
+const uint32_t Black = color_rgb(0, 0, 0);
+const uint32_t White = color_rgb(255, 255, 255);
+const uint32_t Red = color_rgb(255, 0, 0);
+const uint32_t Green = color_rgb(0, 255, 0);
+const uint32_t Blue = color_rgb(0, 0, 255);
 } // namespace Colors

@@ -12,8 +12,8 @@ class Window {
     ~Window();
 
     auto render() -> void;
-    auto clear(Color color) -> void;
-    auto set_pixel(int x, int y, Color color) -> void;
+    auto clear(uint32_t color) -> void;
+    auto set_pixel(int x, int y, uint32_t color) -> void;
 
     [[nodiscard]] auto get_width() const -> int { return m_width; }
     [[nodiscard]] auto get_height() const -> int { return m_height; }
