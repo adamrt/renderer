@@ -2,6 +2,7 @@
 #include <cstdio>
 
 #include "color.h"
+#include "renderer.h"
 #include "window.h"
 
 constexpr int FPS = 30;
@@ -12,6 +13,7 @@ constexpr int WindowHeight = 400;
 
 auto main() -> int {
     auto window = Window(WindowWidth, WindowHeight);
+    auto renderer = Renderer(window);
 
     auto is_running = true;
     auto previous_frame_time = SDL_GetTicks();
@@ -46,7 +48,7 @@ auto main() -> int {
 
         // Render
         window.clear(Colors::Black);
-        window.set_pixel(WindowWidth / 2, WindowHeight / 2, Colors::Red);
+        renderer.draw_line(0, 0, WindowWidth, WindowHeight, Colors::Green);
         window.render();
     }
 
