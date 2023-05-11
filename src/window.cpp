@@ -2,6 +2,7 @@
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_video.h>
 
+#include "color.h"
 #include "imgui.h"
 #include "imgui_impl_sdl2.h"
 #include "imgui_impl_sdlrenderer.h"
@@ -27,7 +28,7 @@ Window::Window(int width, int height) : m_width(width), m_height(height) {
         exit(EXIT_FAILURE);
     }
 
-    m_texture = SDL_CreateTexture(m_renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING,
+    m_texture = SDL_CreateTexture(m_renderer, SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_STREAMING,
                                   m_width, m_height);
 
     m_color_buffer.resize(get_size());
@@ -63,20 +64,8 @@ void Window::render() {
     ImGui::NewFrame();
 
     {
-        static float f = 0.0;
-        static int counter = 0;
-
         ImGui::Begin("Hello, world!");
-        ImGui::Text("This is some useful text.");
-        ImGui::SliderFloat("float", &f, 0.0, 1.0);
         ImGui::ColorEdit3("clear color", (float *)&m_clear_color);
-
-        if (ImGui::Button("Button")) {
-            m_counter++;
-        }
-        ImGui::SameLine();
-        ImGui::Text("counter = %d", counter);
-
         ImGui::Text("Average %.3f ms/frame (%.1f FPS)", 1000.0 / m_io->Framerate, m_io->Framerate);
         ImGui::End();
     }
@@ -94,9 +83,9 @@ void Window::render() {
     SDL_RenderPresent(m_renderer);
 }
 
-void Window::clear(uint32_t color) {
+void Window::clear() {
     for (int i = 0; i < get_size(); i++) {
-        m_color_buffer[i] = color;
+        m_color_buffer[i] = ImGui::ColorConvertFloat4ToU32(m_clear_color);
     }
 }
 

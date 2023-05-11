@@ -13,7 +13,7 @@ class Window {
     ~Window();
 
     auto render() -> void;
-    auto clear(uint32_t color) -> void;
+    auto clear() -> void;
     auto set_pixel(int x, int y, uint32_t color) -> void;
 
     [[nodiscard]] auto get_width() const -> int { return m_width; }

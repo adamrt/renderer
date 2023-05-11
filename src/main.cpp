@@ -12,8 +12,8 @@
 constexpr int FPS = 60;
 constexpr int FrameTargetTime = (1000 / FPS);
 
-constexpr int WindowWidth = 1024 * 2;
-constexpr int WindowHeight = 768 * 2;
+constexpr int WindowWidth = 1024;
+constexpr int WindowHeight = 768;
 
 auto main() -> int {
     auto window = Window(WindowWidth, WindowHeight);
@@ -52,7 +52,7 @@ auto main() -> int {
         previous_frame_time = SDL_GetTicks();
 
         // Render
-        window.clear(Colors::Black);
+        window.clear();
         renderer.draw_line(0, 0, WindowWidth, WindowHeight, Colors::Green);
         renderer.draw_filled_triangle(WindowWidth, 0, WindowWidth / 2, WindowHeight, 0,
                                       WindowHeight / 2, Colors::White);

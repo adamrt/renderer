@@ -1,3 +1,10 @@
 #include "color.h"
 
-auto color_rgb(int r, int g, int b) -> uint32_t { return (r << 24) | (g << 16) | (b << 8) | 255; }
+#include "stdint.h"
+// color_new returns a uint32_t for individual components.
+//
+// The returned format is 0xAABBGGRR.
+// This matches ImGUI's ImVec4 and SDL2's SDL_PIXELFORMAT_ABGR8888.
+auto color_new(int r, int g, int b, int a) -> uint32_t {
+    return (a << 24) | (b << 16) | (g << 8) | r;
+}
