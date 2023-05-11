@@ -5,11 +5,15 @@
 #include "renderer.h"
 #include "window.h"
 
-constexpr int FPS = 30;
+#include "imgui.h"
+#include "imgui_impl_sdl2.h"
+#include "imgui_impl_sdlrenderer.h"
+
+constexpr int FPS = 60;
 constexpr int FrameTargetTime = (1000 / FPS);
 
-constexpr int WindowWidth = 400;
-constexpr int WindowHeight = 400;
+constexpr int WindowWidth = 1024 * 2;
+constexpr int WindowHeight = 768 * 2;
 
 auto main() -> int {
     auto window = Window(WindowWidth, WindowHeight);
@@ -23,6 +27,7 @@ auto main() -> int {
         // Process Input
         SDL_Event event;
         while (SDL_PollEvent(&event) != 0) {
+            ImGui_ImplSDL2_ProcessEvent(&event);
             switch (event.type) {
             case SDL_QUIT:
                 is_running = false;

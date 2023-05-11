@@ -7,6 +7,7 @@
 - [X] Draw Line
 - [X] Draw Triangle
 - [X] Draw Filled Triangle
+- [X] ImGUI import and wire up
 - [ ] ImGUI interface to change Triangle
 - [ ] Draw Cube (Orthographic Projection)
 - [ ] Rotate Cube

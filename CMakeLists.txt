@@ -18,5 +18,17 @@ add_executable(renderer
   src/main.cpp
   src/color.cpp
   src/renderer.cpp
-  src/window.cpp)
+  src/window.cpp
+  lib/imgui/imgui.cpp
+  lib/imgui/imgui_draw.cpp
+  lib/imgui/imgui_tables.cpp
+  lib/imgui/imgui_widgets.cpp
+  lib/imgui/backends/imgui_impl_sdl2.cpp
+  lib/imgui/backends/imgui_impl_sdlrenderer.cpp)
+
+
+include_directories(
+  lib/imgui
+  lib/imgui/backends)
+
 target_link_libraries(renderer m SDL2)

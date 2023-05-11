@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "color.h"
+#include "imgui.h"
 
 class Window {
   public:
@@ -27,4 +28,9 @@ class Window {
     SDL_Window *m_window = nullptr;
     SDL_Renderer *m_renderer = nullptr;
     SDL_Texture *m_texture = nullptr;
+
+    // Move these. They are just for initial imgui import.
+    ImGuiIO *m_io;
+    int m_counter;
+    ImVec4 m_clear_color = ImVec4(0.45, 0.55, 0.60, 1.00);
 };
