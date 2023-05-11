@@ -14,5 +14,7 @@ add_compile_options(-Wextra)
 add_compile_options(-Werror)
 add_compile_options(-pedantic)
 
-add_executable(renderer src/main.cpp)
+add_executable(renderer
+  src/main.cpp
+  src/window.cpp)
 target_link_libraries(renderer m SDL2)

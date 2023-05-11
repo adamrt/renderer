@@ -2,8 +2,8 @@
 
 ### Goals
 
-- [ ] Simple C++ project
-- [ ] Draw Pixel
+- [X] Simple C++ project
+- [X] Draw Pixel
 - [ ] Draw Line
 - [ ] Draw Triangle
 - [ ] Draw Filled Triangle
