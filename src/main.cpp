@@ -1,6 +1,7 @@
 #include <SDL2/SDL.h>
 #include <cstdio>
 
+#include "color.h"
 #include "window.h"
 
 constexpr int FPS = 30;
@@ -8,9 +9,6 @@ constexpr int FrameTargetTime = (1000 / FPS);
 
 constexpr int WindowWidth = 400;
 constexpr int WindowHeight = 400;
-
-constexpr uint32_t BLACK = 0xFF000000;
-constexpr uint32_t RED = 0xFFFFFFFF;
 
 auto main() -> int {
     auto window = Window(WindowWidth, WindowHeight);
@@ -47,8 +45,8 @@ auto main() -> int {
         previous_frame_time = SDL_GetTicks();
 
         // Render
-        window.clear(BLACK);
-        window.set_pixel(WindowWidth / 2, WindowHeight / 2, RED);
+        window.clear(Colors::Black);
+        window.set_pixel(WindowWidth / 2, WindowHeight / 2, Colors::Red);
         window.render();
     }
 
