@@ -13,6 +13,7 @@ struct Color {
 
 namespace Colors {
 const auto Black = Color(0, 0, 0);
+const auto White = Color(255, 255, 255);
 const auto Red = Color(255, 0, 0);
 const auto Green = Color(0, 255, 0);
 const auto Blue = Color(0, 0, 255);
