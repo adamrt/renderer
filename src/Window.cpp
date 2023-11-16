@@ -68,7 +68,7 @@ void Window::update_gui()
 
     {
         ImGui::Begin("Control", nullptr);
-        ImGui::Text("Right Contents");
+        ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / m_io->Framerate, m_io->Framerate);
         ImGui::End();
     }
 
