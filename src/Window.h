@@ -27,7 +27,7 @@ public:
     int get_height() { return m_height; }
 
 private:
-    void update_gui();
+    void draw_gui();
 
     Framebuffer& m_fb;
     int m_width;
