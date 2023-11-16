@@ -20,6 +20,7 @@ add_library(imgui ${IMGUI_SOURCES} lib/imgui/imgui.cpp)
 
 add_executable(heretic
   src/main.cpp
+  src/Engine.cpp
   src/Window.cpp
   src/Framebuffer.cpp)
 target_include_directories(heretic PRIVATE ${SDL2_INCLUDE_DIRS} lib/imgui/)
