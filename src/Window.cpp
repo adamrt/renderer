@@ -1,4 +1,6 @@
 #include "Window.h"
+#include "imgui.h"
+#include "imgui_internal.h"
 
 Window::Window(Framebuffer& fb, int width, int height)
     : m_fb(fb)
@@ -57,23 +59,27 @@ void Window::draw_gui()
             ImGui::DockBuilderSetNodeSize(dock_id, ImGui::GetContentRegionAvail());
 
             ImGuiID dock_id_left;
-            ImGuiID dock_id_right = ImGui::DockBuilderSplitNode(dock_id, ImGuiDir_Right, 0.35f, NULL, &dock_id_left);
+            ImGuiID dock_id_right = ImGui::DockBuilderSplitNode(dock_id, ImGuiDir_Right, 0.5f, NULL, &dock_id_left);
 
             ImGui::DockBuilderDockWindow("Render", dock_id_left);
             ImGui::DockBuilderDockWindow("Control", dock_id_right);
             ImGui::DockBuilderFinish(dock_id);
         }
 
-        ImGui::DockSpace(dock_id, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_None | ImGuiDockNodeFlags_NoCloseButton);
+        ImGui::DockSpace(dock_id, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_None | ImGuiDockNodeFlags_NoResize | ImGuiDockNodeFlags_NoCloseButton | ImGuiDockNodeFlags_HiddenTabBar | ImGuiDockNodeFlags_NoWindowMenuButton);
+
+        auto window_flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
 
         {
-            ImGui::Begin("Render", nullptr);
+            ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+            ImGui::Begin("Render", nullptr, window_flags);
             ImGui::Image(m_texture, ImVec2(m_fb.width(), m_fb.height()), ImVec2(0, 0), ImVec2(1, 1), ImColor(1.0f, 1.0f, 1.0f));
             ImGui::End();
+            ImGui::PopStyleVar();
         }
 
         {
-            ImGui::Begin("Control", nullptr);
+            ImGui::Begin("Control", nullptr, window_flags);
             ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / m_io->Framerate, m_io->Framerate);
             ImGui::End();
         }
@@ -90,7 +96,7 @@ void Window::render()
 
     SDL_UpdateTexture(m_texture, NULL, &m_fb.colorbuffer()[0], m_fb.width() * sizeof(uint32_t));
 
-    draw_gui();
+    draw_gui(); // Uses updated m_texture
 
     ImGui::Render();
     ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData());

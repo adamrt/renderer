@@ -14,14 +14,12 @@
 #include "Framebuffer.h"
 #include "Window.h"
 
-const int SCREEN_WIDTH = 1280;
-const int SCREEN_HEIGHT = 960;
-const int BUFFER_WIDTH = 800;
-const int BUFFER_HEIGHT = 600;
+const int SCREEN_WIDTH = 1200;
+const int SCREEN_HEIGHT = 600;
 
 int main()
 {
-    Framebuffer framebuffer(BUFFER_WIDTH, BUFFER_HEIGHT);
+    Framebuffer framebuffer(SCREEN_WIDTH / 2, SCREEN_HEIGHT);
     Window window(framebuffer, SCREEN_WIDTH, SCREEN_HEIGHT);
     Engine engine(framebuffer, window);
 
