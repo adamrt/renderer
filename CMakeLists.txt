@@ -18,7 +18,10 @@ set(IMGUI_PATH  "lib/imgui/")
 file(GLOB IMGUI_SOURCES "lib/imgui/*.h" "lib/imgui/*.cpp")
 add_library(imgui ${IMGUI_SOURCES} lib/imgui/imgui.cpp)
 
-add_executable(heretic src/main.cpp)
+add_executable(heretic
+  src/main.cpp
+  src/Window.cpp
+  src/Framebuffer.cpp)
 target_include_directories(heretic PRIVATE ${SDL2_INCLUDE_DIRS} lib/imgui/)
 target_link_libraries(heretic ${SDL2_LIBRARIES} imgui)
 target_compile_options(heretic PRIVATE -Werror -Wall -Wextra -Wpedantic)
