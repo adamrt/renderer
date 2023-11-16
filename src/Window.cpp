@@ -101,7 +101,6 @@ void Window::render()
 
     // Render the GUI
     ImGui::Render();
-    SDL_RenderClear(m_renderer);
     ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData()); // After RenderCopy
     SDL_RenderPresent(m_renderer);
 }
