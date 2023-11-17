@@ -16,7 +16,15 @@ Window::Window(Framebuffer& fb, int width, int height)
     SDL_SetHint(SDL_HINT_IME_SHOW_UI, "1");
 
     m_window = SDL_CreateWindow("Heretic", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, m_width, m_height, SDL_WINDOW_SHOWN);
-    m_renderer = SDL_CreateRenderer(m_window, -1, SDL_RENDERER_PRESENTVSYNC);
+
+    // Create a SDL renderer.
+    // - SDL_RENDERER_PRESENTVSYNC isn't included because it caps the
+    //   framerate to the monitor's refresh rate. We want to control
+    //   this via our time step.
+    // - SDL_RENDERER_ACCELERATED isn't included because it is the
+    // - default. Its commonly incorrectly included.
+    m_renderer = SDL_CreateRenderer(m_window, -1, 0);
+
     // Using RGBA8888 so we can use intuitive 0xRRGGBBAA uint32_t values for colors
     m_texture = SDL_CreateTexture(m_renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING, m_fb.width(), m_fb.height());
     if (!m_texture) {

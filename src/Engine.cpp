@@ -1,5 +1,7 @@
 #include "Engine.h"
+#include "SDL_timer.h"
 #include "Vector.h"
+#include "Window.h"
 #include <iostream>
 
 std::vector<Vec3> cube_points;
@@ -45,6 +47,15 @@ void Engine::process_input()
 
 void Engine::update()
 {
+
+    int delay = FRAME_TARGET_TIME - (SDL_GetTicks() - m_previous_frame_time);
+
+    if (delay > 0 && delay <= FRAME_TARGET_TIME) {
+        SDL_Delay(delay);
+    }
+
+    m_previous_frame_time = SDL_GetTicks();
+
     auto project = [](Vec3 p) {
         return Vec2(p.x / p.z * fov_factor, p.y / p.z * fov_factor);
     };

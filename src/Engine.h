@@ -18,5 +18,6 @@ private:
     Framebuffer& m_framebuffer;
     Window& m_window;
 
+    uint32_t m_previous_frame_time = SDL_GetTicks();
     bool m_running = true;
 };
