@@ -6,6 +6,9 @@ Engine::Engine(Framebuffer& fb, Window& window)
 {
 }
 
+void Engine::setup()
+{
+}
 void Engine::process_input()
 {
     SDL_Event event;

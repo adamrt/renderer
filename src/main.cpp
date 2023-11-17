@@ -23,6 +23,7 @@ int main()
     Window window(framebuffer, SCREEN_WIDTH, SCREEN_HEIGHT);
     Engine engine(framebuffer, window);
 
+    engine.setup();
     while (engine.is_running()) {
         engine.process_input();
         engine.update();
