@@ -15,11 +15,11 @@
 #include "Window.h"
 
 const int SCREEN_WIDTH = 1200;
-const int SCREEN_HEIGHT = 600;
+const int SCREEN_HEIGHT = 800;
 
 int main()
 {
-    Framebuffer framebuffer(SCREEN_WIDTH / 2, SCREEN_HEIGHT);
+    Framebuffer framebuffer((SCREEN_WIDTH / 3) * 2, SCREEN_HEIGHT);
     Window window(framebuffer, SCREEN_WIDTH, SCREEN_HEIGHT);
     Engine engine(framebuffer, window);
 

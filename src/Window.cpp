@@ -1,6 +1,7 @@
 #include "Window.h"
 #include "imgui.h"
 #include "imgui_internal.h"
+#include <iostream>
 
 Window::Window(Framebuffer& fb, int width, int height)
     : m_fb(fb)
@@ -59,7 +60,7 @@ void Window::draw_gui()
             ImGui::DockBuilderSetNodeSize(dock_id, ImGui::GetContentRegionAvail());
 
             ImGuiID dock_id_left;
-            ImGuiID dock_id_right = ImGui::DockBuilderSplitNode(dock_id, ImGuiDir_Right, 0.5f, NULL, &dock_id_left);
+            ImGuiID dock_id_right = ImGui::DockBuilderSplitNode(dock_id, ImGuiDir_Right, 0.33f, NULL, &dock_id_left);
 
             ImGui::DockBuilderDockWindow("Render", dock_id_left);
             ImGui::DockBuilderDockWindow("Control", dock_id_right);
@@ -80,7 +81,15 @@ void Window::draw_gui()
 
         {
             ImGui::Begin("Control", nullptr, window_flags);
-            ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / m_io->Framerate, m_io->Framerate);
+            ImGui::Text("%.1f FPS (%.3f ms/frame)", m_io->Framerate, 1000.0f / m_io->Framerate);
+            if (ImGui::Button("Quit")) {
+                SDL_Event event;
+                event.type = SDL_QUIT;
+                SDL_PushEvent(&event);
+            }
+            if (ImGui::CollapsingHeader("Stats", ImGuiTreeNodeFlags_DefaultOpen)) {
+                ImGui::Text("Framebuffer Width / Height: %d x %d", m_fb.width(), m_fb.height());
+            }
             ImGui::End();
         }
 
