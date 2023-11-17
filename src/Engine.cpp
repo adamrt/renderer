@@ -123,6 +123,10 @@ void Engine::update()
             projected_triangle.points.push_back(projected);
         }
 
+        if (m_ui.backface_culling && projected_triangle.should_cull()) {
+            continue;
+        }
+
         triangles_to_render.push_back(projected_triangle);
     }
 }
@@ -131,7 +135,7 @@ void Engine::render()
 {
     m_framebuffer.clear(0x333333FF);
 
-    if (m_ui.filled) {
+    if (m_ui.draw_filled) {
         for (auto& t : triangles_to_render) {
             m_framebuffer.draw_triangle_filled(
                 t.points[0].x, t.points[0].y,

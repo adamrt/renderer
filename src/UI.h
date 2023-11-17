@@ -2,5 +2,6 @@
 
 struct UI {
     bool rotate = false;
-    bool filled = false;
+    bool draw_filled = false;
+    bool backface_culling = false;
 };

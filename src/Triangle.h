@@ -12,6 +12,8 @@ struct Triangle {
     Triangle();
     Triangle(Vec2 a, Vec2 b, Vec2 c, uint32_t color);
 
+    bool should_cull() const;
+
     std::vector<Vec2> points;
     uint32_t color;
 };

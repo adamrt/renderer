@@ -102,7 +102,8 @@ void Window::draw_gui()
             }
 
             ImGui::Checkbox("Rotate", &m_ui.rotate);
-            ImGui::Checkbox("Filled", &m_ui.filled);
+            ImGui::Checkbox("Draw Filled", &m_ui.draw_filled);
+            ImGui::Checkbox("Backface Culling", &m_ui.backface_culling);
             ImGui::End();
         }
 
