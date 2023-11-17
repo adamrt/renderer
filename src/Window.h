@@ -23,8 +23,8 @@ public:
 
     void render();
 
-    int get_width() { return m_width; }
-    int get_height() { return m_height; }
+    int width() const { return m_width; }
+    int height() const { return m_height; }
 
 private:
     void draw_gui();
