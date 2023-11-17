@@ -112,6 +112,11 @@ void Engine::update()
             transformed.z += 5.0f;
 
             Vec2 projected = project(transformed);
+
+            // Invert the Y asis to compensate for the Y axis of the model and
+            // the color buffer being different (+Y up vs +Y down, respectively).
+            projected.y *= -1;
+
             projected.x += (w / 2.0f);
             projected.y += (h / 2.0f);
 
