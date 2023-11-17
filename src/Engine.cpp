@@ -27,8 +27,8 @@ void Engine::process_input()
 
 void Engine::update()
 {
-    m_framebuffer.draw_triangle(10, 370, 450, 760, 680, 80, 0xFF0000FF);
-    m_framebuffer.draw_triangle(180, 50, 150, 1, 70, 180, 0x00FF00FF);
+    m_framebuffer.draw_triangle_filled(10, 370, 450, 760, 680, 80, 0xFF0000FF);
+    m_framebuffer.draw_triangle_filled(180, 50, 150, 1, 70, 180, 0x00FF00FF);
 }
 
 void Engine::render()

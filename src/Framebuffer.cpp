@@ -64,3 +64,28 @@ void Framebuffer::draw_triangle(int x0, int y0, int x1, int y1, int x2, int y2, 
     draw_line(x1, y1, x2, y2, color);
     draw_line(x2, y2, x0, y0, color);
 }
+
+// draw_triangle_filled draws a filled triangle using the edge function algorithm
+void Framebuffer::draw_triangle_filled(int x0, int y0, int x1, int y1, int x2, int y2, uint32_t color)
+{
+    int min_x = std::min({ x0, x1, x2 });
+    int min_y = std::min({ y0, y1, y2 });
+    int max_x = std::max({ x0, x1, x2 });
+    int max_y = std::max({ y0, y1, y2 });
+
+    auto edge_function = [](int x0, int y0, int x1, int y1, int x2, int y2) {
+        return (x2 - x0) * (y1 - y0) - (y2 - y0) * (x1 - x0);
+    };
+
+    for (int y = min_y; y <= max_y; y++) {
+        for (int x = min_x; x <= max_x; x++) {
+            int e0 = edge_function(x0, y0, x1, y1, x, y);
+            int e1 = edge_function(x1, y1, x2, y2, x, y);
+            int e2 = edge_function(x2, y2, x0, y0, x, y);
+
+            if (e0 >= 0 && e1 >= 0 && e2 >= 0) {
+                draw_pixel(x, y, color);
+            }
+        }
+    }
+}
