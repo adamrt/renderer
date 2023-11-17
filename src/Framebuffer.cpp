@@ -58,6 +58,15 @@ void Framebuffer::draw_line(int x0, int y0, int x1, int y1, uint32_t color)
     }
 }
 
+void Framebuffer::draw_rect(int x, int y, int w, int h, uint32_t color)
+{
+    for (int i = 0; i < w; i++) {
+        for (int j = 0; j < h; j++) {
+            draw_pixel(x + i, y + j, color);
+        }
+    }
+}
+
 void Framebuffer::draw_triangle(int x0, int y0, int x1, int y1, int x2, int y2, uint32_t color)
 {
     draw_line(x0, y0, x1, y1, color);
