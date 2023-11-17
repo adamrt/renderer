@@ -19,9 +19,10 @@ const int SCREEN_HEIGHT = 800;
 
 int main()
 {
-    Framebuffer framebuffer((SCREEN_WIDTH / 3) * 2, SCREEN_HEIGHT);
-    Window window(framebuffer, SCREEN_WIDTH, SCREEN_HEIGHT);
-    Engine engine(framebuffer, window);
+    UI ui {};
+    Framebuffer framebuffer(ui, (SCREEN_WIDTH / 3) * 2, SCREEN_HEIGHT);
+    Window window(framebuffer, ui, SCREEN_WIDTH, SCREEN_HEIGHT);
+    Engine engine(framebuffer, window, ui);
 
     engine.setup();
     while (engine.is_running()) {

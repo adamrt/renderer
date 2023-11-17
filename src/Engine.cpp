@@ -9,9 +9,10 @@ std::vector<Vec2> projected_points;
 Vec3 cube_rotation {};
 float fov_factor = 640.0f;
 
-Engine::Engine(Framebuffer& fb, Window& window)
+Engine::Engine(Framebuffer& fb, Window& window, UI& ui)
     : m_framebuffer(fb)
     , m_window(window)
+    , m_ui(ui)
 {
 }
 

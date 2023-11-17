@@ -3,9 +3,11 @@
 #include <cstdint>
 #include <vector>
 
+#include "UI.h"
+
 class Framebuffer {
 public:
-    Framebuffer(int width, int height);
+    Framebuffer(UI& ui, int width, int height);
 
     const std::vector<uint32_t>& colorbuffer() { return m_colorbuffer; }
 
@@ -21,6 +23,7 @@ public:
     void draw_triangle_filled(int x0, int y0, int x1, int y1, int x2, int y2, uint32_t color);
 
 private:
+    UI& m_ui;
     int m_width;
     int m_height;
     std::vector<uint32_t> m_colorbuffer;

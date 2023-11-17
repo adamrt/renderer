@@ -3,8 +3,9 @@
 #include "imgui_internal.h"
 #include <iostream>
 
-Window::Window(Framebuffer& fb, int width, int height)
+Window::Window(Framebuffer& fb, UI& ui, int width, int height)
     : m_fb(fb)
+    , m_ui(ui)
     , m_width(width)
     , m_height(height)
 {
@@ -99,6 +100,9 @@ void Window::draw_gui()
             if (ImGui::CollapsingHeader("Stats", ImGuiTreeNodeFlags_DefaultOpen)) {
                 ImGui::Text("Framebuffer Width / Height: %d x %d", m_fb.width(), m_fb.height());
             }
+
+            ImGui::Checkbox("Rotate", &m_ui.rotate);
+            ImGui::Checkbox("Filled", &m_ui.filled);
             ImGui::End();
         }
 

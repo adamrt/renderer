@@ -12,13 +12,14 @@
 #include "imgui_internal.h"
 
 #include "Framebuffer.h"
+#include "UI.h"
 
 constexpr int FPS = 60;
 constexpr int FRAME_TARGET_TIME = (1000 / FPS);
 
 class Window {
 public:
-    Window(Framebuffer& fb, int width, int height);
+    Window(Framebuffer& fb, UI& ui, int width, int height);
     ~Window();
 
     void render();
@@ -30,6 +31,8 @@ private:
     void draw_gui();
 
     Framebuffer& m_fb;
+    UI& m_ui;
+
     int m_width;
     int m_height;
 

@@ -3,8 +3,9 @@
 
 #include "Framebuffer.h"
 
-Framebuffer::Framebuffer(int width, int height)
-    : m_width(width)
+Framebuffer::Framebuffer(UI& ui, int width, int height)
+    : m_ui(ui)
+    , m_width(width)
     , m_height(height)
     , m_colorbuffer(m_width * m_height)
 {
