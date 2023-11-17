@@ -17,7 +17,8 @@ Window::Window(Framebuffer& fb, int width, int height)
 
     m_window = SDL_CreateWindow("Heretic", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, m_width, m_height, SDL_WINDOW_SHOWN);
     m_renderer = SDL_CreateRenderer(m_window, -1, SDL_RENDERER_PRESENTVSYNC);
-    m_texture = SDL_CreateTexture(m_renderer, SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_STREAMING, m_fb.width(), m_fb.height());
+    // Using RGBA8888 so we can use intuitive 0xRRGGBBAA uint32_t values for colors
+    m_texture = SDL_CreateTexture(m_renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING, m_fb.width(), m_fb.height());
     if (!m_texture) {
         fprintf(stderr, "Error creating SDL texture.\n");
         exit(EXIT_FAILURE);
