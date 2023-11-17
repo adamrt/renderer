@@ -93,7 +93,7 @@ void Framebuffer::draw_triangle_filled(int x0, int y0, int x1, int y1, int x2, i
             int e1 = edge_function(x1, y1, x2, y2, x, y);
             int e2 = edge_function(x2, y2, x0, y0, x, y);
 
-            if (e0 >= 0 && e1 >= 0 && e2 >= 0) {
+            if (e0 <= 0 && e1 <= 0 && e2 <= 0) {
                 draw_pixel(x, y, color);
             }
         }
