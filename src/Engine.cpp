@@ -1,4 +1,11 @@
 #include "Engine.h"
+#include "Vector.h"
+#include <iostream>
+
+std::vector<Vec3> cube_points;
+std::vector<Vec2> projected_points;
+Vec3 cube_rotation {};
+float fov_factor = 640.0f;
 
 Engine::Engine(Framebuffer& fb, Window& window)
     : m_framebuffer(fb)
@@ -8,7 +15,15 @@ Engine::Engine(Framebuffer& fb, Window& window)
 
 void Engine::setup()
 {
+    for (float x = -1; x < 1; x += 0.25) {
+        for (float y = -1; y < 1; y += 0.25) {
+            for (float z = -1; z < 1; z += 0.25) {
+                cube_points.push_back(Vec3(x, y, z));
+            }
+        }
+    }
 }
+
 void Engine::process_input()
 {
     SDL_Event event;
@@ -30,11 +45,40 @@ void Engine::process_input()
 
 void Engine::update()
 {
-    m_framebuffer.draw_triangle_filled(10, 370, 450, 760, 680, 80, 0xFF0000FF);
-    m_framebuffer.draw_triangle_filled(180, 50, 150, 1, 70, 180, 0x00FF00FF);
+    auto project = [](Vec3 p) {
+        return Vec2(p.x / p.z * fov_factor, p.y / p.z * fov_factor);
+    };
+
+    cube_rotation.x += 0.02f;
+    cube_rotation.y += 0.012f;
+    cube_rotation.z += 0.018f;
+
+    projected_points.clear();
+    for (auto& p : cube_points) {
+
+        auto transformed = p.rotate_x(cube_rotation.x);
+        transformed = transformed.rotate_y(cube_rotation.y);
+        transformed = transformed.rotate_z(cube_rotation.z);
+
+        // Push points away from the camera.
+        transformed.z += 5.0f;
+
+        projected_points.push_back(project(transformed));
+    }
 }
 
 void Engine::render()
 {
+    auto w = m_framebuffer.width();
+    auto h = m_framebuffer.height();
+
+    m_framebuffer.clear(0x333333FF);
+
+    for (auto& p : projected_points) {
+        auto centered_x = p.x + (w / 2.0f);
+        auto centered_y = p.y + (h / 2.0f);
+
+        m_framebuffer.draw_rect(centered_x, centered_y, 2, 2, 0xFFFF00FF);
+    }
     m_window.render();
 }
