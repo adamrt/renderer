@@ -1,3 +1,6 @@
+// This file contains 4x4 Matrix class in row-major order.
+// NOTE: All methods use a left handed coordinate system.
+
 #include "Matrix.h"
 #include "Vector.h"
 
@@ -140,4 +143,20 @@ Mat4 Mat4::world(const Vec3& s, const Vec3& r, const Vec3& t)
     Mat4 translation = Mat4::translation(t);
     Mat4 world = Mat4::identity() * translation * rotation * scale;
     return world;
+}
+
+Mat4 Mat4::perspective(float fov, float aspect, float znear, float zfar)
+{
+    float thf = tan(fov / 2.0f);
+    float z_range = zfar - znear;
+
+    Mat4 m {};
+    m(0, 0) = 1.0f / (thf * aspect);
+    m(1, 1) = 1.0f / thf;
+    m(2, 2) = zfar / z_range; // Adjusted for left-handed system
+    m(2, 3) = 1.0;
+    m(3, 2) = (-zfar * znear) / z_range;
+    m(3, 3) = 0.0;
+
+    return m;
 }

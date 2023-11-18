@@ -33,4 +33,6 @@ public:
     static Mat4 rotation_y(float angle);
     static Mat4 rotation_z(float angle);
     static Mat4 world(const Vec3& s, const Vec3& r, const Vec3& t);
+
+    static Mat4 perspective(float fov, float aspect, float znear, float zfar);
 };
