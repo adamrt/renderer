@@ -150,12 +150,11 @@ Mat4 Mat4::perspective(float fov, float aspect, float znear, float zfar)
     float z_range = zfar - znear;
 
     Mat4 m {};
-    m(0, 0) = 1.0f / (thf * aspect);
+    m(0, 0) = aspect * (1.0f / thf);
     m(1, 1) = 1.0f / thf;
-    m(2, 2) = zfar / z_range; // Adjusted for left-handed system
-    m(2, 3) = 1.0;
-    m(3, 2) = (-zfar * znear) / z_range;
-    m(3, 3) = 0.0;
+    m(2, 2) = zfar / z_range;
+    m(2, 3) = (-zfar * znear) / z_range;
+    m(3, 2) = 1.0;
 
     return m;
 }
@@ -166,14 +165,13 @@ Mat4 Mat4::orthographic(float left, float right, float bottom, float top, float 
     float height = top - bottom;
     float depth = zfar - znear;
 
-    Mat4 m {};
+    auto m = Mat4::identity();
     m(0, 0) = 2.0f / width;
     m(1, 1) = 2.0f / height;
-    m(2, 2) = 1.0f / depth;
-    m(3, 3) = 1.0f;
+    m(2, 2) = -2.0f / depth;
     m(0, 3) = -(right + left) / width;
     m(1, 3) = -(top + bottom) / height;
-    m(2, 3) = -znear / depth;
+    m(2, 3) = -(zfar + znear) / depth;
 
     return m;
 }
