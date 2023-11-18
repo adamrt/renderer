@@ -16,6 +16,7 @@ struct Mesh {
     Mesh(const std::string filename);
 
     std::vector<Vec3> vertices;
+    std::vector<Vec3> normals;
     std::vector<Face> faces;
 
     Vec3 scale = Vec3(1.0f, 1.0f, 1.0f);

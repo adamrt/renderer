@@ -23,6 +23,11 @@ Mesh::Mesh(std::string filename)
             sscanf(line, "v %f %f %f", &vertex.x, &vertex.y, &vertex.z);
             vertices.push_back(vertex);
         }
+        if (strncmp(line, "n ", 2) == 0) {
+            Vec3 vertex {};
+            sscanf(line, "n %f %f %f", &vertex.x, &vertex.y, &vertex.z);
+            normals.push_back(vertex);
+        }
         // Texture coordinate information
         if (strncmp(line, "f ", 2) == 0) {
             int vertex_indices[3];
