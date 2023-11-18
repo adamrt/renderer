@@ -1,3 +1,4 @@
+#include "SDL_events.h"
 #include "SDL_timer.h"
 #include <iostream>
 
@@ -9,9 +10,11 @@
 #include "Vector.h"
 #include "Window.h"
 
-float fov = 60.0f;
-float znear = 0.1f;
-float zfar = 1000.0f;
+const float ZNEAR = 0.1f;
+const float ZFAR = 1000.0f;
+
+const float MIN_ZOOM = 0.5f;
+const float MAX_ZOOM = 2.5f;
 
 std::vector<Triangle> triangles_to_render {};
 
@@ -65,8 +68,17 @@ void Engine::process_input()
         case SDL_KEYDOWN:
             if (event.key.keysym.sym == SDLK_ESCAPE) {
                 m_running = false;
-                break;
             }
+            break;
+        case SDL_MOUSEWHEEL:
+            auto y = event.wheel.preciseY;
+            y *= 0.1f;
+            zoom -= y;
+            if (zoom < MIN_ZOOM)
+                zoom = MIN_ZOOM;
+            if (zoom > MAX_ZOOM)
+                zoom = MAX_ZOOM;
+            break;
         }
     }
 }
@@ -111,12 +123,21 @@ void Engine::update()
             Vec3 transformed = world * face_vertex;
             Vec4 vertex = transformed.vec4();
 
-            auto proj = Mat4::perspective(fov, m_framebuffer.aspect(), znear, zfar);
-            vertex = proj * vertex;
-            if (vertex.w != 0.0f) {
-                vertex.x /= vertex.w;
-                vertex.y /= vertex.w;
-                vertex.z /= vertex.w;
+            if (m_ui.projection == Projection::Perspective) {
+                // (180/3 = 60 degrees). Value is in radians.
+                auto fov = M_PI / 3.0 * zoom;
+                auto proj = Mat4::perspective(fov, m_framebuffer.aspect(), ZNEAR, ZFAR);
+                vertex = proj * vertex;
+                if (vertex.w != 0.0f) {
+                    vertex.x /= vertex.w;
+                    vertex.y /= vertex.w;
+                    vertex.z /= vertex.w;
+                }
+            } else {
+                auto w = 1.0f * zoom;
+                auto h = 1.0f * m_framebuffer.aspect() * zoom;
+                auto proj = Mat4::orthographic(-w, w, -h, h, ZNEAR, ZFAR);
+                vertex = proj * vertex;
             }
 
             // Invert the Y asis to compensate for the Y axis of the model and

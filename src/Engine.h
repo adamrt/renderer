@@ -22,4 +22,6 @@ private:
 
     uint32_t m_previous_frame_time = SDL_GetTicks();
     bool m_running = true;
+
+    float zoom = 1.2f;
 };

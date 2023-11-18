@@ -137,11 +137,10 @@ Mat4 Mat4::rotation(const Vec3& v)
 
 Mat4 Mat4::world(const Vec3& s, const Vec3& r, const Vec3& t)
 {
-    // Do we need to start with an identity matrix?
     Mat4 scale = Mat4::scale(s);
     Mat4 rotation = Mat4::rotation(r);
     Mat4 translation = Mat4::translation(t);
-    Mat4 world = Mat4::identity() * translation * rotation * scale;
+    Mat4 world = translation * rotation * scale;
     return world;
 }
 
@@ -157,6 +156,24 @@ Mat4 Mat4::perspective(float fov, float aspect, float znear, float zfar)
     m(2, 3) = 1.0;
     m(3, 2) = (-zfar * znear) / z_range;
     m(3, 3) = 0.0;
+
+    return m;
+}
+
+Mat4 Mat4::orthographic(float left, float right, float bottom, float top, float znear, float zfar)
+{
+    float width = right - left;
+    float height = top - bottom;
+    float depth = zfar - znear;
+
+    Mat4 m {};
+    m(0, 0) = 2.0f / width;
+    m(1, 1) = 2.0f / height;
+    m(2, 2) = 1.0f / depth;
+    m(3, 3) = 1.0f;
+    m(0, 3) = -(right + left) / width;
+    m(1, 3) = -(top + bottom) / height;
+    m(2, 3) = -znear / depth;
 
     return m;
 }
