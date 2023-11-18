@@ -11,8 +11,9 @@ public:
 
     const std::vector<uint32_t>& colorbuffer() { return m_colorbuffer; }
 
-    int width() { return m_width; }
-    int height() { return m_height; }
+    int width() const { return m_width; }
+    int height() const { return m_height; }
+    float aspect() const { return (float)m_height / (float)m_width; }
 
     void render();
     void clear(uint32_t color);
