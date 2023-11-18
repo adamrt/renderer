@@ -5,10 +5,13 @@
 #include "Matrix.h"
 #include "Mesh.h"
 #include "Triangle.h"
+#include "UI.h"
 #include "Vector.h"
 #include "Window.h"
 
-float fov_factor = 640.0f;
+float fov = 60.0f;
+float znear = 0.1f;
+float zfar = 1000.0f;
 
 std::vector<Triangle> triangles_to_render {};
 
@@ -80,10 +83,6 @@ void Engine::update()
 
     m_previous_frame_time = SDL_GetTicks();
 
-    auto project = [](Vec3 p) {
-        return Vec2(p.x / p.z * fov_factor, p.y / p.z * fov_factor);
-    };
-
     if (m_ui.rotate) {
         mesh.rotation.x += 0.008f;
         mesh.rotation.y += 0.008f;
@@ -108,25 +107,31 @@ void Engine::update()
         Triangle projected_triangle {};
         projected_triangle.color = face.color;
 
-        for (auto transformed : face_vertices) {
-            transformed = world * transformed;
+        for (auto face_vertex : face_vertices) {
+            Vec3 transformed = world * face_vertex;
+            Vec4 vertex = transformed.vec4();
 
-            Vec2 projected;
-
-            if (m_ui.projection == Projection::Perspective) {
-                projected = project(transformed);
-            } else {
-                projected = Vec2(transformed.x * fov_factor, transformed.y * fov_factor);
+            auto proj = Mat4::perspective(fov, m_framebuffer.aspect(), znear, zfar);
+            vertex = proj * vertex;
+            if (vertex.w != 0.0f) {
+                vertex.x /= vertex.w;
+                vertex.y /= vertex.w;
+                vertex.z /= vertex.w;
             }
 
             // Invert the Y asis to compensate for the Y axis of the model and
             // the color buffer being different (+Y up vs +Y down, respectively).
-            projected.y *= -1;
+            vertex.y *= -1;
 
-            projected.x += (w / 2.0f);
-            projected.y += (h / 2.0f);
+            // Scale to screen size
+            vertex.x *= (w / 2.0f);
+            vertex.y *= (h / 2.0f);
 
-            projected_triangle.points.push_back(projected);
+            // Translate to middle of the screen
+            vertex.x += (w / 2.0f);
+            vertex.y += (h / 2.0f);
+
+            projected_triangle.points.push_back(vertex);
         }
 
         if (m_ui.backface_culling && projected_triangle.should_cull()) {
