@@ -23,6 +23,6 @@ struct Vec4 {
     float x, y, z, w;
     Vec4();
     Vec4(float x, float y, float z, float w);
-
+    Vec4 operator-(const Vec4& rhs) const;
     Vec3 vec3() const;
 };

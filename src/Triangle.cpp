@@ -7,7 +7,7 @@ Triangle::Triangle()
     points.reserve(3);
 }
 
-Triangle::Triangle(Vec2 a, Vec2 b, Vec2 c, uint32_t color)
+Triangle::Triangle(Vec4 a, Vec4 b, Vec4 c, uint32_t color)
     : points({ a, b, c })
     , color(color)
 {
@@ -20,12 +20,12 @@ Triangle::Triangle(Vec2 a, Vec2 b, Vec2 c, uint32_t color)
 // method must be done after the vertices have been projected.
 bool Triangle::should_cull() const
 {
-    Vec2 a = points[0];
-    Vec2 b = points[1];
-    Vec2 c = points[2];
+    Vec4 a = points[0];
+    Vec4 b = points[1];
+    Vec4 c = points[2];
 
-    Vec2 ab = b - a;
-    Vec2 ac = c - a;
+    Vec4 ab = b - a;
+    Vec4 ac = c - a;
 
     float sign = ab.x * ac.y - ac.x * ab.y;
     return sign < 0;

@@ -52,6 +52,11 @@ Vec4::Vec4(float x, float y, float z, float w)
 {
 }
 
+Vec4 Vec4::operator-(const Vec4& rhs) const
+{
+    return Vec4(x - rhs.x, y - rhs.y, z - rhs.z, w - rhs.w);
+}
+
 Vec3 Vec4::vec3() const
 {
     return Vec3(x, y, z);
