@@ -22,6 +22,7 @@ add_executable(heretic
   src/main.cpp
   src/Engine.cpp
   src/Framebuffer.cpp
+  src/Matrix.cpp
   src/Mesh.cpp
   src/Triangle.cpp
   src/Window.cpp)

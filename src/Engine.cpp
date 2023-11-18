@@ -2,12 +2,12 @@
 #include <iostream>
 
 #include "Engine.h"
+#include "Matrix.h"
 #include "Mesh.h"
 #include "Triangle.h"
 #include "Vector.h"
 #include "Window.h"
 
-Vec3 cube_rotation {};
 float fov_factor = 640.0f;
 
 std::vector<Triangle> triangles_to_render {};
@@ -85,13 +85,15 @@ void Engine::update()
     };
 
     if (m_ui.rotate) {
-        cube_rotation.x += 0.008f;
-        cube_rotation.y += 0.008f;
-        cube_rotation.z += 0.008f;
+        mesh.rotation.x += 0.008f;
+        mesh.rotation.y += 0.008f;
+        mesh.rotation.z += 0.008f;
     }
 
     auto w = m_framebuffer.width();
     auto h = m_framebuffer.height();
+
+    auto world = Mat4::world(mesh.scale, mesh.rotation, mesh.translation);
 
     for (auto& face : mesh.faces) {
         auto face_vertices = std::vector<Vec3> {
@@ -104,9 +106,7 @@ void Engine::update()
         projected_triangle.color = face.color;
 
         for (auto transformed : face_vertices) {
-            transformed = transformed.rotate_x(cube_rotation.x);
-            transformed = transformed.rotate_y(cube_rotation.y);
-            transformed = transformed.rotate_z(cube_rotation.z);
+            transformed = world * transformed;
 
             // Push points away from the camera.
             transformed.z += 5.0f;
