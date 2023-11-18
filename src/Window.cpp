@@ -27,6 +27,7 @@ Window::Window(Framebuffer& fb, UI& ui, int width, int height)
     m_renderer = SDL_CreateRenderer(m_window, -1, 0);
 
     // Using RGBA8888 so we can use intuitive 0xRRGGBBAA uint32_t values for colors
+    // FIXME: Might be worth changing to a native format like ARGB8888 for performance.
     m_texture = SDL_CreateTexture(m_renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING, m_fb.width(), m_fb.height());
     if (!m_texture) {
         fprintf(stderr, "Error creating SDL texture.\n");
@@ -133,7 +134,7 @@ void Window::render()
     ImGui_ImplSDL2_NewFrame();
     ImGui::NewFrame();
 
-    SDL_UpdateTexture(m_texture, NULL, &m_fb.colorbuffer()[0], m_fb.width() * sizeof(uint32_t));
+    SDL_UpdateTexture(m_texture, NULL, m_fb.colorbuffer().data(), m_fb.width() * sizeof(uint32_t));
 
     draw_gui(); // Uses updated m_texture
 
