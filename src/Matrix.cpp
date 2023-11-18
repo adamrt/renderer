@@ -51,6 +51,16 @@ Vec3 Mat4::operator*(const Vec3& v) const
     return m;
 }
 
+Vec4 Mat4::operator*(const Vec4& v) const
+{
+    Vec4 m;
+    m.x = data[0][0] * v.x + data[0][1] * v.y + data[0][2] * v.z + data[0][3] * v.w;
+    m.y = data[1][0] * v.x + data[1][1] * v.y + data[1][2] * v.z + data[1][3] * v.w;
+    m.z = data[2][0] * v.x + data[2][1] * v.y + data[2][2] * v.z + data[2][3] * v.w;
+    m.w = data[3][0] * v.x + data[3][1] * v.y + data[3][2] * v.z + data[3][3] * v.w;
+    return m;
+}
+
 Mat4 Mat4::identity()
 {
     Mat4 m;
@@ -124,6 +134,7 @@ Mat4 Mat4::rotation(const Vec3& v)
 
 Mat4 Mat4::world(const Vec3& s, const Vec3& r, const Vec3& t)
 {
+    // Do we need to start with an identity matrix?
     Mat4 scale = Mat4::scale(s);
     Mat4 rotation = Mat4::rotation(r);
     Mat4 translation = Mat4::translation(t);

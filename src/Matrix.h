@@ -22,6 +22,7 @@ public:
     Mat4 operator*(const Mat4& rhs) const;
 
     Vec3 operator*(const Vec3& v) const;
+    Vec4 operator*(const Vec4& v) const;
 
     // Static methods for creating common matrices
     static Mat4 identity();

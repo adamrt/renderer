@@ -25,6 +25,7 @@ add_executable(heretic
   src/Matrix.cpp
   src/Mesh.cpp
   src/Triangle.cpp
+  src/Vector.cpp
   src/Window.cpp)
 target_include_directories(heretic PRIVATE ${SDL2_INCLUDE_DIRS} lib/imgui/)
 target_link_libraries(heretic ${SDL2_LIBRARIES} imgui)
