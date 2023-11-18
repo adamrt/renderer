@@ -1,5 +1,6 @@
 #pragma once
 #include <cstdint>
+#include <string>
 #include <vector>
 
 #include "Vector.h"
@@ -12,6 +13,7 @@ struct Face {
 
 struct Mesh {
     Mesh(std::vector<Vec3>, std::vector<Face>);
+    Mesh(const std::string filename);
 
     std::vector<Vec3> vertices;
     std::vector<Face> faces;

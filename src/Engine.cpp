@@ -11,38 +11,14 @@
 #include "Window.h"
 
 const float ZNEAR = 0.1f;
-const float ZFAR = 1000.0f;
+const float ZFAR = 100.0f;
 
 const float MIN_ZOOM = 0.5f;
 const float MAX_ZOOM = 2.5f;
 
 std::vector<Triangle> triangles_to_render {};
 
-Mesh mesh(
-    {
-        { -1, -1, -1 }, // 1
-        { -1, 1, -1 },  // 2
-        { 1, 1, -1 },   // 3
-        { 1, -1, -1 },  // 4
-        { 1, 1, 1 },    // 5
-        { 1, -1, 1 },   // 6
-        { -1, 1, 1 },   // 7
-        { -1, -1, 1 }   // 8
-    },
-    {
-        { 1, 2, 3, 0x000000FF }, // front
-        { 1, 3, 4, 0x000000FF },
-        { 4, 3, 5, 0x000000FF }, // right
-        { 4, 5, 6, 0x000000FF },
-        { 6, 5, 7, 0x000000FF }, // back
-        { 6, 7, 8, 0x000000FF },
-        { 8, 7, 2, 0x000000FF }, // left
-        { 8, 2, 1, 0x000000FF },
-        { 2, 7, 5, 0x000000FF }, // top
-        { 2, 5, 3, 0x000000FF },
-        { 6, 8, 1, 0x000000FF }, // bottom
-        { 6, 1, 4, 0x000000FF },
-    });
+Mesh mesh("res/cube.obj");
 
 Engine::Engine(Framebuffer& fb, Window& window, UI& ui)
     : m_framebuffer(fb)
