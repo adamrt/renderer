@@ -24,18 +24,18 @@ Mesh mesh(
         { -1, -1, 1 }   // 8
     },
     {
-        { 1, 2, 3, 0xFF0000FF }, // front
-        { 1, 3, 4, 0x00FF00FF },
-        { 4, 3, 5, 0x0000FFFF }, // right
-        { 4, 5, 6, 0xFFFF00FF },
-        { 6, 5, 7, 0x00FFFFFF }, // back
-        { 6, 7, 8, 0xA500FFFF },
+        { 1, 2, 3, 0xFFFFFFFF }, // front
+        { 1, 3, 4, 0xFFFFFFFF },
+        { 4, 3, 5, 0xFFFFFFFF }, // right
+        { 4, 5, 6, 0xFFFFFFFF },
+        { 6, 5, 7, 0xFFFFFFFF }, // back
+        { 6, 7, 8, 0xFFFFFFFF },
         { 8, 7, 2, 0xFFFFFFFF }, // left
-        { 8, 2, 1, 0x990000FF },
-        { 2, 7, 5, 0x009900FF }, // top
-        { 2, 5, 3, 0x000099FF },
-        { 6, 8, 1, 0x999900FF }, // bottom
-        { 6, 1, 4, 0x009999FF },
+        { 8, 2, 1, 0xFFFFFFFF },
+        { 2, 7, 5, 0xFFFFFFFF }, // top
+        { 2, 5, 3, 0xFFFFFFFF },
+        { 6, 8, 1, 0xFFFFFFFF }, // bottom
+        { 6, 1, 4, 0xFFFFFFFF },
     });
 
 Engine::Engine(Framebuffer& fb, Window& window, UI& ui)
@@ -111,7 +111,13 @@ void Engine::update()
             // Push points away from the camera.
             transformed.z += 5.0f;
 
-            Vec2 projected = project(transformed);
+            Vec2 projected;
+
+            if (m_ui.projection == Projection::Perspective) {
+                projected = project(transformed);
+            } else {
+                projected = Vec2(transformed.x * fov_factor, transformed.y * fov_factor);
+            }
 
             // Invert the Y asis to compensate for the Y axis of the model and
             // the color buffer being different (+Y up vs +Y down, respectively).
@@ -143,7 +149,9 @@ void Engine::render()
                 t.points[2].x, t.points[2].y,
                 t.color);
         }
-    } else {
+    }
+
+    if (m_ui.draw_wireframe) {
         for (auto& t : triangles_to_render) {
             m_framebuffer.draw_triangle(
                 t.points[0].x, t.points[0].y,

@@ -91,19 +91,33 @@ void Window::draw_gui()
 
         {
             ImGui::Begin("Control", nullptr, window_flags);
-            ImGui::Text("%.1f FPS (%.3f ms/frame)", m_io->Framerate, 1000.0f / m_io->Framerate);
-            if (ImGui::Button("Quit")) {
-                SDL_Event event;
-                event.type = SDL_QUIT;
-                SDL_PushEvent(&event);
-            }
-            if (ImGui::CollapsingHeader("Stats", ImGuiTreeNodeFlags_DefaultOpen)) {
-                ImGui::Text("Framebuffer Width / Height: %d x %d", m_fb.width(), m_fb.height());
+
+            if (ImGui::CollapsingHeader("UI", ImGuiTreeNodeFlags_DefaultOpen)) {
+                if (ImGui::RadioButton("Perspective", m_ui.projection == Projection::Perspective)) {
+                    m_ui.projection = Projection::Perspective;
+                }
+                ImGui::SameLine();
+                if (ImGui::RadioButton("Orthographic", m_ui.projection == Projection::Orthographic)) {
+                    m_ui.projection = Projection::Orthographic;
+                }
             }
 
             ImGui::Checkbox("Rotate", &m_ui.rotate);
-            ImGui::Checkbox("Draw Filled", &m_ui.draw_filled);
             ImGui::Checkbox("Backface Culling", &m_ui.backface_culling);
+            ImGui::Checkbox("Draw Wireframe", &m_ui.draw_wireframe);
+            ImGui::SameLine();
+            ImGui::Checkbox("Filled", &m_ui.draw_filled);
+
+            if (ImGui::CollapsingHeader("Stats", ImGuiTreeNodeFlags_DefaultOpen)) {
+                ImGui::Text("%.1f FPS (%.3f ms/frame)", m_io->Framerate, 1000.0f / m_io->Framerate);
+                ImGui::Text("%d x %d", m_fb.width(), m_fb.height());
+                if (ImGui::Button("Quit")) {
+                    SDL_Event event;
+                    event.type = SDL_QUIT;
+                    SDL_PushEvent(&event);
+                }
+            }
+
             ImGui::End();
         }
 
