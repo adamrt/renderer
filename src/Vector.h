@@ -34,6 +34,7 @@ struct Vec3 {
     static Vec3 cross(const Vec3& a, const Vec3& b);
     static float dot(const Vec3& a, const Vec3& b);
 
+    Vec2 xy() const;
     Vec4 xyzw() const;
 };
 
@@ -45,5 +46,6 @@ struct Vec4 {
 
     Vec4 operator-(const Vec4& rhs) const;
 
+    Vec2 xy() const;
     Vec3 xyz() const;
 };

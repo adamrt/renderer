@@ -11,11 +11,11 @@
 // projection.
 struct Triangle {
     Triangle();
-    Triangle(Vec4 a, Vec4 b, Vec4 c, Color color);
+    Triangle(Vec2 a, Vec2 b, Vec2 c, Color color);
 
     bool should_cull() const;
 
-    std::vector<Vec4> points;
+    std::vector<Vec2> points;
     std::vector<Vec2> texcoords;
     float avg_depth = 0.0f;
     Color color;

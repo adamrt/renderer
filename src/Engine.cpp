@@ -140,7 +140,7 @@ void Engine::update()
             proj_vertex.x += half_w;
             proj_vertex.y += half_h;
 
-            proj_triangle.points.push_back(proj_vertex);
+            proj_triangle.points.push_back(proj_vertex.xy());
         }
 
         if (m_ui.backface_culling && proj_triangle.should_cull()) {

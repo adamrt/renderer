@@ -32,6 +32,11 @@ float Vec2::dot(const Vec2& a, const Vec2& b)
     return a.x * b.x + a.y * b.y;
 }
 
+Vec2 Vec3::xy() const
+{
+    return Vec2(x, y);
+};
+
 Vec3::Vec3()
     : x(0.0f)
     , y(0.0f)
@@ -120,4 +125,9 @@ Vec4 Vec4::operator-(const Vec4& rhs) const
 Vec3 Vec4::xyz() const
 {
     return Vec3(x, y, z);
+};
+
+Vec2 Vec4::xy() const
+{
+    return Vec2(x, y);
 };
