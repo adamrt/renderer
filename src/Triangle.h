@@ -16,6 +16,8 @@ struct Triangle {
 
     std::array<Vec2, 3> points;
     std::array<Vec2, 3> texcoords;
+
+    f32 light_intensity = 0.0f;
     f32 avg_depth = 0.0f;
     Color color;
 };

@@ -120,7 +120,10 @@ void Framebuffer::draw_triangle_textured(Triangle& t, Texture& tex)
 
                 u32 rgba = (raw[0] << 24) | (raw[1] << 16) | (raw[2] << 8) | raw[3];
 
-                draw_pixel(p.x, p.y, Color(rgba));
+                Color color(rgba);
+                color = color * t.light_intensity;
+
+                draw_pixel(p.x, p.y, color);
             }
         }
     }
