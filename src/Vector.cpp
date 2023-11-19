@@ -27,6 +27,11 @@ Vec2 Vec2::operator-(const Vec2& rhs) const
     return Vec2(x - rhs.x, y - rhs.y);
 }
 
+float Vec2::dot(const Vec2& a, const Vec2& b)
+{
+    return a.x * b.x + a.y * b.y;
+}
+
 Vec3::Vec3()
     : x(0.0f)
     , y(0.0f)

@@ -13,6 +13,8 @@ struct Vec2 {
     Vec2 operator-(const Vec2& rhs) const;
     Vec2 operator+(const Vec2& rhs) const;
     Vec2 operator*(float scalar) const;
+
+    static float dot(const Vec2& a, const Vec2& b);
 };
 
 struct Vec3 {
