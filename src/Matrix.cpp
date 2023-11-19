@@ -12,8 +12,8 @@ Mat4::Mat4()
 Mat4 Mat4::operator+(const Mat4& rhs) const
 {
     Mat4 m;
-    for (int i = 0; i < 4; ++i) {
-        for (int j = 0; j < 4; ++j) {
+    for (i32 i = 0; i < 4; ++i) {
+        for (i32 j = 0; j < 4; ++j) {
             m(i, j) = data[i][j] + rhs(i, j);
         }
     }
@@ -23,8 +23,8 @@ Mat4 Mat4::operator+(const Mat4& rhs) const
 Mat4 Mat4::operator-(const Mat4& rhs) const
 {
     Mat4 m;
-    for (int i = 0; i < 4; ++i) {
-        for (int j = 0; j < 4; ++j) {
+    for (i32 i = 0; i < 4; ++i) {
+        for (i32 j = 0; j < 4; ++j) {
             m(i, j) = data[i][j] - rhs(i, j);
         }
     }
@@ -34,10 +34,10 @@ Mat4 Mat4::operator-(const Mat4& rhs) const
 Mat4 Mat4::operator*(const Mat4& rhs) const
 {
     Mat4 m;
-    for (int i = 0; i < 4; ++i) {
-        for (int j = 0; j < 4; ++j) {
+    for (i32 i = 0; i < 4; ++i) {
+        for (i32 j = 0; j < 4; ++j) {
             m(i, j) = 0;
-            for (int k = 0; k < 4; ++k) {
+            for (i32 k = 0; k < 4; ++k) {
                 m(i, j) += data[i][k] * rhs(k, j);
             }
         }
@@ -68,8 +68,8 @@ Mat4 Mat4::identity()
 {
     Mat4 m;
     // Initialize to identity matrix
-    for (int i = 0; i < 4; ++i) {
-        for (int j = 0; j < 4; ++j) {
+    for (i32 i = 0; i < 4; ++i) {
+        for (i32 j = 0; j < 4; ++j) {
             m.data[i][j] = (i == j) ? 1.0f : 0.0f;
         }
     }
@@ -94,7 +94,7 @@ Mat4 Mat4::scale(const Vec3& v)
     return m;
 }
 
-Mat4 Mat4::rotation_x(float angle)
+Mat4 Mat4::rotation_x(f32 angle)
 {
     auto c = std::cos(angle);
     auto s = std::sin(angle);
@@ -106,7 +106,7 @@ Mat4 Mat4::rotation_x(float angle)
     return m;
 }
 
-Mat4 Mat4::rotation_y(float angle)
+Mat4 Mat4::rotation_y(f32 angle)
 {
     auto c = std::cos(angle);
     auto s = std::sin(angle);
@@ -118,7 +118,7 @@ Mat4 Mat4::rotation_y(float angle)
     return m;
 }
 
-Mat4 Mat4::rotation_z(float angle)
+Mat4 Mat4::rotation_z(f32 angle)
 {
     auto c = std::cos(angle);
     auto s = std::sin(angle);
@@ -144,10 +144,10 @@ Mat4 Mat4::world(const Vec3& s, const Vec3& r, const Vec3& t)
     return world;
 }
 
-Mat4 Mat4::perspective(float fov, float aspect, float znear, float zfar)
+Mat4 Mat4::perspective(f32 fov, f32 aspect, f32 znear, f32 zfar)
 {
-    float thf = tan(fov / 2.0f);
-    float z_range = zfar - znear;
+    f32 thf = tan(fov / 2.0f);
+    f32 z_range = zfar - znear;
 
     Mat4 m {};
     m(0, 0) = aspect * (1.0f / thf);
@@ -159,11 +159,11 @@ Mat4 Mat4::perspective(float fov, float aspect, float znear, float zfar)
     return m;
 }
 
-Mat4 Mat4::orthographic(float left, float right, float bottom, float top, float znear, float zfar)
+Mat4 Mat4::orthographic(f32 left, f32 right, f32 bottom, f32 top, f32 znear, f32 zfar)
 {
-    float width = right - left;
-    float height = top - bottom;
-    float depth = zfar - znear;
+    f32 width = right - left;
+    f32 height = top - bottom;
+    f32 depth = zfar - znear;
 
     auto m = Mat4::identity();
     m(0, 0) = 2.0f / width;

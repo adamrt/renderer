@@ -1,9 +1,12 @@
-#include "Window.h"
-#include "imgui.h"
-#include "imgui_internal.h"
 #include <iostream>
 
-Window::Window(Framebuffer& fb, UI& ui, int width, int height)
+#include "imgui.h"
+#include "imgui_internal.h"
+
+#include "AK.h"
+#include "Window.h"
+
+Window::Window(Framebuffer& fb, UI& ui, i32 width, i32 height)
     : m_fb(fb)
     , m_ui(ui)
     , m_width(width)
@@ -136,7 +139,7 @@ void Window::render()
     ImGui_ImplSDL2_NewFrame();
     ImGui::NewFrame();
 
-    SDL_UpdateTexture(m_texture, NULL, m_fb.colorbuffer().data(), m_fb.width() * sizeof(uint32_t));
+    SDL_UpdateTexture(m_texture, NULL, m_fb.colorbuffer().data(), m_fb.width() * sizeof(u32));
 
     draw_gui(); // Uses updated m_texture
 

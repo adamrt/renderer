@@ -7,12 +7,12 @@ Color::Color()
 {
 }
 
-Color::Color(uint32_t color)
+Color::Color(u32 color)
     : rgba { color }
 {
 }
 
-Color Color::operator*(float factor) const
+Color Color::operator*(f32 factor) const
 {
     if (factor < 0.0f) {
         factor = 0.0f;
@@ -22,15 +22,15 @@ Color Color::operator*(float factor) const
     }
 
     // Extract RGBA components
-    uint8_t red = (rgba >> 24) & 0xFF;
-    uint8_t green = (rgba >> 16) & 0xFF;
-    uint8_t blue = (rgba >> 8) & 0xFF;
-    uint8_t alpha = rgba & 0xFF;
+    u8 red = (rgba >> 24) & 0xFF;
+    u8 green = (rgba >> 16) & 0xFF;
+    u8 blue = (rgba >> 8) & 0xFF;
+    u8 alpha = rgba & 0xFF;
 
     // Scale each component
-    red = std::min(static_cast<uint32_t>(red * factor), 255u);
-    green = std::min(static_cast<uint32_t>(green * factor), 255u);
-    blue = std::min(static_cast<uint32_t>(blue * factor), 255u);
+    red = std::min(static_cast<u32>(red * factor), 255u);
+    green = std::min(static_cast<u32>(green * factor), 255u);
+    blue = std::min(static_cast<u32>(blue * factor), 255u);
 
     return (red << 24) | (green << 16) | (blue << 8) | alpha;
 }

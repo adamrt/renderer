@@ -5,18 +5,15 @@
 
 #include "Engine.h"
 #include "Light.h"
-#include "Matrix.h"
 #include "Mesh.h"
 #include "Triangle.h"
-#include "UI.h"
 #include "Vector.h"
-#include "Window.h"
 
-const float ZNEAR = 0.1f;
-const float ZFAR = 100.0f;
+const f32 ZNEAR = 0.1f;
+const f32 ZFAR = 100.0f;
 
-const float MIN_ZOOM = 0.5f;
-const float MAX_ZOOM = 2.5f;
+const f32 MIN_ZOOM = 0.5f;
+const f32 MAX_ZOOM = 2.5f;
 
 std::vector<Triangle> triangles_to_render {};
 Light light { Vec3(0.0f, 0.0f, 1.0f), Color::Blue };
@@ -58,7 +55,7 @@ void Engine::process_input()
             }
             break;
         case SDL_MOUSEWHEEL:
-            float y = event.wheel.preciseY;
+            f32 y = event.wheel.preciseY;
             y *= 0.1f;
             zoom -= y;
             if (zoom < MIN_ZOOM)
@@ -76,7 +73,7 @@ void Engine::update()
 {
     triangles_to_render.clear();
 
-    int delay = FRAME_TARGET_TIME - (SDL_GetTicks() - m_previous_frame_time);
+    i32 delay = FRAME_TARGET_TIME - (SDL_GetTicks() - m_previous_frame_time);
 
     if (delay > 0 && delay <= FRAME_TARGET_TIME) {
         SDL_Delay(delay);
@@ -86,15 +83,15 @@ void Engine::update()
 
     if (m_ui.rotate) {
         mesh.rotation.x += 0.008f;
-        mesh.rotation.y += 0.008f;
-        mesh.rotation.z += 0.008f;
+        // mesh.rotation.y += 0.008f;
+        // mesh.rotation.z += 0.008f;
     }
 
     // Push points away from the camera.
     mesh.translation.z = 5.0f;
 
-    float half_w = m_framebuffer.width() / 2.0f;
-    float half_h = m_framebuffer.height() / 2.0f;
+    f32 half_w = m_framebuffer.width() / 2.0f;
+    f32 half_h = m_framebuffer.height() / 2.0f;
 
     Mat4 world = Mat4::world(mesh.scale, mesh.rotation, mesh.translation);
 
@@ -106,7 +103,7 @@ void Engine::update()
         };
 
         // Transform
-        for (int i = 0; i < 3; i++) {
+        for (i32 i = 0; i < 3; i++) {
             vertices[i] = world * vertices[i];
         }
 
@@ -118,7 +115,7 @@ void Engine::update()
         proj_triangle.texcoords[2] = mesh.texcoords[face.tc - 1];
 
         // Project
-        for (int i = 0; i < 3; i++) {
+        for (i32 i = 0; i < 3; i++) {
             Vec4 proj_vertex = m_projection_matrix * vertices[i].xyzw();
 
             if (m_ui.projection == Projection::Perspective) {
@@ -149,7 +146,7 @@ void Engine::update()
         }
 
         Vec3 normal = vertices_normal(vertices);
-        float intensity = -Vec3::dot(normal, light.direction);
+        f32 intensity = -Vec3::dot(normal, light.direction);
         proj_triangle.color = face.color * intensity;
 
         triangles_to_render.push_back(proj_triangle);
@@ -188,11 +185,11 @@ void Engine::render()
 void Engine::update_projection()
 {
     if (m_ui.projection == Projection::Perspective) {
-        float fov = M_PI / 3.0 * zoom;
+        f32 fov = M_PI / 3.0 * zoom;
         m_projection_matrix = Mat4::perspective(fov, m_framebuffer.aspect(), ZNEAR, ZFAR);
     } else {
-        float w = 1.0f * zoom;
-        float h = 1.0f * m_framebuffer.aspect() * zoom;
+        f32 w = 1.0f * zoom;
+        f32 h = 1.0f * m_framebuffer.aspect() * zoom;
         m_projection_matrix = Mat4::orthographic(-w, w, -h, h, ZNEAR, ZFAR);
     }
 };

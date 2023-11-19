@@ -1,7 +1,6 @@
 #pragma once
 
 #include <array>
-#include <cstdint>
 #include <vector>
 
 #include "Color.h"
@@ -17,7 +16,7 @@ struct Triangle {
 
     std::array<Vec2, 3> points;
     std::array<Vec2, 3> texcoords;
-    float avg_depth = 0.0f;
+    f32 avg_depth = 0.0f;
     Color color;
 };
 

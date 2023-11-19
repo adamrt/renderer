@@ -29,7 +29,7 @@ bool Triangle::should_cull() const
     Vec2 ab = b - a;
     Vec2 ac = c - a;
 
-    float sign = ab.x * ac.y - ac.x * ab.y;
+    f32 sign = ab.x * ac.y - ac.x * ab.y;
     return sign < 0;
 }
 

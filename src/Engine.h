@@ -1,5 +1,6 @@
 #pragma once
 
+#include "AK.h"
 #include "Framebuffer.h"
 #include "Matrix.h"
 #include "UI.h"
@@ -23,10 +24,10 @@ private:
     Window& m_window;
     UI& m_ui;
 
-    uint32_t m_previous_frame_time = SDL_GetTicks();
+    u32 m_previous_frame_time = SDL_GetTicks();
     bool m_running = true;
 
     Mat4 m_projection_matrix;
 
-    float zoom = 1.2f;
+    f32 zoom = 1.2f;
 };

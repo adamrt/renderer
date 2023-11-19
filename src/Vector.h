@@ -2,47 +2,49 @@
 
 #include <cmath>
 
+#include "AK.h"
+
 struct Vec4;
 
 struct Vec2 {
-    float x, y;
+    f32 x, y;
 
     Vec2();
-    Vec2(float x, float y);
+    Vec2(f32 x, f32 y);
 
     Vec2 operator-(const Vec2& rhs) const;
     Vec2 operator+(const Vec2& rhs) const;
-    Vec2 operator*(float scalar) const;
+    Vec2 operator*(f32 scalar) const;
 
-    static float dot(const Vec2& a, const Vec2& b);
+    static f32 dot(const Vec2& a, const Vec2& b);
 };
 
 struct Vec3 {
-    float x, y, z;
+    f32 x, y, z;
 
     Vec3();
-    Vec3(float x, float y, float z);
+    Vec3(f32 x, f32 y, f32 z);
 
     Vec3 operator+(const Vec3& rhs) const;
     Vec3 operator-(const Vec3& rhs) const;
-    Vec3 operator*(float scalar) const;
-    Vec3 operator/(float scalar) const;
+    Vec3 operator*(f32 scalar) const;
+    Vec3 operator/(f32 scalar) const;
 
     void normalize();
     Vec3 normalized() const;
 
     static Vec3 cross(const Vec3& a, const Vec3& b);
-    static float dot(const Vec3& a, const Vec3& b);
+    static f32 dot(const Vec3& a, const Vec3& b);
 
     Vec2 xy() const;
     Vec4 xyzw() const;
 };
 
 struct Vec4 {
-    float x, y, z, w;
+    f32 x, y, z, w;
 
     Vec4();
-    Vec4(float x, float y, float z, float w);
+    Vec4(f32 x, f32 y, f32 z, f32 w);
 
     Vec4 operator-(const Vec4& rhs) const;
 

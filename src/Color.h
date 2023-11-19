@@ -1,14 +1,14 @@
 #pragma once
 
-#include <cstdint>
+#include "AK.h"
 
 struct Color {
-    uint32_t rgba;
+    u32 rgba;
 
     Color();
-    Color(uint32_t color);
+    Color(u32 color);
 
-    Color operator*(float factor) const;
+    Color operator*(f32 factor) const;
 
     static const Color Black;
     static const Color White;

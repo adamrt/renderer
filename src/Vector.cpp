@@ -6,13 +6,13 @@ Vec2::Vec2()
 {
 }
 
-Vec2::Vec2(float x, float y)
+Vec2::Vec2(f32 x, f32 y)
     : x(x)
     , y(y)
 {
 }
 
-Vec2 Vec2::operator*(float scalar) const
+Vec2 Vec2::operator*(f32 scalar) const
 {
     return Vec2(x * scalar, y * scalar);
 }
@@ -27,7 +27,7 @@ Vec2 Vec2::operator-(const Vec2& rhs) const
     return Vec2(x - rhs.x, y - rhs.y);
 }
 
-float Vec2::dot(const Vec2& a, const Vec2& b)
+f32 Vec2::dot(const Vec2& a, const Vec2& b)
 {
     return a.x * b.x + a.y * b.y;
 }
@@ -44,7 +44,7 @@ Vec3::Vec3()
 {
 }
 
-Vec3::Vec3(float x, float y, float z)
+Vec3::Vec3(f32 x, f32 y, f32 z)
     : x(x)
     , y(y)
     , z(z)
@@ -61,12 +61,12 @@ Vec3 Vec3::operator-(const Vec3& rhs) const
     return Vec3(x - rhs.x, y - rhs.y, z - rhs.z);
 }
 
-Vec3 Vec3::operator*(float scalar) const
+Vec3 Vec3::operator*(f32 scalar) const
 {
     return Vec3(x * scalar, y * scalar, z * scalar);
 }
 
-Vec3 Vec3::operator/(float scalar) const
+Vec3 Vec3::operator/(f32 scalar) const
 {
     return Vec3(x / scalar, y / scalar, z / scalar);
 }
@@ -76,14 +76,14 @@ Vec3 Vec3::cross(const Vec3& a, const Vec3& b)
     return Vec3(a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x);
 }
 
-float Vec3::dot(const Vec3& a, const Vec3& b)
+f32 Vec3::dot(const Vec3& a, const Vec3& b)
 {
     return a.x * b.x + a.y * b.y + a.z * b.z;
 }
 
 void Vec3::normalize()
 {
-    float length = std::sqrt(x * x + y * y + z * z);
+    f32 length = std::sqrt(x * x + y * y + z * z);
     x /= length;
     y /= length;
     z /= length;
@@ -109,7 +109,7 @@ Vec4::Vec4()
 {
 }
 
-Vec4::Vec4(float x, float y, float z, float w)
+Vec4::Vec4(f32 x, f32 y, f32 z, f32 w)
     : x(x)
     , y(y)
     , z(z)
