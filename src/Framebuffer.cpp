@@ -92,6 +92,12 @@ void Framebuffer::draw_triangle_filled(int x0, int y0, int x1, int y1, int x2, i
     int max_x = std::max({ x0, x1, x2 });
     int max_y = std::max({ y0, y1, y2 });
 
+    // Clamp possible values to the framebuffer so we don't overdraw.
+    min_x = std::max({ min_x, 0 });
+    min_y = std::max({ min_y, 0 });
+    max_x = std::min({ max_x, m_width - 1 });
+    max_y = std::min({ max_y, m_height - 1 });
+
     auto edge_function = [](int x0, int y0, int x1, int y1, int x2, int y2) {
         return (x2 - x0) * (y1 - y0) - (y2 - y0) * (x1 - x0);
     };
