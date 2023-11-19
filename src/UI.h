@@ -6,10 +6,10 @@ enum class Projection {
 };
 
 struct UI {
-    bool rotate = false;
-    bool draw_filled = false;
+    bool rotate = true;
+    bool draw_filled = true;
     bool draw_wireframe = true;
-    bool backface_culling = false;
+    bool backface_culling = true;
 
     Projection projection = Projection::Perspective;
 };

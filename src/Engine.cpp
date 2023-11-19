@@ -141,7 +141,8 @@ void Engine::update()
 
 void Engine::render()
 {
-    m_framebuffer.clear(0x333333FF);
+    m_framebuffer.clear(0x111111FF);
+    m_framebuffer.draw_grid(0x555555FF);
 
     if (m_ui.draw_filled) {
         for (auto& t : triangles_to_render) {

@@ -16,6 +16,15 @@ void Framebuffer::clear(uint32_t color)
     std::fill(m_colorbuffer.begin(), m_colorbuffer.end(), color);
 }
 
+void Framebuffer::draw_grid(uint32_t color)
+{
+    for (int y = 0; y < m_height; y += 10) {
+        for (int x = 0; x < m_width; x += 10) {
+            m_colorbuffer[(m_width * y) + x] = color;
+        }
+    }
+}
+
 void Framebuffer::draw_pixel(int x, int y, uint32_t color)
 {
     if (x < 0 || x >= m_width || y < 0 || y >= m_height) {
