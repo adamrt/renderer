@@ -58,7 +58,7 @@ void Engine::process_input()
             }
             break;
         case SDL_MOUSEWHEEL:
-            auto y = event.wheel.preciseY;
+            float y = event.wheel.preciseY;
             y *= 0.1f;
             zoom -= y;
             if (zoom < MIN_ZOOM)
@@ -93,10 +93,10 @@ void Engine::update()
     // Push points away from the camera.
     mesh.translation.z = 5.0f;
 
-    auto half_w = m_framebuffer.width() / 2.0f;
-    auto half_h = m_framebuffer.height() / 2.0f;
+    float half_w = m_framebuffer.width() / 2.0f;
+    float half_h = m_framebuffer.height() / 2.0f;
 
-    auto world = Mat4::world(mesh.scale, mesh.rotation, mesh.translation);
+    Mat4 world = Mat4::world(mesh.scale, mesh.rotation, mesh.translation);
 
     for (auto& face : mesh.faces) {
         auto vertices = std::array<Vec3, 3> {
@@ -148,8 +148,8 @@ void Engine::update()
             continue;
         }
 
-        auto normal = vertices_normal(vertices);
-        auto intensity = -Vec3::dot(normal, light.direction);
+        Vec3 normal = vertices_normal(vertices);
+        float intensity = -Vec3::dot(normal, light.direction);
         proj_triangle.color = face.color * intensity;
 
         triangles_to_render.push_back(proj_triangle);
@@ -188,11 +188,11 @@ void Engine::render()
 void Engine::update_projection()
 {
     if (m_ui.projection == Projection::Perspective) {
-        auto fov = M_PI / 3.0 * zoom;
+        float fov = M_PI / 3.0 * zoom;
         m_projection_matrix = Mat4::perspective(fov, m_framebuffer.aspect(), ZNEAR, ZFAR);
     } else {
-        auto w = 1.0f * zoom;
-        auto h = 1.0f * m_framebuffer.aspect() * zoom;
+        float w = 1.0f * zoom;
+        float h = 1.0f * m_framebuffer.aspect() * zoom;
         m_projection_matrix = Mat4::orthographic(-w, w, -h, h, ZNEAR, ZFAR);
     }
 };

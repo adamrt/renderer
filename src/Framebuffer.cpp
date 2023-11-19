@@ -87,8 +87,8 @@ void Framebuffer::draw_triangle(int x0, int y0, int x1, int y1, int x2, int y2, 
 
 void Framebuffer::draw_triangle_textured(Triangle& t, Texture& tex)
 {
-    auto a = t.points[0], b = t.points[1], c = t.points[2];
-    auto at = t.texcoords[0], bt = t.texcoords[1], ct = t.texcoords[2];
+    Vec2 a = t.points[0], b = t.points[1], c = t.points[2];
+    Vec2 at = t.texcoords[0], bt = t.texcoords[1], ct = t.texcoords[2];
 
     int min_x = std::min({ a.x, b.x, c.x });
     int min_y = std::min({ a.y, b.y, c.y });
@@ -104,22 +104,22 @@ void Framebuffer::draw_triangle_textured(Triangle& t, Texture& tex)
     Vec2 p;
     for (p.y = min_y; p.y <= max_y; p.y++) {
         for (p.x = min_x; p.x <= max_x; p.x++) {
-            auto weights = barycentric(a, b, c, p);
+            Vec3 weights = barycentric(a, b, c, p);
 
             if ((weights.x >= 0) && (weights.y >= 0) && (weights.z >= 0)) {
-                Vec2 texCoord = (at * weights.x) + (bt * weights.y) + (ct * weights.z);
+                Vec2 tex_coord = (at * weights.x) + (bt * weights.y) + (ct * weights.z);
 
                 // Fetch color from the texture
-                int texX = static_cast<int>(texCoord.x * tex.width());
-                int texY = static_cast<int>(texCoord.y * tex.height());
+                int tex_x = static_cast<int>(tex_coord.x * tex.width());
+                int tex_y = static_cast<int>(tex_coord.y * tex.height());
 
                 // Assuming the image is loaded as RGBA
-                int offset = (texY * tex.width() + texX) * tex.channels();
-                unsigned char color[4] = { tex.data()[offset], tex.data()[offset + 1], tex.data()[offset + 2], tex.data()[offset + 3] };
+                int offset = (tex_y * tex.width() + tex_x) * tex.channels();
+                unsigned char raw[4] = { tex.data()[offset], tex.data()[offset + 1], tex.data()[offset + 2], tex.data()[offset + 3] };
 
-                uint32_t colorInt = (color[0] << 24) | (color[1] << 16) | (color[2] << 8) | color[3];
+                uint32_t rgba = (raw[0] << 24) | (raw[1] << 16) | (raw[2] << 8) | raw[3];
 
-                draw_pixel(p.x, p.y, Color(colorInt));
+                draw_pixel(p.x, p.y, Color(rgba));
             }
         }
     }
@@ -172,9 +172,9 @@ Vec3 barycentric(const Vec2& a, const Vec2& b, const Vec2& c, const Vec2& p)
 
     Vec3 result;
 
-    auto v = (d11 * d20 - d01 * d21) / denom;
-    auto w = (d00 * d21 - d01 * d20) / denom;
-    auto u = 1.0f - v - w;
+    float v = (d11 * d20 - d01 * d21) / denom;
+    float w = (d00 * d21 - d01 * d20) / denom;
+    float u = 1.0f - v - w;
 
     return Vec3 { u, v, w };
 }
