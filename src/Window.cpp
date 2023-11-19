@@ -96,10 +96,12 @@ void Window::draw_gui()
             if (ImGui::CollapsingHeader("UI", ImGuiTreeNodeFlags_DefaultOpen)) {
                 if (ImGui::RadioButton("Perspective", m_ui.projection == Projection::Perspective)) {
                     m_ui.projection = Projection::Perspective;
+                    proj_event();
                 }
                 ImGui::SameLine();
                 if (ImGui::RadioButton("Orthographic", m_ui.projection == Projection::Orthographic)) {
                     m_ui.projection = Projection::Orthographic;
+                    proj_event();
                 }
             }
 

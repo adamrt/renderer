@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Framebuffer.h"
+#include "Matrix.h"
 #include "UI.h"
 #include "Window.h"
 
@@ -15,6 +16,8 @@ public:
 
     bool is_running(void) { return m_running; }
 
+    void update_projection();
+
 private:
     Framebuffer& m_framebuffer;
     Window& m_window;
@@ -22,6 +25,8 @@ private:
 
     uint32_t m_previous_frame_time = SDL_GetTicks();
     bool m_running = true;
+
+    Mat4 m_projection_matrix;
 
     float zoom = 1.2f;
 };

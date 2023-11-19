@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <functional>
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_render.h>
@@ -23,6 +24,8 @@ public:
     ~Window();
 
     void render();
+
+    std::function<void()> proj_event;
 
     int width() const { return m_width; }
     int height() const { return m_height; }

@@ -25,6 +25,13 @@ Engine::Engine(Framebuffer& fb, Window& window, UI& ui)
     , m_window(window)
     , m_ui(ui)
 {
+    // Callback for when the projection type changes in the GUI.
+    m_window.proj_event = [&]() {
+        update_projection();
+    };
+
+    // Initial projection matrix
+    update_projection();
 }
 
 void Engine::setup()
@@ -54,6 +61,8 @@ void Engine::process_input()
                 zoom = MIN_ZOOM;
             if (zoom > MAX_ZOOM)
                 zoom = MAX_ZOOM;
+
+            update_projection();
             break;
         }
     }
@@ -85,13 +94,6 @@ void Engine::update()
 
     auto world = Mat4::world(mesh.scale, mesh.rotation, mesh.translation);
 
-    auto fov = M_PI / 3.0 * zoom;
-    auto proj_persp = Mat4::perspective(fov, m_framebuffer.aspect(), ZNEAR, ZFAR);
-
-    auto pw = 1.0f * zoom;
-    auto ph = 1.0f * m_framebuffer.aspect() * zoom;
-    auto proj_ortho = Mat4::orthographic(-pw, pw, -ph, ph, ZNEAR, ZFAR);
-
     for (auto& face : mesh.faces) {
         auto face_vertices = std::vector<Vec3> {
             mesh.vertices[face.a - 1],
@@ -104,17 +106,15 @@ void Engine::update()
 
         for (auto face_vertex : face_vertices) {
             Vec3 transformed = world * face_vertex;
-            Vec4 vertex = transformed.vec4();
+
+            Vec4 vertex = m_projection_matrix * transformed.vec4();
 
             if (m_ui.projection == Projection::Perspective) {
-                vertex = proj_persp * vertex;
                 if (vertex.w != 0.0f) {
                     vertex.x /= vertex.w;
                     vertex.y /= vertex.w;
                     vertex.z /= vertex.w;
                 }
-            } else {
-                vertex = proj_ortho * vertex;
             }
 
             // Invert the Y asis to compensate for the Y axis of the model and
@@ -144,6 +144,7 @@ void Engine::render()
 {
     m_framebuffer.clear(Color::DarkGray);
     m_framebuffer.draw_grid(Color::LightGray);
+
     if (m_ui.draw_filled) {
         for (auto& t : triangles_to_render) {
             m_framebuffer.draw_triangle_filled(
@@ -166,3 +167,15 @@ void Engine::render()
 
     m_window.render();
 }
+
+void Engine::update_projection()
+{
+    if (m_ui.projection == Projection::Perspective) {
+        auto fov = M_PI / 3.0 * zoom;
+        m_projection_matrix = Mat4::perspective(fov, m_framebuffer.aspect(), ZNEAR, ZFAR);
+    } else {
+        auto w = 1.0f * zoom;
+        auto h = 1.0f * m_framebuffer.aspect() * zoom;
+        m_projection_matrix = Mat4::orthographic(-w, w, -h, h, ZNEAR, ZFAR);
+    }
+};
