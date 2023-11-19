@@ -35,9 +35,9 @@ bool Triangle::should_cull() const
 // normal returns the normal of the triangle.
 Vec3 Triangle::normal() const
 {
-    Vec3 a = points[0].vec3();
-    Vec3 b = points[1].vec3();
-    Vec3 c = points[2].vec3();
+    Vec3 a = points[0].xyz();
+    Vec3 b = points[1].xyz();
+    Vec3 c = points[2].xyz();
 
     Vec3 ab = b - a;
     Vec3 ac = c - a;

@@ -107,7 +107,7 @@ void Engine::update()
         for (auto vertex : face_vertices) {
 
             Vec3 trans_vertex = world * vertex;
-            Vec4 proj_vertex = m_projection_matrix * trans_vertex.vec4();
+            Vec4 proj_vertex = m_projection_matrix * trans_vertex.xyzw();
 
             if (m_ui.projection == Projection::Perspective) {
                 if (proj_vertex.w != 0.0f) {

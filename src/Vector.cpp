@@ -76,7 +76,7 @@ Vec3 Vec3::normalized() const
     return v;
 }
 
-Vec4 Vec3::vec4() const
+Vec4 Vec3::xyzw() const
 {
     return Vec4(x, y, z, 1.0f);
 };
@@ -102,7 +102,7 @@ Vec4 Vec4::operator-(const Vec4& rhs) const
     return Vec4(x - rhs.x, y - rhs.y, z - rhs.z, w - rhs.w);
 }
 
-Vec3 Vec4::vec3() const
+Vec3 Vec4::xyz() const
 {
     return Vec3(x, y, z);
 };
