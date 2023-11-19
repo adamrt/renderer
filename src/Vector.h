@@ -25,7 +25,10 @@ struct Vec3 {
     Vec3 operator/(float scalar) const;
 
     void normalize();
-    Vec3 cross(const Vec3& rhs) const;
+    Vec3 normalized() const;
+
+    static Vec3 cross(const Vec3& a, const Vec3& b);
+    static float dot(const Vec3& a, const Vec3& b);
 
     Vec4 vec4() const;
 };
