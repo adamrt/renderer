@@ -4,6 +4,7 @@
 #include <iostream>
 
 #include "Engine.h"
+#include "Light.h"
 #include "Matrix.h"
 #include "Mesh.h"
 #include "Triangle.h"
@@ -18,6 +19,7 @@ const float MIN_ZOOM = 0.5f;
 const float MAX_ZOOM = 2.5f;
 
 std::vector<Triangle> triangles_to_render {};
+Light light { Vec3(0.0f, 0.0f, 1.0f), Color::Blue };
 
 Mesh mesh("res/cube.obj");
 
@@ -142,6 +144,9 @@ void Engine::update()
             continue;
         }
 
+        auto normal = vertices_normal(vertices);
+        auto intensity = -Vec3::dot(normal, light.direction);
+        proj_triangle.color = face.color * intensity;
 
         triangles_to_render.push_back(proj_triangle);
     }

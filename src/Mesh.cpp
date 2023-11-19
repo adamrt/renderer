@@ -42,7 +42,7 @@ Mesh::Mesh(std::string filename)
             face.a = (uint32_t)vertex_indices[0];
             face.b = (uint32_t)vertex_indices[1];
             face.c = (uint32_t)vertex_indices[2];
-            face.color = Color::Black;
+            face.color = Color::White;
             faces.push_back(face);
         }
     }
