@@ -8,6 +8,8 @@ struct Color {
     Color();
     Color(uint32_t color);
 
+    Color operator*(float factor) const;
+
     static const Color Black;
     static const Color White;
     static const Color DarkGray;
