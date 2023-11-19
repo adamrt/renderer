@@ -113,13 +113,13 @@ void Engine::update()
         Triangle proj_triangle;
         proj_triangle.color = face.color;
         proj_triangle.avg_depth = (vertices[0].z + vertices[1].z + vertices[2].z) / 3.0f;
-        proj_triangle.texcoords.push_back(mesh.texcoords[face.ta - 1]);
-        proj_triangle.texcoords.push_back(mesh.texcoords[face.tb - 1]);
-        proj_triangle.texcoords.push_back(mesh.texcoords[face.tc - 1]);
+        proj_triangle.texcoords[0] = mesh.texcoords[face.ta - 1];
+        proj_triangle.texcoords[1] = mesh.texcoords[face.tb - 1];
+        proj_triangle.texcoords[2] = mesh.texcoords[face.tc - 1];
 
         // Project
-        for (auto vertex : vertices) {
-            Vec4 proj_vertex = m_projection_matrix * vertex.xyzw();
+        for (int i = 0; i < 3; i++) {
+            Vec4 proj_vertex = m_projection_matrix * vertices[i].xyzw();
 
             if (m_ui.projection == Projection::Perspective) {
                 if (proj_vertex.w != 0.0f) {
@@ -141,7 +141,7 @@ void Engine::update()
             proj_vertex.x += half_w;
             proj_vertex.y += half_h;
 
-            proj_triangle.points.push_back(proj_vertex.xy());
+            proj_triangle.points[i] = proj_vertex.xy();
         }
 
         if (m_ui.backface_culling && proj_triangle.should_cull()) {

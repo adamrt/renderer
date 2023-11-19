@@ -7,7 +7,6 @@ Triangle::Triangle()
     : points({})
     , color(Color::Red)
 {
-    points.reserve(3);
 }
 
 Triangle::Triangle(Vec2 a, Vec2 b, Vec2 c, Color color)

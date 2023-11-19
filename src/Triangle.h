@@ -15,8 +15,8 @@ struct Triangle {
 
     bool should_cull() const;
 
-    std::vector<Vec2> points;
-    std::vector<Vec2> texcoords;
+    std::array<Vec2, 3> points;
+    std::array<Vec2, 3> texcoords;
     float avg_depth = 0.0f;
     Color color;
 };
