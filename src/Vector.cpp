@@ -31,6 +31,39 @@ Vec3::Vec3(float x, float y, float z)
 {
 }
 
+Vec3 Vec3::operator+(const Vec3& rhs) const
+{
+    return Vec3(x + rhs.x, y + rhs.y, z + rhs.z);
+}
+
+Vec3 Vec3::operator-(const Vec3& rhs) const
+{
+    return Vec3(x - rhs.x, y - rhs.y, z - rhs.z);
+}
+
+Vec3 Vec3::operator*(float scalar) const
+{
+    return Vec3(x * scalar, y * scalar, z * scalar);
+}
+
+Vec3 Vec3::operator/(float scalar) const
+{
+    return Vec3(x / scalar, y / scalar, z / scalar);
+}
+
+Vec3 Vec3::cross(const Vec3& rhs) const
+{
+    return Vec3(y * rhs.z - z * rhs.y, z * rhs.x - x * rhs.z, x * rhs.y - y * rhs.x);
+}
+
+void Vec3::normalize()
+{
+    float length = std::sqrt(x * x + y * y + z * z);
+    x /= length;
+    y /= length;
+    z /= length;
+}
+
 Vec4 Vec3::vec4() const
 {
     return Vec4(x, y, z, 1.0f);
