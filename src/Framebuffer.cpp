@@ -117,7 +117,7 @@ void Framebuffer::draw_triangle_textured(Triangle& t, Texture& tex)
                 int offset = (texY * tex.width() + texX) * tex.channels();
                 unsigned char color[4] = { tex.data()[offset], tex.data()[offset + 1], tex.data()[offset + 2], tex.data()[offset + 3] };
 
-                uint32_t colorInt = (color[3] << 24) | (color[0] << 16) | (color[1] << 8) | color[2];
+                uint32_t colorInt = (color[0] << 24) | (color[1] << 16) | (color[2] << 8) | color[3];
 
                 draw_pixel(p.x, p.y, Color(colorInt));
             }
