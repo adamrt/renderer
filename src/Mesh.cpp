@@ -23,6 +23,11 @@ Mesh::Mesh(std::string filename)
             sscanf(line, "v %f %f %f", &vertex.x, &vertex.y, &vertex.z);
             vertices.push_back(vertex);
         }
+        if (strncmp(line, "vt ", 3) == 0) {
+            Vec2 texcoord;
+            sscanf(line, "vt %f %f", &texcoord.x, &texcoord.y);
+            texcoords.push_back(texcoord);
+        }
         if (strncmp(line, "n ", 2) == 0) {
             Vec3 vertex {};
             sscanf(line, "n %f %f %f", &vertex.x, &vertex.y, &vertex.z);
@@ -42,6 +47,9 @@ Mesh::Mesh(std::string filename)
             face.a = (uint32_t)vertex_indices[0];
             face.b = (uint32_t)vertex_indices[1];
             face.c = (uint32_t)vertex_indices[2];
+            face.ta = (uint32_t)texture_indices[0];
+            face.tb = (uint32_t)texture_indices[1];
+            face.tc = (uint32_t)texture_indices[2];
             face.color = Color::White;
             faces.push_back(face);
         }

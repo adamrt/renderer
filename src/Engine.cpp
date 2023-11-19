@@ -112,6 +112,9 @@ void Engine::update()
         Triangle proj_triangle;
         proj_triangle.color = face.color;
         proj_triangle.avg_depth = (vertices[0].z + vertices[1].z + vertices[2].z) / 3.0f;
+        proj_triangle.texcoords.push_back(mesh.texcoords[face.ta - 1]);
+        proj_triangle.texcoords.push_back(mesh.texcoords[face.tb - 1]);
+        proj_triangle.texcoords.push_back(mesh.texcoords[face.tc - 1]);
 
         // Project
         for (auto vertex : vertices) {

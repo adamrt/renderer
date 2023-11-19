@@ -9,6 +9,7 @@
 // Face is a triangle with vertex indices.
 struct Face {
     uint32_t a, b, c;
+    uint32_t ta, tb, tc;
     Color color = Color::Black;
 };
 
@@ -18,6 +19,7 @@ struct Mesh {
 
     std::vector<Vec3> vertices;
     std::vector<Vec3> normals;
+    std::vector<Vec2> texcoords;
     std::vector<Face> faces;
 
     Vec3 scale = Vec3(1.0f, 1.0f, 1.0f);
