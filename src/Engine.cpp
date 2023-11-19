@@ -22,6 +22,7 @@ std::vector<Triangle> triangles_to_render {};
 Light light { Vec3(0.0f, 0.0f, 1.0f), Color::Blue };
 
 Mesh mesh("res/cube.obj");
+Texture texture("res/cube.png");
 
 Engine::Engine(Framebuffer& fb, Window& window, UI& ui)
     : m_framebuffer(fb)
@@ -167,11 +168,7 @@ void Engine::render()
 
     if (m_ui.draw_filled) {
         for (auto& t : triangles_to_render) {
-            m_framebuffer.draw_triangle_filled(
-                t.points[0].x, t.points[0].y,
-                t.points[1].x, t.points[1].y,
-                t.points[2].x, t.points[2].y,
-                t.color);
+            m_framebuffer.draw_triangle_textured(t, texture);
         }
     }
 

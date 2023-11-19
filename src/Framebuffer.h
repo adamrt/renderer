@@ -4,9 +4,13 @@
 #include <vector>
 
 #include "Color.h"
+#include "Texture.h"
+#include "Triangle.h"
 #include "UI.h"
+#include "Vector.h"
 
 int edge_function(int x0, int y0, int x1, int y1, int x2, int y2);
+Vec3 barycentric(const Vec2& a, const Vec2& b, const Vec2& c, const Vec2& p);
 
 class Framebuffer {
 public:
@@ -26,6 +30,7 @@ public:
     void draw_rect(int x, int y, int w, int h, Color color);
     void draw_triangle(int x0, int y0, int x1, int y1, int x2, int y2, Color color);
     void draw_triangle_filled(int x0, int y0, int x1, int y1, int x2, int y2, Color color);
+    void draw_triangle_textured(Triangle& t, Texture& tex);
 
 private:
     UI& m_ui;
