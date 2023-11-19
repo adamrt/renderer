@@ -96,27 +96,21 @@ void Engine::update()
     Mat4 world = Mat4::world(mesh.scale, mesh.rotation, mesh.translation);
 
     for (auto& face : mesh.faces) {
-        auto vertices = std::array<Vec3, 3> {
+        auto face_verts = std::array<Vec3, 3> {
             mesh.vertices[face.a - 1],
             mesh.vertices[face.b - 1],
             mesh.vertices[face.c - 1]
         };
 
-        // Transform
+        auto trans_verts = std::array<Vec3, 3> {};
         for (i32 i = 0; i < 3; i++) {
-            vertices[i] = world * vertices[i];
+            trans_verts[i] = world * face_verts[i];
         }
 
-        Triangle proj_triangle;
-        proj_triangle.color = face.color;
-        proj_triangle.avg_depth = (vertices[0].z + vertices[1].z + vertices[2].z) / 3.0f;
-        proj_triangle.texcoords[0] = mesh.texcoords[face.ta - 1];
-        proj_triangle.texcoords[1] = mesh.texcoords[face.tb - 1];
-        proj_triangle.texcoords[2] = mesh.texcoords[face.tc - 1];
+        auto proj_verts = std::array<Vec2, 3> {};
 
-        // Project
         for (i32 i = 0; i < 3; i++) {
-            Vec4 proj_vertex = m_projection_matrix * vertices[i].xyzw();
+            Vec4 proj_vertex = m_projection_matrix * trans_verts[i].xyzw();
 
             if (m_ui.projection == Projection::Perspective) {
                 if (proj_vertex.w != 0.0f) {
@@ -138,13 +132,21 @@ void Engine::update()
             proj_vertex.x += half_w;
             proj_vertex.y += half_h;
 
-            proj_triangle.points[i] = proj_vertex.xy();
+            proj_verts[i] = proj_vertex.xy();
         }
 
-        if (m_ui.backface_culling && proj_triangle.should_cull()) {
+        if (m_ui.backface_culling && should_cull(proj_verts)) {
             continue;
         }
 
+        Triangle triangle;
+        triangle.points = proj_verts;
+        triangle.texcoords[0] = mesh.texcoords[face.ta - 1];
+        triangle.texcoords[1] = mesh.texcoords[face.tb - 1];
+        triangle.texcoords[2] = mesh.texcoords[face.tc - 1];
+
+        // Sorting for painters algo
+        triangle.avg_depth = (trans_verts[0].z + trans_verts[1].z + trans_verts[2].z) / 3.0f;
 
         // Light
         Vec3 normal = vertices_normal(trans_verts);
