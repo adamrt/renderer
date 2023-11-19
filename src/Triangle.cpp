@@ -31,3 +31,17 @@ bool Triangle::should_cull() const
     float sign = ab.x * ac.y - ac.x * ab.y;
     return sign < 0;
 }
+
+// normal returns the normal of the triangle.
+Vec3 Triangle::normal() const
+{
+    Vec3 a = points[0].vec3();
+    Vec3 b = points[1].vec3();
+    Vec3 c = points[2].vec3();
+
+    Vec3 ab = b - a;
+    Vec3 ac = c - a;
+
+    Vec3 normal = Vec3::cross(ab, ac);
+    return normal.normalized();
+}

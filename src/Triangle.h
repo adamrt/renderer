@@ -14,6 +14,7 @@ struct Triangle {
     Triangle(Vec4 a, Vec4 b, Vec4 c, Color color);
 
     bool should_cull() const;
+    Vec3 normal() const;
 
     std::vector<Vec4> points;
     Color color;
