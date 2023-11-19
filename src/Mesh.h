@@ -3,12 +3,13 @@
 #include <string>
 #include <vector>
 
+#include "Color.h"
 #include "Vector.h"
 
 // Face is a triangle with vertex indices.
 struct Face {
     uint32_t a, b, c;
-    uint32_t color;
+    Color color = Color::Black;
 };
 
 struct Mesh {

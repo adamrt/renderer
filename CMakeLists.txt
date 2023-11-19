@@ -21,6 +21,7 @@ add_library(imgui ${IMGUI_SOURCES} lib/imgui/imgui.cpp)
 
 add_executable(heretic
   src/main.cpp
+  src/Color.cpp
   src/Engine.cpp
   src/Framebuffer.cpp
   src/Matrix.cpp

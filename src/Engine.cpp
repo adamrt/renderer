@@ -142,9 +142,8 @@ void Engine::update()
 
 void Engine::render()
 {
-    m_framebuffer.clear(0x111111FF);
-    m_framebuffer.draw_grid(0x555555FF);
-
+    m_framebuffer.clear(Color::DarkGray);
+    m_framebuffer.draw_grid(Color::LightGray);
     if (m_ui.draw_filled) {
         for (auto& t : triangles_to_render) {
             m_framebuffer.draw_triangle_filled(
@@ -161,7 +160,7 @@ void Engine::render()
                 t.points[0].x, t.points[0].y,
                 t.points[1].x, t.points[1].y,
                 t.points[2].x, t.points[2].y,
-                0xA500FFFF);
+                Color::Purple);
         }
     }
 

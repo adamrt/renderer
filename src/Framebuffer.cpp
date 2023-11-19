@@ -11,12 +11,12 @@ Framebuffer::Framebuffer(UI& ui, int width, int height)
 {
 }
 
-void Framebuffer::clear(uint32_t color)
+void Framebuffer::clear(Color color)
 {
     std::fill(m_colorbuffer.begin(), m_colorbuffer.end(), color);
 }
 
-void Framebuffer::draw_grid(uint32_t color)
+void Framebuffer::draw_grid(Color color)
 {
     for (int y = 0; y < m_height; y += 10) {
         for (int x = 0; x < m_width; x += 10) {
@@ -25,7 +25,7 @@ void Framebuffer::draw_grid(uint32_t color)
     }
 }
 
-void Framebuffer::draw_pixel(int x, int y, uint32_t color)
+void Framebuffer::draw_pixel(int x, int y, Color color)
 {
     if (x < 0 || x >= m_width || y < 0 || y >= m_height) {
         return;
@@ -34,7 +34,7 @@ void Framebuffer::draw_pixel(int x, int y, uint32_t color)
 }
 
 // draw_line uses the Bresenham's line algorithm
-void Framebuffer::draw_line(int x0, int y0, int x1, int y1, uint32_t color)
+void Framebuffer::draw_line(int x0, int y0, int x1, int y1, Color color)
 {
     bool steep = std::abs(y1 - y0) > std::abs(x1 - x0);
 
@@ -68,7 +68,7 @@ void Framebuffer::draw_line(int x0, int y0, int x1, int y1, uint32_t color)
     }
 }
 
-void Framebuffer::draw_rect(int x, int y, int w, int h, uint32_t color)
+void Framebuffer::draw_rect(int x, int y, int w, int h, Color color)
 {
     for (int i = 0; i < w; i++) {
         for (int j = 0; j < h; j++) {
@@ -77,7 +77,7 @@ void Framebuffer::draw_rect(int x, int y, int w, int h, uint32_t color)
     }
 }
 
-void Framebuffer::draw_triangle(int x0, int y0, int x1, int y1, int x2, int y2, uint32_t color)
+void Framebuffer::draw_triangle(int x0, int y0, int x1, int y1, int x2, int y2, Color color)
 {
     draw_line(x0, y0, x1, y1, color);
     draw_line(x1, y1, x2, y2, color);
@@ -85,7 +85,7 @@ void Framebuffer::draw_triangle(int x0, int y0, int x1, int y1, int x2, int y2, 
 }
 
 // draw_triangle_filled draws a filled triangle using the edge function algorithm
-void Framebuffer::draw_triangle_filled(int x0, int y0, int x1, int y1, int x2, int y2, uint32_t color)
+void Framebuffer::draw_triangle_filled(int x0, int y0, int x1, int y1, int x2, int y2, Color color)
 {
     int min_x = std::min({ x0, x1, x2 });
     int min_y = std::min({ y0, y1, y2 });

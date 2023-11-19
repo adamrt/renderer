@@ -1,13 +1,14 @@
 #include "Triangle.h"
+#include "Color.h"
 
 Triangle::Triangle()
     : points({})
-    , color(0xFF0000FF)
+    , color(Color::Red)
 {
     points.reserve(3);
 }
 
-Triangle::Triangle(Vec4 a, Vec4 b, Vec4 c, uint32_t color)
+Triangle::Triangle(Vec4 a, Vec4 b, Vec4 c, Color color)
     : points({ a, b, c })
     , color(color)
 {
