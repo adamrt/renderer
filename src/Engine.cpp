@@ -1,5 +1,6 @@
 #include "SDL_events.h"
 #include "SDL_timer.h"
+#include <algorithm>
 #include <iostream>
 
 #include "Engine.h"
@@ -95,19 +96,24 @@ void Engine::update()
     auto world = Mat4::world(mesh.scale, mesh.rotation, mesh.translation);
 
     for (auto& face : mesh.faces) {
-        auto face_vertices = std::vector<Vec3> {
+        auto vertices = std::array<Vec3, 3> {
             mesh.vertices[face.a - 1],
             mesh.vertices[face.b - 1],
             mesh.vertices[face.c - 1]
         };
 
-        Triangle proj_triangle {};
+        // Transform
+        for (int i = 0; i < 3; i++) {
+            vertices[i] = world * vertices[i];
+        }
+
+        Triangle proj_triangle;
         proj_triangle.color = face.color;
+        proj_triangle.avg_depth = (vertices[0].z + vertices[1].z + vertices[2].z) / 3.0f;
 
-        for (auto vertex : face_vertices) {
-
-            Vec3 trans_vertex = world * vertex;
-            Vec4 proj_vertex = m_projection_matrix * trans_vertex.xyzw();
+        // Project
+        for (auto vertex : vertices) {
+            Vec4 proj_vertex = m_projection_matrix * vertex.xyzw();
 
             if (m_ui.projection == Projection::Perspective) {
                 if (proj_vertex.w != 0.0f) {
@@ -136,8 +142,14 @@ void Engine::update()
             continue;
         }
 
+
         triangles_to_render.push_back(proj_triangle);
     }
+
+    // Painters algo
+    std::sort(triangles_to_render.begin(), triangles_to_render.end(), [](const Triangle& a, const Triangle& b) {
+        return a.avg_depth > b.avg_depth;
+    });
 }
 
 void Engine::render()

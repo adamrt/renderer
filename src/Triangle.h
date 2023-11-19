@@ -17,5 +17,6 @@ struct Triangle {
     Vec3 normal() const;
 
     std::vector<Vec4> points;
+    float avg_depth = 0.0f;
     Color color;
 };
