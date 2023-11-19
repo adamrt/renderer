@@ -12,8 +12,6 @@ struct Triangle {
     Triangle();
     Triangle(Vec2 a, Vec2 b, Vec2 c, Color color);
 
-    bool should_cull() const;
-
     std::array<Vec2, 3> points;
     std::array<Vec2, 3> texcoords;
 
@@ -22,4 +20,5 @@ struct Triangle {
     Color color;
 };
 
+bool should_cull(std::array<Vec2, 3> points);
 Vec3 vertices_normal(const std::array<Vec3, 3>& points);

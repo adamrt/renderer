@@ -20,7 +20,7 @@ Triangle::Triangle(Vec2 a, Vec2 b, Vec2 c, Color color)
 // This checks the winding order of the triangle.  If its CCW then you
 // can ignore this triangle since it would be back-facing.  This
 // method must be done after the vertices have been projected.
-bool Triangle::should_cull() const
+bool should_cull(std::array<Vec2, 3> points)
 {
     Vec2 a = points[0];
     Vec2 b = points[1];
