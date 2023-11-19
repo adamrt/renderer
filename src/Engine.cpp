@@ -89,8 +89,8 @@ void Engine::update()
     // Push points away from the camera.
     mesh.translation.z = 5.0f;
 
-    auto w = m_framebuffer.width();
-    auto h = m_framebuffer.height();
+    auto half_w = m_framebuffer.width() / 2.0f;
+    auto half_h = m_framebuffer.height() / 2.0f;
 
     auto world = Mat4::world(mesh.scale, mesh.rotation, mesh.translation);
 
@@ -101,42 +101,42 @@ void Engine::update()
             mesh.vertices[face.c - 1]
         };
 
-        Triangle projected_triangle {};
-        projected_triangle.color = face.color;
+        Triangle proj_triangle {};
+        proj_triangle.color = face.color;
 
-        for (auto face_vertex : face_vertices) {
-            Vec3 transformed = world * face_vertex;
+        for (auto vertex : face_vertices) {
 
-            Vec4 vertex = m_projection_matrix * transformed.vec4();
+            Vec3 trans_vertex = world * vertex;
+            Vec4 proj_vertex = m_projection_matrix * trans_vertex.vec4();
 
             if (m_ui.projection == Projection::Perspective) {
-                if (vertex.w != 0.0f) {
-                    vertex.x /= vertex.w;
-                    vertex.y /= vertex.w;
-                    vertex.z /= vertex.w;
+                if (proj_vertex.w != 0.0f) {
+                    proj_vertex.x /= proj_vertex.w;
+                    proj_vertex.y /= proj_vertex.w;
+                    proj_vertex.z /= proj_vertex.w;
                 }
             }
 
             // Invert the Y asis to compensate for the Y axis of the model and
             // the color buffer being different (+Y up vs +Y down, respectively).
-            vertex.y *= -1;
+            proj_vertex.y *= -1;
 
             // Scale to screen size
-            vertex.x *= (w / 2.0f);
-            vertex.y *= (h / 2.0f);
+            proj_vertex.x *= half_w;
+            proj_vertex.y *= half_h;
 
             // Translate to middle of the screen
-            vertex.x += (w / 2.0f);
-            vertex.y += (h / 2.0f);
+            proj_vertex.x += half_w;
+            proj_vertex.y += half_h;
 
-            projected_triangle.points.push_back(vertex);
+            proj_triangle.points.push_back(proj_vertex);
         }
 
-        if (m_ui.backface_culling && projected_triangle.should_cull()) {
+        if (m_ui.backface_culling && proj_triangle.should_cull()) {
             continue;
         }
 
-        triangles_to_render.push_back(projected_triangle);
+        triangles_to_render.push_back(proj_triangle);
     }
 }
 
