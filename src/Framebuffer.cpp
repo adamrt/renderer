@@ -98,10 +98,6 @@ void Framebuffer::draw_triangle_filled(int x0, int y0, int x1, int y1, int x2, i
     max_x = std::min({ max_x, m_width - 1 });
     max_y = std::min({ max_y, m_height - 1 });
 
-    auto edge_function = [](int x0, int y0, int x1, int y1, int x2, int y2) {
-        return (x2 - x0) * (y1 - y0) - (y2 - y0) * (x1 - x0);
-    };
-
     for (int y = min_y; y <= max_y; y++) {
         for (int x = min_x; x <= max_x; x++) {
             int e0 = edge_function(x0, y0, x1, y1, x, y);
@@ -114,3 +110,8 @@ void Framebuffer::draw_triangle_filled(int x0, int y0, int x1, int y1, int x2, i
         }
     }
 }
+
+inline int edge_function(int x0, int y0, int x1, int y1, int x2, int y2)
+{
+    return (x2 - x0) * (y1 - y0) - (y2 - y0) * (x1 - x0);
+};

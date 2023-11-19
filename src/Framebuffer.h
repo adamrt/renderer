@@ -5,6 +5,8 @@
 
 #include "UI.h"
 
+int edge_function(int x0, int y0, int x1, int y1, int x2, int y2);
+
 class Framebuffer {
 public:
     Framebuffer(UI& ui, int width, int height);
