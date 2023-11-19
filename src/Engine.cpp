@@ -85,6 +85,13 @@ void Engine::update()
 
     auto world = Mat4::world(mesh.scale, mesh.rotation, mesh.translation);
 
+    auto fov = M_PI / 3.0 * zoom;
+    auto proj_persp = Mat4::perspective(fov, m_framebuffer.aspect(), ZNEAR, ZFAR);
+
+    auto pw = 1.0f * zoom;
+    auto ph = 1.0f * m_framebuffer.aspect() * zoom;
+    auto proj_ortho = Mat4::orthographic(-pw, pw, -ph, ph, ZNEAR, ZFAR);
+
     for (auto& face : mesh.faces) {
         auto face_vertices = std::vector<Vec3> {
             mesh.vertices[face.a - 1],
@@ -100,20 +107,14 @@ void Engine::update()
             Vec4 vertex = transformed.vec4();
 
             if (m_ui.projection == Projection::Perspective) {
-                // (180/3 = 60 degrees). Value is in radians.
-                auto fov = M_PI / 3.0 * zoom;
-                auto proj = Mat4::perspective(fov, m_framebuffer.aspect(), ZNEAR, ZFAR);
-                vertex = proj * vertex;
+                vertex = proj_persp * vertex;
                 if (vertex.w != 0.0f) {
                     vertex.x /= vertex.w;
                     vertex.y /= vertex.w;
                     vertex.z /= vertex.w;
                 }
             } else {
-                auto w = 1.0f * zoom;
-                auto h = 1.0f * m_framebuffer.aspect() * zoom;
-                auto proj = Mat4::orthographic(-w, w, -h, h, ZNEAR, ZFAR);
-                vertex = proj * vertex;
+                vertex = proj_ortho * vertex;
             }
 
             // Invert the Y asis to compensate for the Y axis of the model and
