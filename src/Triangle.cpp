@@ -1,5 +1,7 @@
-#include "Triangle.h"
+#include <array>
+
 #include "Color.h"
+#include "Triangle.h"
 
 Triangle::Triangle()
     : points({})
@@ -32,12 +34,13 @@ bool Triangle::should_cull() const
     return sign < 0;
 }
 
-// normal returns the normal of the triangle.
-Vec3 Triangle::normal() const
+// normal returns the normal of three vertices.  We do this calc
+// before projection so we can't use it as a method on Triangle.
+Vec3 vertices_normal(const std::array<Vec3, 3>& points)
 {
-    Vec3 a = points[0].xyz();
-    Vec3 b = points[1].xyz();
-    Vec3 c = points[2].xyz();
+    Vec3 a = points[0];
+    Vec3 b = points[1];
+    Vec3 c = points[2];
 
     Vec3 ab = b - a;
     Vec3 ac = c - a;
