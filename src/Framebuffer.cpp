@@ -129,15 +129,15 @@ void Framebuffer::draw_triangle_textured(Triangle& t, Texture& tex)
     Vec2 v1 = b.xy();
     Vec2 v2 = c.xy();
 
-    f32 area = edge_cross(v0, v1, v2);
+    f32 area = Vec2::edge_cross(v0, v1, v2);
 
     for (p.y = min_y; p.y <= max_y; p.y++) {
         for (p.x = min_x; p.x <= max_x; p.x++) {
 
             // These are the opposing vertices to the side we want.
-            float w0 = edge_cross(v1, v2, p);
-            float w1 = edge_cross(v2, v0, p);
-            float w2 = edge_cross(v0, v1, p);
+            float w0 = Vec2::edge_cross(v1, v2, p);
+            float w1 = Vec2::edge_cross(v2, v0, p);
+            float w2 = Vec2::edge_cross(v0, v1, p);
 
             f32 alpha = w0 / area;
             f32 beta = w1 / area;
@@ -206,9 +206,9 @@ void Framebuffer::draw_triangle_filled(Triangle& t)
 
     for (p.y = min_y; p.y <= max_y; p.y++) {
         for (p.x = min_x; p.x <= max_x; p.x++) {
-            f32 w0 = edge_cross(v0, v1, p);
-            f32 w1 = edge_cross(v1, v2, p);
-            f32 w2 = edge_cross(v2, v0, p);
+            f32 w0 = Vec2::edge_cross(v0, v1, p);
+            f32 w1 = Vec2::edge_cross(v1, v2, p);
+            f32 w2 = Vec2::edge_cross(v2, v0, p);
 
             if (w0 <= 0 && w1 <= 0 && w2 <= 0) {
                 draw_pixel(p.x, p.y, color);
@@ -216,8 +216,3 @@ void Framebuffer::draw_triangle_filled(Triangle& t)
         }
     }
 }
-
-inline f32 edge_cross(const Vec2& a, const Vec2& b, const Vec2& c)
-{
-    return (c.x - a.x) * (b.y - a.y) - (c.y - a.y) * (b.x - a.x);
-};

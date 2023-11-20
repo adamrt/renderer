@@ -32,6 +32,11 @@ f32 Vec2::dot(const Vec2& a, const Vec2& b)
     return a.x * b.x + a.y * b.y;
 }
 
+f32 Vec2::edge_cross(const Vec2& a, const Vec2& b, const Vec2& c)
+{
+    return (c.x - a.x) * (b.y - a.y) - (c.y - a.y) * (b.x - a.x);
+}
+
 Vec2 Vec3::xy() const
 {
     return Vec2(x, y);

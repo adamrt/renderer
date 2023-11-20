@@ -9,8 +9,6 @@
 #include "UI.h"
 #include "Vector.h"
 
-f32 edge_cross(const Vec2& a, const Vec2& b, const Vec2& c);
-
 class Framebuffer {
 public:
     Framebuffer(UI& ui, i32 width, i32 height);
