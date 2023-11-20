@@ -86,9 +86,15 @@ void Engine::update()
     m_previous_frame_time = SDL_GetTicks();
 
     if (m_ui.rotate) {
-        mesh.rotation.x += 0.008f;
-        // mesh.rotation.y += 0.008f;
-        // mesh.rotation.z += 0.008f;
+        if (m_ui.rotate_x) {
+            mesh.rotation.x += 0.008f;
+        }
+        if (m_ui.rotate_y) {
+            mesh.rotation.y += 0.008f;
+        }
+        if (m_ui.rotate_z) {
+            mesh.rotation.z += 0.008f;
+        }
     }
 
     // Push points away from the camera.
@@ -170,9 +176,13 @@ void Engine::render()
     m_framebuffer.clear(Color::DarkGray);
     m_framebuffer.draw_grid(Color::LightGray);
 
-    if (m_ui.draw_filled) {
+    if (m_ui.draw_texture) {
         for (auto& t : triangles_to_render) {
             m_framebuffer.draw_triangle_textured(t, texture);
+        }
+    } else if (m_ui.draw_filled) {
+        for (auto& t : triangles_to_render) {
+            m_framebuffer.draw_triangle_filled(t);
         }
     }
 

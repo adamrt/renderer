@@ -106,16 +106,42 @@ void Window::draw_gui()
                     m_ui.projection = Projection::Orthographic;
                     proj_event();
                 }
-            }
+                ImGui::Separator();
+                // Surface
+                if (ImGui::RadioButton("Draw Texture", m_ui.draw_texture)) {
+                    m_ui.draw_texture = true;
+                    m_ui.draw_filled = false;
+                    m_ui.draw_empty = false;
+                }
+                if (ImGui::RadioButton("Filled", m_ui.draw_filled)) {
+                    m_ui.draw_texture = false;
+                    m_ui.draw_filled = true;
+                    m_ui.draw_empty = false;
+                }
+                ImGui::SameLine();
+                ImGui::ColorEdit4("Color", &m_ui.fill_color.x, ImGuiColorEditFlags_NoSidePreview | ImGuiColorEditFlags_NoInputs);
+                if (ImGui::RadioButton("Empty", m_ui.draw_empty)) {
+                    m_ui.draw_texture = false;
+                    m_ui.draw_filled = false;
+                    m_ui.draw_empty = true;
+                }
+                ImGui::Checkbox("Wireframe", &m_ui.draw_wireframe);
+                ImGui::Separator();
+                // Rotation Buttons
+                ImGui::Checkbox("Rotate", &m_ui.rotate);
+                ImGui::SameLine();
+                ImGui::Checkbox("X", &m_ui.rotate_x);
+                ImGui::SameLine();
+                ImGui::Checkbox("Y", &m_ui.rotate_y);
+                ImGui::SameLine();
+                ImGui::Checkbox("Z", &m_ui.rotate_z);
+                ImGui::SameLine();
                 if (ImGui::Button("Reset Orientation")) {
                     orientation_event();
                 }
 
-            ImGui::Checkbox("Rotate", &m_ui.rotate);
-            ImGui::Checkbox("Backface Culling", &m_ui.backface_culling);
-            ImGui::Checkbox("Draw Wireframe", &m_ui.draw_wireframe);
-            ImGui::SameLine();
-            ImGui::Checkbox("Filled", &m_ui.draw_filled);
+                ImGui::Checkbox("Backface Culling", &m_ui.backface_culling);
+            }
 
             if (ImGui::CollapsingHeader("Information")) {
                 ImGui::Text("%dw x %dh", m_fb.width(), m_fb.height());
