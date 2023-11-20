@@ -10,14 +10,13 @@
 // projection.
 struct Triangle {
     Triangle();
-    Triangle(Vec2 a, Vec2 b, Vec2 c, Color color);
+    Triangle(Vec2 a, Vec2 b, Vec2 c);
 
     std::array<Vec2, 3> points;
     std::array<Vec2, 3> texcoords;
 
     f32 light_intensity = 0.0f;
     f32 avg_depth = 0.0f;
-    Color color;
 };
 
 bool should_cull(std::array<Vec2, 3> points);

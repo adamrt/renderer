@@ -5,13 +5,11 @@
 
 Triangle::Triangle()
     : points({})
-    , color(Color::Red)
 {
 }
 
-Triangle::Triangle(Vec2 a, Vec2 b, Vec2 c, Color color)
+Triangle::Triangle(Vec2 a, Vec2 b, Vec2 c)
     : points({ a, b, c })
-    , color(color)
 {
 }
 

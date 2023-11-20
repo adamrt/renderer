@@ -151,7 +151,6 @@ void Engine::update()
         // Light
         Vec3 normal = vertices_normal(trans_verts);
         triangle.light_intensity = -Vec3::dot(normal, light.direction);
-        triangle.color = face.color * triangle.light_intensity;
 
         triangles_to_render.push_back(triangle);
     }
