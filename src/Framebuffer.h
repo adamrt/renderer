@@ -9,7 +9,7 @@
 #include "UI.h"
 #include "Vector.h"
 
-i32 edge_function(i32 x0, i32 y0, i32 x1, i32 y1, i32 x2, i32 y2);
+i32 edge_function(const Vec2& a, const Vec2& b, const Vec2& c);
 Vec3 barycentric(const Vec2& a, const Vec2& b, const Vec2& c, const Vec2& p);
 
 class Framebuffer {

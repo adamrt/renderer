@@ -133,7 +133,9 @@ void Framebuffer::draw_triangle_filled(Triangle& t)
     Color color(m_ui.fill_color);
     color = color * t.light_intensity;
 
-    Vec2 a = t.points[0], b = t.points[1], c = t.points[2];
+    Vec2 a = t.points[0];
+    Vec2 b = t.points[1];
+    Vec2 c = t.points[2];
 
     i32 min_x = std::min({ a.x, b.x, c.x });
     i32 min_y = std::min({ a.y, b.y, c.y });
@@ -146,22 +148,23 @@ void Framebuffer::draw_triangle_filled(Triangle& t)
     max_x = std::min({ max_x, m_width - 1 });
     max_y = std::min({ max_y, m_height - 1 });
 
-    for (i32 y = min_y; y <= max_y; y++) {
-        for (i32 x = min_x; x <= max_x; x++) {
-            i32 e0 = edge_function(a.x, a.y, b.x, b.y, x, y);
-            i32 e1 = edge_function(b.x, b.y, c.x, c.y, x, y);
-            i32 e2 = edge_function(c.x, c.y, a.x, a.y, x, y);
+    Vec2 p;
+    for (p.y = min_y; p.y <= max_y; p.y++) {
+        for (p.x = min_x; p.x <= max_x; p.x++) {
+            i32 e0 = edge_function(a, b, p);
+            i32 e1 = edge_function(b, c, p);
+            i32 e2 = edge_function(c, a, p);
 
             if (e0 <= 0 && e1 <= 0 && e2 <= 0) {
-                draw_pixel(x, y, color);
+                draw_pixel(p.x, p.y, color);
             }
         }
     }
 }
 
-inline i32 edge_function(i32 x0, i32 y0, i32 x1, i32 y1, i32 x2, i32 y2)
+inline i32 edge_function(const Vec2& a, const Vec2& b, const Vec2& c)
 {
-    return (x2 - x0) * (y1 - y0) - (y2 - y0) * (x1 - x0);
+    return (c.x - a.x) * (b.y - a.y) - (c.y - a.y) * (b.x - a.x);
 };
 
 Vec3 barycentric(const Vec2& a, const Vec2& b, const Vec2& c, const Vec2& p)
