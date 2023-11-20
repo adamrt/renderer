@@ -206,11 +206,11 @@ void Framebuffer::draw_triangle_filled(Triangle& t)
 
     for (p.y = min_y; p.y <= max_y; p.y++) {
         for (p.x = min_x; p.x <= max_x; p.x++) {
-            f32 w0 = Vec2::edge_cross(v0, v1, p);
-            f32 w1 = Vec2::edge_cross(v1, v2, p);
-            f32 w2 = Vec2::edge_cross(v2, v0, p);
+            f32 w0 = Vec2::edge_cross(v1, v2, p);
+            f32 w1 = Vec2::edge_cross(v2, v0, p);
+            f32 w2 = Vec2::edge_cross(v0, v1, p);
 
-            if (w0 <= 0 && w1 <= 0 && w2 <= 0) {
+            if (w0 >= 0 && w1 >= 0 && w2 >= 0) {
                 draw_pixel(p.x, p.y, color);
             }
         }
