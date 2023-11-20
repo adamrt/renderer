@@ -110,7 +110,7 @@ void Framebuffer::draw_triangle(i32 x0, i32 y0, i32 x1, i32 y1, i32 x2, i32 y2, 
 
 void Framebuffer::draw_triangle_textured(Triangle& t, Texture& tex)
 {
-    Vec2 a = t.points[0], b = t.points[1], c = t.points[2];
+    Vec4 a = t.points[0], b = t.points[1], c = t.points[2];
     Vec2 at = t.texcoords[0], bt = t.texcoords[1], ct = t.texcoords[2];
 
     i32 min_x = std::min({ a.x, b.x, c.x });
@@ -125,9 +125,13 @@ void Framebuffer::draw_triangle_textured(Triangle& t, Texture& tex)
     max_y = std::min({ max_y, m_height - 1 });
 
     Vec2 p;
+    Vec2 av2 = a.xy();
+    Vec2 bv2 = b.xy();
+    Vec2 cv2 = c.xy();
+
     for (p.y = min_y; p.y <= max_y; p.y++) {
         for (p.x = min_x; p.x <= max_x; p.x++) {
-            Vec3 weights = barycentric(a, b, c, p);
+            Vec3 weights = barycentric(av2, bv2, cv2, p);
 
             if ((weights.x >= 0) && (weights.y >= 0) && (weights.z >= 0)) {
                 Vec2 tex_coord = (at * weights.x) + (bt * weights.y) + (ct * weights.z);
@@ -155,9 +159,9 @@ void Framebuffer::draw_triangle_filled(Triangle& t)
     Color color(m_ui.fill_color);
     color = color * t.light_intensity;
 
-    Vec2 a = t.points[0];
-    Vec2 b = t.points[1];
-    Vec2 c = t.points[2];
+    Vec4 a = t.points[0];
+    Vec4 b = t.points[1];
+    Vec4 c = t.points[2];
 
     i32 min_x = std::min({ a.x, b.x, c.x });
     i32 min_y = std::min({ a.y, b.y, c.y });
@@ -173,9 +177,9 @@ void Framebuffer::draw_triangle_filled(Triangle& t)
     Vec2 p;
     for (p.y = min_y; p.y <= max_y; p.y++) {
         for (p.x = min_x; p.x <= max_x; p.x++) {
-            i32 e0 = edge_function(a, b, p);
-            i32 e1 = edge_function(b, c, p);
-            i32 e2 = edge_function(c, a, p);
+            i32 e0 = edge_function(a.xy(), b.xy(), p);
+            i32 e1 = edge_function(b.xy(), c.xy(), p);
+            i32 e2 = edge_function(c.xy(), a.xy(), p);
 
             if (e0 <= 0 && e1 <= 0 && e2 <= 0) {
                 draw_pixel(p.x, p.y, color);

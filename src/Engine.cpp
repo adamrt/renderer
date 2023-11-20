@@ -117,7 +117,7 @@ void Engine::update()
             trans_verts[i] = world * face_verts[i];
         }
 
-        auto proj_verts = std::array<Vec2, 3> {};
+        auto proj_verts = std::array<Vec4, 3> {};
 
         for (i32 i = 0; i < 3; i++) {
             Vec4 proj_vertex = m_projection_matrix * trans_verts[i].xyzw();
@@ -142,7 +142,7 @@ void Engine::update()
             proj_vertex.x += half_w;
             proj_vertex.y += half_h;
 
-            proj_verts[i] = proj_vertex.xy();
+            proj_verts[i] = proj_vertex;
         }
 
         if (m_ui.backface_culling && should_cull(proj_verts)) {

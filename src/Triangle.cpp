@@ -8,7 +8,7 @@ Triangle::Triangle()
 {
 }
 
-Triangle::Triangle(Vec2 a, Vec2 b, Vec2 c)
+Triangle::Triangle(Vec4 a, Vec4 b, Vec4 c)
     : points({ a, b, c })
 {
 }
@@ -18,14 +18,14 @@ Triangle::Triangle(Vec2 a, Vec2 b, Vec2 c)
 // This checks the winding order of the triangle.  If its CCW then you
 // can ignore this triangle since it would be back-facing.  This
 // method must be done after the vertices have been projected.
-bool should_cull(std::array<Vec2, 3> points)
+bool should_cull(std::array<Vec4, 3> points)
 {
-    Vec2 a = points[0];
-    Vec2 b = points[1];
-    Vec2 c = points[2];
+    Vec4 a = points[0];
+    Vec4 b = points[1];
+    Vec4 c = points[2];
 
-    Vec2 ab = b - a;
-    Vec2 ac = c - a;
+    Vec4 ab = b - a;
+    Vec4 ac = c - a;
 
     f32 sign = ab.x * ac.y - ac.x * ab.y;
     return sign < 0;
