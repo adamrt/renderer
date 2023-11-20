@@ -110,11 +110,9 @@ void Framebuffer::draw_triangle_textured(Triangle& t, Texture& tex)
             if ((weights.x >= 0) && (weights.y >= 0) && (weights.z >= 0)) {
                 Vec2 tex_coord = (at * weights.x) + (bt * weights.y) + (ct * weights.z);
 
-                // Fetch color from the texture
                 i32 tex_x = static_cast<int>(tex_coord.x * tex.width());
                 i32 tex_y = static_cast<int>(tex_coord.y * tex.height());
 
-                // Assuming the image is loaded as RGBA
                 i32 offset = (tex_y * tex.width() + tex_x) * tex.channels();
                 u8 raw[4] = { tex.data()[offset], tex.data()[offset + 1], tex.data()[offset + 2], tex.data()[offset + 3] };
 
@@ -130,12 +128,17 @@ void Framebuffer::draw_triangle_textured(Triangle& t, Texture& tex)
 }
 
 // draw_triangle_filled draws a filled triangle using the edge function algorithm
-void Framebuffer::draw_triangle_filled(i32 x0, i32 y0, i32 x1, i32 y1, i32 x2, i32 y2, Color color)
+void Framebuffer::draw_triangle_filled(Triangle& t)
 {
-    i32 min_x = std::min({ x0, x1, x2 });
-    i32 min_y = std::min({ y0, y1, y2 });
-    i32 max_x = std::max({ x0, x1, x2 });
-    i32 max_y = std::max({ y0, y1, y2 });
+    Color color(m_ui.fill_color);
+    color = color * t.light_intensity;
+
+    Vec2 a = t.points[0], b = t.points[1], c = t.points[2];
+
+    i32 min_x = std::min({ a.x, b.x, c.x });
+    i32 min_y = std::min({ a.y, b.y, c.y });
+    i32 max_x = std::max({ a.x, b.x, c.x });
+    i32 max_y = std::max({ a.y, b.y, c.y });
 
     // Clamp possible values to the framebuffer so we don't overdraw.
     min_x = std::max({ min_x, 0 });
@@ -145,9 +148,9 @@ void Framebuffer::draw_triangle_filled(i32 x0, i32 y0, i32 x1, i32 y1, i32 x2, i
 
     for (i32 y = min_y; y <= max_y; y++) {
         for (i32 x = min_x; x <= max_x; x++) {
-            i32 e0 = edge_function(x0, y0, x1, y1, x, y);
-            i32 e1 = edge_function(x1, y1, x2, y2, x, y);
-            i32 e2 = edge_function(x2, y2, x0, y0, x, y);
+            i32 e0 = edge_function(a.x, a.y, b.x, b.y, x, y);
+            i32 e1 = edge_function(b.x, b.y, c.x, c.y, x, y);
+            i32 e2 = edge_function(c.x, c.y, a.x, a.y, x, y);
 
             if (e0 <= 0 && e1 <= 0 && e2 <= 0) {
                 draw_pixel(x, y, color);

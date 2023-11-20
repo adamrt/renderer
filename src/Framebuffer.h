@@ -29,7 +29,7 @@ public:
     void draw_line(i32 x0, i32 y0, i32 x1, i32 y1, Color color);
     void draw_rect(i32 x, i32 y, i32 w, i32 h, Color color);
     void draw_triangle(i32 x0, i32 y0, i32 x1, i32 y1, i32 x2, i32 y2, Color color);
-    void draw_triangle_filled(i32 x0, i32 y0, i32 x1, i32 y1, i32 x2, i32 y2, Color color);
+    void draw_triangle_filled(Triangle& t);
     void draw_triangle_textured(Triangle& t, Texture& tex);
 
 private:
