@@ -17,7 +17,7 @@ struct Vec2 {
     Vec2 operator*(f32 scalar) const;
 
     static f32 dot(const Vec2& a, const Vec2& b);
-    static f32 edge_cross(const Vec2& a, const Vec2& b, const Vec2& c);
+    static f32 edge_cross(const Vec2& a, const Vec2& b, const Vec2& p);
 };
 
 struct Vec3 {
