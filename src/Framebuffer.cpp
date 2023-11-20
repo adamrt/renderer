@@ -129,13 +129,19 @@ void Framebuffer::draw_triangle_textured(Triangle& t, Texture& tex)
     Vec2 v1 = b.xy();
     Vec2 v2 = c.xy();
 
+    f32 area = edge_cross(v0, v1, v2);
+
     for (p.y = min_y; p.y <= max_y; p.y++) {
         for (p.x = min_x; p.x <= max_x; p.x++) {
-            Vec3 weights = barycentric(v0, v1, v2, p);
 
-            f32 alpha = weights.x;
-            f32 beta = weights.y;
-            f32 gamma = weights.z;
+            // These are the opposing vertices to the side we want.
+            float w0 = edge_cross(v1, v2, p);
+            float w1 = edge_cross(v2, v0, p);
+            float w2 = edge_cross(v0, v1, p);
+
+            f32 alpha = w0 / area;
+            f32 beta = w1 / area;
+            f32 gamma = w2 / area;
 
             if ((alpha >= 0) && (beta >= 0) && (gamma >= 0)) {
 
@@ -215,25 +221,3 @@ inline f32 edge_cross(const Vec2& a, const Vec2& b, const Vec2& c)
 {
     return (c.x - a.x) * (b.y - a.y) - (c.y - a.y) * (b.x - a.x);
 };
-
-Vec3 barycentric(const Vec2& a, const Vec2& b, const Vec2& c, const Vec2& p)
-{
-    Vec2 ab = b - a;
-    Vec2 ac = c - a;
-    Vec2 ap = p - a;
-
-    f32 d00 = Vec2::dot(ab, ab);
-    f32 d01 = Vec2::dot(ab, ac);
-    f32 d11 = Vec2::dot(ac, ac);
-    f32 d20 = Vec2::dot(ap, ab);
-    f32 d21 = Vec2::dot(ap, ac);
-    f32 denom = d00 * d11 - d01 * d01;
-
-    Vec3 result;
-
-    f32 v = (d11 * d20 - d01 * d21) / denom;
-    f32 w = (d00 * d21 - d01 * d20) / denom;
-    f32 u = 1.0f - v - w;
-
-    return Vec3 { u, v, w };
-}

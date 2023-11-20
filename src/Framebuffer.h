@@ -10,7 +10,6 @@
 #include "Vector.h"
 
 f32 edge_cross(const Vec2& a, const Vec2& b, const Vec2& c);
-Vec3 barycentric(const Vec2& a, const Vec2& b, const Vec2& c, const Vec2& p);
 
 class Framebuffer {
 public:
