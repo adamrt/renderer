@@ -125,13 +125,13 @@ void Framebuffer::draw_triangle_textured(Triangle& t, Texture& tex)
     max_y = std::min({ max_y, m_height - 1 });
 
     Vec2 p;
-    Vec2 av2 = a.xy();
-    Vec2 bv2 = b.xy();
-    Vec2 cv2 = c.xy();
+    Vec2 v0 = a.xy();
+    Vec2 v1 = b.xy();
+    Vec2 v2 = c.xy();
 
     for (p.y = min_y; p.y <= max_y; p.y++) {
         for (p.x = min_x; p.x <= max_x; p.x++) {
-            Vec3 weights = barycentric(av2, bv2, cv2, p);
+            Vec3 weights = barycentric(v0, v1, v2, p);
 
             f32 alpha = weights.x;
             f32 beta = weights.y;
@@ -150,7 +150,7 @@ void Framebuffer::draw_triangle_textured(Triangle& t, Texture& tex)
                         tex_coord.x = interpolated_u /= interpolated_reciprocal_w;
                         tex_coord.y = interpolated_v /= interpolated_reciprocal_w;
                     } else {
-                        tex_coord = (at * weights.x) + (bt * weights.y) + (ct * weights.z);
+                        tex_coord = (at * alpha) + (bt * beta) + (ct * gamma);
                     }
 
                     i32 tex_x = static_cast<int>(tex_coord.x * tex.width());
@@ -194,20 +194,24 @@ void Framebuffer::draw_triangle_filled(Triangle& t)
     max_y = std::min({ max_y, m_height - 1 });
 
     Vec2 p;
+    Vec2 v0 = a.xy();
+    Vec2 v1 = b.xy();
+    Vec2 v2 = c.xy();
+
     for (p.y = min_y; p.y <= max_y; p.y++) {
         for (p.x = min_x; p.x <= max_x; p.x++) {
-            i32 e0 = edge_function(a.xy(), b.xy(), p);
-            i32 e1 = edge_function(b.xy(), c.xy(), p);
-            i32 e2 = edge_function(c.xy(), a.xy(), p);
+            f32 w0 = edge_cross(v0, v1, p);
+            f32 w1 = edge_cross(v1, v2, p);
+            f32 w2 = edge_cross(v2, v0, p);
 
-            if (e0 <= 0 && e1 <= 0 && e2 <= 0) {
+            if (w0 <= 0 && w1 <= 0 && w2 <= 0) {
                 draw_pixel(p.x, p.y, color);
             }
         }
     }
 }
 
-inline i32 edge_function(const Vec2& a, const Vec2& b, const Vec2& c)
+inline f32 edge_cross(const Vec2& a, const Vec2& b, const Vec2& c)
 {
     return (c.x - a.x) * (b.y - a.y) - (c.y - a.y) * (b.x - a.x);
 };
