@@ -133,21 +133,40 @@ void Framebuffer::draw_triangle_textured(Triangle& t, Texture& tex)
         for (p.x = min_x; p.x <= max_x; p.x++) {
             Vec3 weights = barycentric(av2, bv2, cv2, p);
 
-            if ((weights.x >= 0) && (weights.y >= 0) && (weights.z >= 0)) {
-                Vec2 tex_coord = (at * weights.x) + (bt * weights.y) + (ct * weights.z);
+            f32 alpha = weights.x;
+            f32 beta = weights.y;
+            f32 gamma = weights.z;
 
-                i32 tex_x = static_cast<int>(tex_coord.x * tex.width());
-                i32 tex_y = static_cast<int>(tex_coord.y * tex.height());
+            if ((alpha >= 0) && (beta >= 0) && (gamma >= 0)) {
 
-                i32 offset = (tex_y * tex.width() + tex_x) * tex.channels();
-                u8 raw[4] = { tex.data()[offset], tex.data()[offset + 1], tex.data()[offset + 2], tex.data()[offset + 3] };
+                auto interpolated_reciprocal_w = (1 / a.w) * alpha + (1 / b.w) * beta + (1 / c.w) * gamma;
+                auto depth = 1.0f - interpolated_reciprocal_w;
+                if (depth < get_depth(p.x, p.y)) {
 
-                u32 rgba = (raw[0] << 24) | (raw[1] << 16) | (raw[2] << 8) | raw[3];
+                    Vec2 tex_coord {};
+                    if (m_ui.perspective_correction) {
+                        auto interpolated_u = (at.x / a.w) * alpha + (bt.x / b.w) * beta + (ct.x / c.w) * gamma;
+                        auto interpolated_v = (at.y / a.w) * alpha + (bt.y / b.w) * beta + (ct.y / c.w) * gamma;
+                        tex_coord.x = interpolated_u /= interpolated_reciprocal_w;
+                        tex_coord.y = interpolated_v /= interpolated_reciprocal_w;
+                    } else {
+                        tex_coord = (at * weights.x) + (bt * weights.y) + (ct * weights.z);
+                    }
 
-                Color color(rgba);
-                color = color * t.light_intensity;
+                    i32 tex_x = static_cast<int>(tex_coord.x * tex.width());
+                    i32 tex_y = static_cast<int>(tex_coord.y * tex.height());
 
-                draw_pixel(p.x, p.y, color);
+                    i32 offset = (tex_y * tex.width() + tex_x) * tex.channels();
+                    u8 raw[4] = { tex.data()[offset], tex.data()[offset + 1], tex.data()[offset + 2], tex.data()[offset + 3] };
+
+                    u32 rgba = (raw[0] << 24) | (raw[1] << 16) | (raw[2] << 8) | raw[3];
+
+                    Color color(rgba);
+                    color = color * t.light_intensity;
+
+                    draw_pixel(p.x, p.y, color);
+                    set_depth(p.x, p.y, depth);
+                }
             }
         }
     }

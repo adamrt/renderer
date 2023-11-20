@@ -113,6 +113,9 @@ void Window::draw_gui()
                     m_ui.draw_filled = false;
                     m_ui.draw_empty = false;
                 }
+                ImGui::SameLine();
+                ImGui::Checkbox("Perspective Correction", &m_ui.perspective_correction);
+
                 if (ImGui::RadioButton("Filled", m_ui.draw_filled)) {
                     m_ui.draw_texture = false;
                     m_ui.draw_filled = true;
