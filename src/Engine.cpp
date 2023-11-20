@@ -173,7 +173,8 @@ void Engine::update()
 
 void Engine::render()
 {
-    m_framebuffer.clear(Color::DarkGray);
+    m_framebuffer.clear_depthbuffer();
+    m_framebuffer.clear_colorbuffer(Color::DarkGray);
     m_framebuffer.draw_grid(Color::LightGray);
 
     if (m_ui.draw_texture) {

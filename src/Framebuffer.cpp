@@ -10,12 +10,34 @@ Framebuffer::Framebuffer(UI& ui, i32 width, i32 height)
     , m_width(width)
     , m_height(height)
     , m_colorbuffer(m_width * m_height)
+    , m_depthbuffer(m_width * m_height)
 {
 }
 
-void Framebuffer::clear(Color color)
+void Framebuffer::clear_colorbuffer(Color color)
 {
     std::fill(m_colorbuffer.begin(), m_colorbuffer.end(), color);
+}
+
+void Framebuffer::clear_depthbuffer()
+{
+    std::fill(m_depthbuffer.begin(), m_depthbuffer.end(), 1.0f);
+}
+
+f32 Framebuffer::get_depth(i32 x, i32 y)
+{
+    if (x < 0 || x >= m_width || y < 0 || y >= m_height) {
+        return 1.0f;
+    }
+    return m_depthbuffer[(m_width * y) + x];
+}
+
+void Framebuffer::set_depth(i32 x, i32 y, f32 depth)
+{
+    if (x < 0 || x >= m_width || y < 0 || y >= m_height) {
+        return;
+    }
+    m_depthbuffer[(m_width * y) + x] = depth;
 }
 
 void Framebuffer::draw_grid(Color color)

@@ -16,14 +16,19 @@ class Framebuffer {
 public:
     Framebuffer(UI& ui, i32 width, i32 height);
 
-    const std::vector<Color>& colorbuffer() { return m_colorbuffer; }
-
     i32 width() const { return m_width; }
     i32 height() const { return m_height; }
     f32 aspect() const { return (f32)m_height / (f32)m_width; }
 
+    const std::vector<Color>& colorbuffer() const { return m_colorbuffer; }
+
+    void clear_colorbuffer(Color color);
+    void clear_depthbuffer();
+
+    f32 get_depth(i32 x, i32 y);
+    void set_depth(i32 x, i32 y, f32 depth);
+
     void render();
-    void clear(Color color);
     void draw_pixel(i32 x, i32 y, Color color);
     void draw_grid(Color color);
     void draw_line(i32 x0, i32 y0, i32 x1, i32 y1, Color color);
@@ -37,4 +42,5 @@ private:
     i32 m_width;
     i32 m_height;
     std::vector<Color> m_colorbuffer;
+    std::vector<f32> m_depthbuffer;
 };
