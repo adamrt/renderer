@@ -25,6 +25,7 @@ public:
     void render();
 
     std::function<void()> proj_event;
+    std::function<void()> orientation_event;
 
     int width() const { return m_width; }
     int height() const { return m_height; }

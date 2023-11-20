@@ -31,6 +31,10 @@ Engine::Engine(Framebuffer& fb, Window& window, UI& ui)
         update_projection();
     };
 
+    m_window.orientation_event = [&]() {
+        reset_orientation();
+    };
+
     // Initial projection matrix
     update_projection();
 }
@@ -196,3 +200,10 @@ void Engine::update_projection()
         m_projection_matrix = Mat4::orthographic(-w, w, -h, h, ZNEAR, ZFAR);
     }
 };
+
+void Engine::reset_orientation()
+{
+    mesh.rotation.x = 0.0f;
+    mesh.rotation.y = 0.0f;
+    mesh.rotation.z = 0.0f;
+}

@@ -107,6 +107,9 @@ void Window::draw_gui()
                     proj_event();
                 }
             }
+                if (ImGui::Button("Reset Orientation")) {
+                    orientation_event();
+                }
 
             ImGui::Checkbox("Rotate", &m_ui.rotate);
             ImGui::Checkbox("Backface Culling", &m_ui.backface_culling);

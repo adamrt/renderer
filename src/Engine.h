@@ -18,6 +18,7 @@ public:
     bool is_running(void) { return m_running; }
 
     void update_projection();
+    void reset_orientation();
 
 private:
     Framebuffer& m_framebuffer;
