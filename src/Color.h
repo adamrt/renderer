@@ -1,5 +1,7 @@
 #pragma once
 
+#include "imgui.h"
+
 #include "AK.h"
 
 struct Color {
@@ -7,6 +9,7 @@ struct Color {
 
     Color();
     Color(u32 color);
+    Color(ImVec4 color);
 
     Color operator*(f32 factor) const;
 

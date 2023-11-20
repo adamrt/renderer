@@ -12,6 +12,17 @@ Color::Color(u32 color)
 {
 }
 
+Color::Color(ImVec4 color)
+    : rgba { 0x000000FF }
+{
+    uint8_t r = static_cast<uint8_t>(color.x * 255.0f + 0.5f);
+    uint8_t g = static_cast<uint8_t>(color.y * 255.0f + 0.5f);
+    uint8_t b = static_cast<uint8_t>(color.z * 255.0f + 0.5f);
+    uint8_t a = static_cast<uint8_t>(color.w * 255.0f + 0.5f);
+
+    rgba = (r << 24) | (g << 16) | (b << 8) | a;
+}
+
 Color Color::operator*(f32 factor) const
 {
     if (factor < 0.0f) {
