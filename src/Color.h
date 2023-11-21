@@ -11,6 +11,8 @@ struct Color {
     Color(u32 color);
     Color(ImVec4 color);
 
+    Color operator+(const Color& rhs) const;
+    Color operator*(const Color& rhs) const;
     Color operator*(f32 factor) const;
 
     static const Color Black;
