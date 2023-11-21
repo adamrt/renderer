@@ -233,6 +233,13 @@ void Framebuffer::draw_triangle_filled(Triangle& t, Color color)
     Vec2 v1 = b.xy();
     Vec2 v2 = c.xy();
 
+    // Fill convention
+    f32 bias0 = Vec2::is_top_left(v1, v2) ? 0 : -0.0001;
+    f32 bias1 = Vec2::is_top_left(v2, v0) ? 0 : -0.0001;
+    f32 bias2 = Vec2::is_top_left(v0, v1) ? 0 : -0.0001;
+
+    f32 area = Vec2::edge_cross(v0, v1, v2);
+
     for (p.y = min_y; p.y <= max_y; p.y++) {
         for (p.x = min_x; p.x <= max_x; p.x++) {
             f32 w0 = Vec2::edge_cross(v1, v2, p);
@@ -240,7 +247,24 @@ void Framebuffer::draw_triangle_filled(Triangle& t, Color color)
             f32 w2 = Vec2::edge_cross(v0, v1, p);
 
             if (w0 >= 0 && w1 >= 0 && w2 >= 0) {
-                draw_pixel(p.x, p.y, color);
+
+                if (m_ui.enable_fill_convention) {
+                    w0 += bias0;
+                    w1 += bias1;
+                    w2 += bias2;
+                }
+
+                f32 alpha = w0 / area;
+                f32 beta = w1 / area;
+                f32 gamma = w2 / area;
+
+                auto interpolated_reciprocal_w = (1 / a.w) * alpha + (1 / b.w) * beta + (1 / c.w) * gamma;
+                auto depth = 1.0f - interpolated_reciprocal_w;
+
+                if (depth < get_depth(p.x, p.y)) {
+                    draw_pixel(p.x, p.y, color);
+                    set_depth(p.x, p.y, depth);
+                }
             }
         }
     }
