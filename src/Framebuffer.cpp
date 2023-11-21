@@ -207,9 +207,8 @@ void Framebuffer::draw_triangle_textured(Triangle& t, Texture& tex)
 }
 
 // draw_triangle_filled draws a filled triangle using the edge function algorithm
-void Framebuffer::draw_triangle_filled(Triangle& t)
+void Framebuffer::draw_triangle_filled(Triangle& t, Color color)
 {
-    Color color(m_ui.fill_color);
     if (m_ui.enable_lighting) {
         color = color * t.light_intensity;
     }
