@@ -129,6 +129,11 @@ void Framebuffer::draw_triangle_textured(Triangle& t, Texture& tex)
     Vec2 v1 = b.xy();
     Vec2 v2 = c.xy();
 
+    // Fill convention
+    f32 bias0 = Vec2::is_top_left(v1, v2) ? 0 : -0.0001;
+    f32 bias1 = Vec2::is_top_left(v2, v0) ? 0 : -0.0001;
+    f32 bias2 = Vec2::is_top_left(v0, v1) ? 0 : -0.0001;
+
     f32 area = Vec2::edge_cross(v0, v1, v2);
 
     for (p.y = min_y; p.y <= max_y; p.y++) {
@@ -138,6 +143,12 @@ void Framebuffer::draw_triangle_textured(Triangle& t, Texture& tex)
             float w0 = Vec2::edge_cross(v1, v2, p);
             float w1 = Vec2::edge_cross(v2, v0, p);
             float w2 = Vec2::edge_cross(v0, v1, p);
+
+            if (m_ui.enable_fill_convention) {
+                w0 += bias0;
+                w1 += bias1;
+                w2 += bias2;
+            }
 
             f32 alpha = w0 / area;
             f32 beta = w1 / area;

@@ -12,7 +12,7 @@
 const f32 ZNEAR = 0.1f;
 const f32 ZFAR = 100.0f;
 
-const f32 MIN_ZOOM = 0.5f;
+const f32 MIN_ZOOM = 0.1f;
 const f32 MAX_ZOOM = 2.5f;
 
 std::vector<Triangle> triangles_to_render {};

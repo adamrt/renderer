@@ -39,6 +39,14 @@ f32 Vec2::edge_cross(const Vec2& a, const Vec2& b, const Vec2& p)
     return ab.x * ap.y - ab.y * ap.x;
 }
 
+bool Vec2::is_top_left(const Vec2& start, const Vec2& end)
+{
+    Vec2 edge = end - start;
+    bool is_top_edge = edge.y == 0 && edge.x > 0;
+    bool is_left_edge = edge.y < 0;
+    return is_top_edge || is_left_edge;
+}
+
 Vec2 Vec3::xy() const
 {
     return Vec2(x, y);

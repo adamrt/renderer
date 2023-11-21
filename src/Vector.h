@@ -18,6 +18,7 @@ struct Vec2 {
 
     static f32 dot(const Vec2& a, const Vec2& b);
     static f32 edge_cross(const Vec2& a, const Vec2& b, const Vec2& p);
+    static bool is_top_left(const Vec2& start, const Vec2& end);
 };
 
 struct Vec3 {
