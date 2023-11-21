@@ -150,6 +150,8 @@ void Window::draw_gui()
             }
 
             if (ImGui::CollapsingHeader("Information")) {
+                ImGui::Text("Visible Triangles: %d/%d", m_ui.visible_triangles, m_ui.total_triangles);
+                ImGui::Separator();
                 ImGui::Text("%dw x %dh", m_fb.width(), m_fb.height());
                 ImGui::Text("SDL2 and ImGui");
                 ImGui::Text("Left handed system");

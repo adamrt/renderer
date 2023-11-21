@@ -29,4 +29,7 @@ struct UI {
     bool backface_culling = true;
 
     Projection projection = Projection::Perspective;
+
+    int total_triangles = 0;
+    int visible_triangles = 0;
 };

@@ -41,6 +41,7 @@ Engine::Engine(Framebuffer& fb, Window& window, UI& ui)
 
 void Engine::setup()
 {
+    m_ui.total_triangles = mesh.faces.size();
 }
 
 void Engine::process_input()
@@ -164,6 +165,8 @@ void Engine::update()
 
         triangles_to_render.push_back(triangle);
     }
+
+    m_ui.visible_triangles = triangles_to_render.size();
 
     // Painters algo
     std::sort(triangles_to_render.begin(), triangles_to_render.end(), [](const Triangle& a, const Triangle& b) {
