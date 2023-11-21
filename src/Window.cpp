@@ -136,8 +136,13 @@ void Window::draw_gui()
                 ImGui::Checkbox("Perspective Correction", &m_ui.perspective_correction);
 
                 ImGui::Separator();
-                ImGui::Checkbox("Wireframe", &m_ui.draw_wireframe);
                 ImGui::Checkbox("Lighting", &m_ui.enable_lighting);
+                ImGui::ColorEdit4("Ambient Light", &m_ui.ambient_light.x, ImGuiColorEditFlags_NoSidePreview | ImGuiColorEditFlags_NoInputs);
+                ImGui::SameLine((m_ui.width / (f32)3));
+                ImGui::SliderFloat("Ambient Strength", &m_ui.ambient_strength, 0.0f, 1.1f);
+                ImGui::Separator();
+
+                ImGui::Checkbox("Wireframe", &m_ui.draw_wireframe);
                 ImGui::Checkbox("Backface Culling", &m_ui.backface_culling);
                 ImGui::Checkbox("Fill Convention", &m_ui.enable_fill_convention);
 

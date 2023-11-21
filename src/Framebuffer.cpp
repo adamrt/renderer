@@ -154,6 +154,10 @@ void Framebuffer::draw_triangle_textured(Triangle& t, Texture& tex)
         w2_row += bias2;
     }
 
+    Color ambient(m_ui.ambient_light);
+    ambient = ambient * m_ui.ambient_strength;
+    Color light_color = Color::White * t.light_intensity;
+
     for (i32 y = min_y; y <= max_y; y++) {
         f32 w0 = w0_row;
         f32 w1 = w1_row;
@@ -202,7 +206,8 @@ void Framebuffer::draw_triangle_textured(Triangle& t, Texture& tex)
 
                     Color color(rgba);
                     if (m_ui.enable_lighting) {
-                        color = color * t.light_intensity;
+                        Color light = ambient * 2.0 + light_color;
+                        color = color * light;
                     }
 
                     draw_pixel(x, y, color);
@@ -223,7 +228,11 @@ void Framebuffer::draw_triangle_textured(Triangle& t, Texture& tex)
 void Framebuffer::draw_triangle_filled(Triangle& t, Color color)
 {
     if (m_ui.enable_lighting) {
-        color = color * t.light_intensity;
+        Color ambient(m_ui.ambient_light);
+        ambient = ambient * m_ui.ambient_strength;
+        Color light_color = Color::White * t.light_intensity;
+        Color light = ambient * 2.0 + light_color;
+        color = color * light;
     }
 
     Vec4 a = t.points[0];

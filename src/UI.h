@@ -26,6 +26,9 @@ struct UI {
     bool perspective_correction = true;
     bool draw_filled = false;
     ImVec4 fill_color = { 1.0f, 1.0f, 1.0f, 1.0f };
+    ImVec4 ambient_light = { 1.0f, 1.0f, 1.0f, 1.0f };
+    f32 ambient_strength = 0.2f;
+
     bool draw_empty = false;
 
     bool draw_wireframe = false;
