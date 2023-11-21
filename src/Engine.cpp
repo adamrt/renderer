@@ -172,18 +172,17 @@ void Engine::render()
     m_framebuffer.clear_colorbuffer(Color::DarkGray);
     m_framebuffer.draw_grid(Color::LightGray);
 
-    if (m_ui.draw_texture) {
-        for (auto& t : triangles_to_render) {
-            m_framebuffer.draw_triangle_textured(t, texture);
-        }
-    } else if (m_ui.draw_filled) {
-        for (auto& t : triangles_to_render) {
-            m_framebuffer.draw_triangle_filled(t);
-        }
-    }
+    for (auto& t : triangles_to_render) {
 
-    if (m_ui.draw_wireframe) {
-        for (auto& t : triangles_to_render) {
+        if (m_ui.draw_texture) {
+            m_framebuffer.draw_triangle_textured(t, texture);
+
+        } else if (m_ui.draw_filled) {
+            Color color(m_ui.fill_color);
+            m_framebuffer.draw_triangle_filled(t, color);
+        }
+
+        if (m_ui.draw_wireframe) {
             m_framebuffer.draw_triangle(
                 t.points[0].x, t.points[0].y,
                 t.points[1].x, t.points[1].y,
