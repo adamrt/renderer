@@ -96,6 +96,8 @@ void Window::draw_gui()
         {
             ImGui::Begin("Control", nullptr, window_flags);
             ImGui::Text("%.1f FPS (%.3f ms/frame)", m_io->Framerate, 1000.0f / m_io->Framerate);
+            ImGui::Text("Visible Triangles: %d/%d", m_ui.visible_triangles, m_ui.total_triangles);
+
             if (ImGui::CollapsingHeader("UI", ImGuiTreeNodeFlags_DefaultOpen)) {
                 if (ImGui::RadioButton("Perspective", m_ui.projection == Projection::Perspective)) {
                     m_ui.projection = Projection::Perspective;
@@ -111,13 +113,11 @@ void Window::draw_gui()
                 }
                 ImGui::Separator();
                 // Surface
-                if (ImGui::RadioButton("Draw Texture", m_ui.draw_texture)) {
-                    m_ui.draw_texture = true;
+                if (ImGui::RadioButton("Empty", m_ui.draw_empty)) {
+                    m_ui.draw_texture = false;
                     m_ui.draw_filled = false;
-                    m_ui.draw_empty = false;
+                    m_ui.draw_empty = true;
                 }
-                ImGui::SameLine();
-
                 if (ImGui::RadioButton("Filled", m_ui.draw_filled)) {
                     m_ui.draw_texture = false;
                     m_ui.draw_filled = true;
@@ -125,10 +125,10 @@ void Window::draw_gui()
                 }
                 ImGui::SameLine();
                 ImGui::ColorEdit4("Color", &m_ui.fill_color.x, ImGuiColorEditFlags_NoSidePreview | ImGuiColorEditFlags_NoInputs);
-                if (ImGui::RadioButton("Empty", m_ui.draw_empty)) {
-                    m_ui.draw_texture = false;
+                if (ImGui::RadioButton("Draw Texture", m_ui.draw_texture)) {
+                    m_ui.draw_texture = true;
                     m_ui.draw_filled = false;
-                    m_ui.draw_empty = true;
+                    m_ui.draw_empty = false;
                 }
                 ImGui::Separator();
                 ImGui::Checkbox("Wireframe", &m_ui.draw_wireframe);
@@ -153,12 +153,10 @@ void Window::draw_gui()
             }
 
             if (ImGui::CollapsingHeader("Information")) {
-                ImGui::Text("Visible Triangles: %d/%d", m_ui.visible_triangles, m_ui.total_triangles);
-                ImGui::Separator();
-                ImGui::Text("%dw x %dh", m_fb.width(), m_fb.height());
-                ImGui::Text("SDL2 and ImGui");
+                ImGui::Text("%dx%d framebuffer", m_fb.width(), m_fb.height());
                 ImGui::Text("Left handed system");
                 ImGui::Text("Row major matrices");
+                ImGui::Text("Clockwise vertex winding");
             }
 
             if (ImGui::Button("Quit")) {
