@@ -156,9 +156,6 @@ void Engine::update()
         triangle.texcoords[1] = mesh.texcoords[face.tb - 1];
         triangle.texcoords[2] = mesh.texcoords[face.tc - 1];
 
-        // Sorting for painters algo
-        triangle.avg_depth = (trans_verts[0].z + trans_verts[1].z + trans_verts[2].z) / 3.0f;
-
         // Light
         Vec3 normal = vertices_normal(trans_verts);
         triangle.light_intensity = -Vec3::dot(normal, light.direction);
@@ -167,11 +164,6 @@ void Engine::update()
     }
 
     m_ui.visible_triangles = triangles_to_render.size();
-
-    // Painters algo
-    std::sort(triangles_to_render.begin(), triangles_to_render.end(), [](const Triangle& a, const Triangle& b) {
-        return a.avg_depth > b.avg_depth;
-    });
 }
 
 void Engine::render()

@@ -16,7 +16,6 @@ struct Triangle {
     std::array<Vec2, 3> texcoords;
 
     f32 light_intensity = 0.0f;
-    f32 avg_depth = 0.0f;
 };
 
 bool should_cull(std::array<Vec4, 3> points);
