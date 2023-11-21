@@ -165,8 +165,21 @@ void Framebuffer::draw_triangle_textured(Triangle& t, Texture& tex)
                 f32 beta = w1 / area;
                 f32 gamma = w2 / area;
 
-                auto interpolated_reciprocal_w = (1 / a.w) * alpha + (1 / b.w) * beta + (1 / c.w) * gamma;
-                auto depth = 1.0f - interpolated_reciprocal_w;
+                f32 depth = 0.0f;
+                f32 interpolated_reciprocal_w = 0.0f;
+                if (m_ui.projection == Projection::Perspective) {
+                    if (m_ui.perspective_correction) {
+                        interpolated_reciprocal_w = (1 / a.w) * alpha + (1 / b.w) * beta + (1 / c.w) * gamma;
+                        depth = 1.0f - interpolated_reciprocal_w;
+                    } else {
+                        depth = (1 / a.z) * alpha + (1 / b.z) * beta + (1 / c.z) * gamma;
+                        depth = 1.0f - depth;
+                    }
+                } else if (m_ui.projection == Projection::Orthographic) {
+                    // NOTE: I'm not sure why we need the reciprocal of these, but we do.
+                    depth = (1 / a.z) * alpha + (1 / b.z) * beta + (1 / c.z) * gamma;
+                }
+
                 if (depth < get_depth(x, y)) {
 
                     Vec2 tex_coord {};
@@ -258,8 +271,19 @@ void Framebuffer::draw_triangle_filled(Triangle& t, Color color)
                 f32 beta = w1 / area;
                 f32 gamma = w2 / area;
 
-                auto interpolated_reciprocal_w = (1 / a.w) * alpha + (1 / b.w) * beta + (1 / c.w) * gamma;
-                auto depth = 1.0f - interpolated_reciprocal_w;
+                f32 depth = 0.0f;
+                if (m_ui.projection == Projection::Perspective) {
+                    if (m_ui.perspective_correction) {
+                        auto interpolated_reciprocal_w = (1 / a.w) * alpha + (1 / b.w) * beta + (1 / c.w) * gamma;
+                        depth = 1.0f - interpolated_reciprocal_w;
+                    } else {
+                        depth = (1 / a.z) * alpha + (1 / b.z) * beta + (1 / c.z) * gamma;
+                        depth = 1.0f - depth;
+                    }
+                } else if (m_ui.projection == Projection::Orthographic) {
+                    // NOTE: I'm not sure why we need the reciprocal of these, but we do.
+                    depth = (1 / a.z) * alpha + (1 / b.z) * beta + (1 / c.z) * gamma;
+                }
 
                 if (depth < get_depth(p.x, p.y)) {
                     draw_pixel(p.x, p.y, color);
