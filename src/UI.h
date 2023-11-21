@@ -32,7 +32,8 @@ struct UI {
     bool backface_culling = true;
 
     Projection projection = Projection::Perspective;
-    Vec3 camera_position = Vec3(0.0f, 3.0f, -5.0f);
+    f32 camera_phi = 30.0f;
+    f32 camera_theta = 180.0f;
 
     int total_triangles = 0;
     int visible_triangles = 0;
