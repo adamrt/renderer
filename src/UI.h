@@ -11,8 +11,10 @@ enum class Projection {
 };
 
 struct UI {
-    UI(int width)
-        : width(width) {};
+    UI(int ui_width)
+        : width(ui_width)
+    {
+    }
 
     bool rotate = true;
     bool rotate_x = false;

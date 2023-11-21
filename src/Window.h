@@ -24,7 +24,7 @@ public:
 
     void render();
 
-    std::function<void()> proj_event;
+    std::function<void()> update_camera;
     std::function<void()> orientation_event;
 
     int width() const { return m_width; }

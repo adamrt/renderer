@@ -30,7 +30,6 @@ void Camera::zoom(f32 d)
     const f32 min_dist = 2.5f;
     const f32 max_dist = 25.0f;
     distance = kclamp(distance + d, min_dist, max_dist);
-    update();
 }
 
 Vec3 Camera::eye() const

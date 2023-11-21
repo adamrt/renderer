@@ -99,16 +99,20 @@ void Window::draw_gui()
             ImGui::Text("Visible Triangles: %d/%d", m_ui.visible_triangles, m_ui.total_triangles);
 
             if (ImGui::CollapsingHeader("Camera", ImGuiTreeNodeFlags_DefaultOpen)) {
-                ImGui::SliderFloat3("Camera Position", &m_ui.camera_position.x, -15.0f, 15.0f);
+
+                ImGui::Text("Camera Phi %f", m_ui.camera_phi);
+                ImGui::SameLine((m_ui.width / (f32)2));
+                ImGui::Text("Theta %f", m_ui.camera_theta);
+
                 if (ImGui::RadioButton("Perspective", m_ui.projection == Projection::Perspective)) {
                     m_ui.projection = Projection::Perspective;
                     m_ui.perspective_correction = true;
-                    proj_event();
+                    update_camera();
                 }
                 if (ImGui::RadioButton("Orthographic", m_ui.projection == Projection::Orthographic)) {
                     m_ui.projection = Projection::Orthographic;
                     m_ui.perspective_correction = false;
-                    proj_event();
+                    update_camera();
                 }
             }
             if (ImGui::CollapsingHeader("Model", ImGuiTreeNodeFlags_DefaultOpen)) {

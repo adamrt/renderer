@@ -9,39 +9,34 @@
 #include "Triangle.h"
 #include "Vector.h"
 
-const f32 ZNEAR = 0.1f;
-const f32 ZFAR = 100.0f;
-
-const f32 MIN_ZOOM = 0.1f;
-const f32 MAX_ZOOM = 2.5f;
-
 std::vector<Triangle> triangles_to_render {};
 Light light { Vec3(0.0f, 0.0f, 1.0f), Color::Blue };
 
 Mesh mesh("res/cube.obj");
 Texture texture("res/cube.png");
 
-Engine::Engine(Framebuffer& fb, Window& window, UI& ui)
+bool left_button_down = false;
+
+Engine::Engine(Framebuffer& fb, Window& window, Camera& camera, UI& ui)
     : m_framebuffer(fb)
     , m_window(window)
+    , m_camera(camera)
     , m_ui(ui)
 {
     // Callback for when the projection type changes in the GUI.
-    m_window.proj_event = [&]() {
-        update_projection();
+    m_window.update_camera = [&]() {
+        m_camera.update();
     };
 
     m_window.orientation_event = [&]() {
         reset_orientation();
     };
-
-    // Initial projection matrix
-    update_projection();
 }
 
 void Engine::setup()
 {
     m_ui.total_triangles = mesh.faces.size();
+    m_camera.update();
 }
 
 void Engine::process_input()
@@ -49,6 +44,9 @@ void Engine::process_input()
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
         ImGui_ImplSDL2_ProcessEvent(&event);
+
+        i32 mx, my;
+        SDL_GetMouseState(&mx, &my);
 
         switch (event.type) {
         case SDL_QUIT:
@@ -59,16 +57,34 @@ void Engine::process_input()
                 m_running = false;
             }
             break;
+        case SDL_MOUSEBUTTONDOWN:
+            if (mx < m_framebuffer.width() && my < m_framebuffer.height()) {
+                if (event.button.button == SDL_BUTTON_LEFT) {
+                    left_button_down = true;
+                }
+            }
+            break;
+        case SDL_MOUSEBUTTONUP:
+            if (mx < m_framebuffer.width() && my < m_framebuffer.height()) {
+                if (event.button.button == SDL_BUTTON_LEFT) {
+                    left_button_down = false;
+                }
+            }
+            break;
+        case SDL_MOUSEMOTION:
+            if (mx < m_framebuffer.width() && my < m_framebuffer.height()) {
+                if (left_button_down) {
+                    m_ui.rotate = false;
+                    m_camera.orbit(event.motion.xrel * 0.25f, event.motion.yrel * 0.25f);
+                    m_camera.update();
+                }
+            }
+            break;
         case SDL_MOUSEWHEEL:
-            f32 y = event.wheel.preciseY;
-            y *= 0.1f;
-            zoom -= y;
-            if (zoom < MIN_ZOOM)
-                zoom = MIN_ZOOM;
-            if (zoom > MAX_ZOOM)
-                zoom = MAX_ZOOM;
-
-            update_projection();
+            if (mx < m_framebuffer.width() && my < m_framebuffer.height()) {
+                m_camera.zoom(-event.wheel.preciseY);
+                m_camera.update();
+            }
             break;
         }
     }
@@ -102,7 +118,6 @@ void Engine::update()
     f32 half_h = m_framebuffer.height() / 2.0f;
 
     Mat4 world = Mat4::world(mesh.scale, mesh.rotation, mesh.translation);
-    Mat4 view = Mat4::look_at(m_ui.camera_position, Vec3(), Vec3(0.0f, 1.0f, 0.0));
 
     for (auto& face : mesh.faces) {
         auto face_verts = std::array<Vec3, 3> {
@@ -119,13 +134,13 @@ void Engine::update()
         Vec3 normal = vertices_normal(trans_verts);
 
         for (i32 i = 0; i < 3; i++) {
-            trans_verts[i] = view * trans_verts[i];
+            trans_verts[i] = m_camera.view_matrix * trans_verts[i];
         }
 
         auto proj_verts = std::array<Vec4, 3> {};
 
         for (i32 i = 0; i < 3; i++) {
-            Vec4 proj_vertex = m_projection_matrix * trans_verts[i].xyzw();
+            Vec4 proj_vertex = m_camera.proj_matrix * trans_verts[i].xyzw();
 
             if (m_ui.projection == Projection::Perspective) {
                 if (proj_vertex.w != 0.0f) {
@@ -196,18 +211,6 @@ void Engine::render()
 
     m_window.render();
 }
-
-void Engine::update_projection()
-{
-    if (m_ui.projection == Projection::Perspective) {
-        f32 fov = M_PI / 3.0 * zoom;
-        m_projection_matrix = Mat4::perspective(fov, m_framebuffer.aspect(), ZNEAR, ZFAR);
-    } else {
-        f32 w = 1.0f * zoom;
-        f32 h = 1.0f * m_framebuffer.aspect() * zoom;
-        m_projection_matrix = Mat4::orthographic(-w, w, -h, h, ZNEAR, ZFAR);
-    }
-};
 
 void Engine::reset_orientation()
 {
