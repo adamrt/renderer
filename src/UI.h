@@ -20,10 +20,9 @@ struct UI {
 
     bool draw_texture = true;
     bool perspective_correction = true;
-
     bool draw_filled = false;
-    bool draw_empty = false;
     ImVec4 fill_color = { 1.0f, 1.0f, 1.0f, 1.0f };
+    bool draw_empty = false;
 
     bool draw_wireframe = false;
     bool backface_culling = true;

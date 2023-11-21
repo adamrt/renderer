@@ -99,11 +99,14 @@ void Window::draw_gui()
             if (ImGui::CollapsingHeader("UI", ImGuiTreeNodeFlags_DefaultOpen)) {
                 if (ImGui::RadioButton("Perspective", m_ui.projection == Projection::Perspective)) {
                     m_ui.projection = Projection::Perspective;
+                    m_ui.perspective_correction = true;
                     proj_event();
                 }
                 ImGui::SameLine();
+                ImGui::Checkbox("Texture Correction", &m_ui.perspective_correction);
                 if (ImGui::RadioButton("Orthographic", m_ui.projection == Projection::Orthographic)) {
                     m_ui.projection = Projection::Orthographic;
+                    m_ui.perspective_correction = false;
                     proj_event();
                 }
                 ImGui::Separator();
@@ -114,7 +117,6 @@ void Window::draw_gui()
                     m_ui.draw_empty = false;
                 }
                 ImGui::SameLine();
-                ImGui::Checkbox("Perspective Correction", &m_ui.perspective_correction);
 
                 if (ImGui::RadioButton("Filled", m_ui.draw_filled)) {
                     m_ui.draw_texture = false;
