@@ -144,6 +144,7 @@ Mat4 Mat4::world(const Vec3& s, const Vec3& r, const Vec3& t)
     return world;
 }
 
+// perspective returns a projection matrix for a left-handed coordinate system.
 Mat4 Mat4::perspective(f32 fov, f32 aspect, f32 znear, f32 zfar)
 {
     f32 thf = tan(fov / 2.0f);
@@ -159,6 +160,7 @@ Mat4 Mat4::perspective(f32 fov, f32 aspect, f32 znear, f32 zfar)
     return m;
 }
 
+// orthographic returns a projection matrix for a left-handed coordinate system.
 Mat4 Mat4::orthographic(f32 left, f32 right, f32 bottom, f32 top, f32 znear, f32 zfar)
 {
     f32 width = right - left;
@@ -172,6 +174,31 @@ Mat4 Mat4::orthographic(f32 left, f32 right, f32 bottom, f32 top, f32 znear, f32
     m(0, 3) = -(right + left) / width;
     m(1, 3) = -(top + bottom) / height;
     m(2, 3) = -(zfar + znear) / depth;
+
+    return m;
+}
+
+// look_at returns a view matrix for a left-handed coordinate system.
+Mat4 Mat4::look_at(const Vec3& eye, const Vec3& target, const Vec3& up)
+{
+    Vec3 z = (target - eye).normalized();     // forward
+    Vec3 x = Vec3::cross(up, z).normalized(); // right
+    Vec3 y = Vec3::cross(z, x);               // up
+
+    Mat4 m;
+    m(0, 0) = x.x;
+    m(0, 1) = x.y;
+    m(0, 2) = x.z;
+    m(1, 0) = y.x;
+    m(1, 1) = y.y;
+    m(1, 2) = y.z;
+    m(2, 0) = z.x;
+    m(2, 1) = z.y;
+    m(2, 2) = z.z;
+    m(0, 3) = -Vec3::dot(x, eye);
+    m(1, 3) = -Vec3::dot(y, eye);
+    m(2, 3) = -Vec3::dot(z, eye);
+    m(3, 3) = 1.0f;
 
     return m;
 }

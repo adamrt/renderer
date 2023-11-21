@@ -37,4 +37,5 @@ public:
 
     static Mat4 perspective(f32 fov, f32 aspect, f32 znear, f32 zfar);
     static Mat4 orthographic(f32 left, f32 right, f32 bottom, f32 top, f32 znear, f32 zfar);
+    static Mat4 look_at(const Vec3& eye, const Vec3& target, const Vec3& up);
 };

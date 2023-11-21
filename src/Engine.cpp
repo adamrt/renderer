@@ -98,13 +98,11 @@ void Engine::update()
         }
     }
 
-    // Push points away from the camera.
-    mesh.translation.z = 5.0f;
-
     f32 half_w = m_framebuffer.width() / 2.0f;
     f32 half_h = m_framebuffer.height() / 2.0f;
 
     Mat4 world = Mat4::world(mesh.scale, mesh.rotation, mesh.translation);
+    Mat4 view = Mat4::look_at(m_ui.camera_position, Vec3(), Vec3(0.0f, 1.0f, 0.0));
 
     for (auto& face : mesh.faces) {
         auto face_verts = std::array<Vec3, 3> {
@@ -116,6 +114,12 @@ void Engine::update()
         auto trans_verts = std::array<Vec3, 3> {};
         for (i32 i = 0; i < 3; i++) {
             trans_verts[i] = world * face_verts[i];
+        }
+
+        Vec3 normal = vertices_normal(trans_verts);
+
+        for (i32 i = 0; i < 3; i++) {
+            trans_verts[i] = view * trans_verts[i];
         }
 
         auto proj_verts = std::array<Vec4, 3> {};
@@ -157,7 +161,6 @@ void Engine::update()
         triangle.texcoords[2] = mesh.texcoords[face.tc - 1];
 
         // Light
-        Vec3 normal = vertices_normal(trans_verts);
         triangle.light_intensity = -Vec3::dot(normal, light.direction);
 
         triangles_to_render.push_back(triangle);

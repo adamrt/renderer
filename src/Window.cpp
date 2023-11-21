@@ -99,6 +99,7 @@ void Window::draw_gui()
             ImGui::Text("Visible Triangles: %d/%d", m_ui.visible_triangles, m_ui.total_triangles);
 
             if (ImGui::CollapsingHeader("UI", ImGuiTreeNodeFlags_DefaultOpen)) {
+                ImGui::SliderFloat3("Camera Position", &m_ui.camera_position.x, -50.0f, 50.0f);
                 if (ImGui::RadioButton("Perspective", m_ui.projection == Projection::Perspective)) {
                     m_ui.projection = Projection::Perspective;
                     m_ui.perspective_correction = true;
