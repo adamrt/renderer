@@ -30,5 +30,5 @@ private:
 
     Mat4 m_projection_matrix;
 
-    f32 zoom = 1.2f;
+    f32 zoom = 0.8f;
 };

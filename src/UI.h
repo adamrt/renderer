@@ -11,9 +11,9 @@ enum class Projection {
 
 struct UI {
     bool rotate = true;
-    bool rotate_x = true;
+    bool rotate_x = false;
     bool rotate_y = true;
-    bool rotate_z = true;
+    bool rotate_z = false;
 
     bool enable_fill_convention = true;
     bool enable_lighting = true;

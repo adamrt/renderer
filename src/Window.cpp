@@ -128,6 +128,7 @@ void Window::draw_gui()
                     m_ui.draw_filled = false;
                     m_ui.draw_empty = true;
                 }
+                ImGui::Separator();
                 ImGui::Checkbox("Wireframe", &m_ui.draw_wireframe);
                 ImGui::Checkbox("Lighting", &m_ui.enable_lighting);
                 ImGui::Checkbox("Fill Convention", &m_ui.enable_fill_convention);
