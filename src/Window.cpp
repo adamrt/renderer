@@ -129,6 +129,7 @@ void Window::draw_gui()
                     m_ui.draw_empty = true;
                 }
                 ImGui::Checkbox("Wireframe", &m_ui.draw_wireframe);
+                ImGui::Checkbox("Lighting", &m_ui.enable_lighting);
                 ImGui::Separator();
                 // Rotation Buttons
                 ImGui::Checkbox("Rotate", &m_ui.rotate);

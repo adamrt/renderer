@@ -15,6 +15,8 @@ struct UI {
     bool rotate_y = true;
     bool rotate_z = true;
 
+    bool enable_lighting = true;
+
     bool draw_texture = true;
     bool perspective_correction = true;
 

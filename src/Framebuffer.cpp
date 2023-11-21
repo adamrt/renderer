@@ -168,7 +168,9 @@ void Framebuffer::draw_triangle_textured(Triangle& t, Texture& tex)
                     u32 rgba = (raw[0] << 24) | (raw[1] << 16) | (raw[2] << 8) | raw[3];
 
                     Color color(rgba);
-                    color = color * t.light_intensity;
+                    if (m_ui.enable_lighting) {
+                        color = color * t.light_intensity;
+                    }
 
                     draw_pixel(p.x, p.y, color);
                     set_depth(p.x, p.y, depth);
@@ -182,7 +184,9 @@ void Framebuffer::draw_triangle_textured(Triangle& t, Texture& tex)
 void Framebuffer::draw_triangle_filled(Triangle& t)
 {
     Color color(m_ui.fill_color);
-    color = color * t.light_intensity;
+    if (m_ui.enable_lighting) {
+        color = color * t.light_intensity;
+    }
 
     Vec4 a = t.points[0];
     Vec4 b = t.points[1];
