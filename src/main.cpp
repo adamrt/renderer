@@ -19,7 +19,7 @@ const i32 SCREEN_HEIGHT = 800;
 
 i32 main()
 {
-    UI ui {};
+    UI ui { (SCREEN_WIDTH / 3) };
     Framebuffer framebuffer(ui, (SCREEN_WIDTH / 3) * 2, SCREEN_HEIGHT);
     Window window(framebuffer, ui, SCREEN_WIDTH, SCREEN_HEIGHT);
     Engine engine(framebuffer, window, ui);

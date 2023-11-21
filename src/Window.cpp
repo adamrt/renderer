@@ -98,42 +98,47 @@ void Window::draw_gui()
             ImGui::Text("%.1f FPS (%.3f ms/frame)", m_io->Framerate, 1000.0f / m_io->Framerate);
             ImGui::Text("Visible Triangles: %d/%d", m_ui.visible_triangles, m_ui.total_triangles);
 
-            if (ImGui::CollapsingHeader("UI", ImGuiTreeNodeFlags_DefaultOpen)) {
-                ImGui::SliderFloat3("Camera Position", &m_ui.camera_position.x, -50.0f, 50.0f);
+            if (ImGui::CollapsingHeader("Camera", ImGuiTreeNodeFlags_DefaultOpen)) {
+                ImGui::SliderFloat3("Camera Position", &m_ui.camera_position.x, -15.0f, 15.0f);
                 if (ImGui::RadioButton("Perspective", m_ui.projection == Projection::Perspective)) {
                     m_ui.projection = Projection::Perspective;
                     m_ui.perspective_correction = true;
                     proj_event();
                 }
-                ImGui::SameLine();
-                ImGui::Checkbox("Texture Correction", &m_ui.perspective_correction);
                 if (ImGui::RadioButton("Orthographic", m_ui.projection == Projection::Orthographic)) {
                     m_ui.projection = Projection::Orthographic;
                     m_ui.perspective_correction = false;
                     proj_event();
                 }
-                ImGui::Separator();
+            }
+            if (ImGui::CollapsingHeader("Model", ImGuiTreeNodeFlags_DefaultOpen)) {
                 // Surface
                 if (ImGui::RadioButton("Empty", m_ui.draw_empty)) {
                     m_ui.draw_texture = false;
                     m_ui.draw_filled = false;
                     m_ui.draw_empty = true;
                 }
+
                 if (ImGui::RadioButton("Filled", m_ui.draw_filled)) {
                     m_ui.draw_texture = false;
                     m_ui.draw_filled = true;
                     m_ui.draw_empty = false;
                 }
-                ImGui::SameLine();
+                ImGui::SameLine((m_ui.width / (f32)3));
                 ImGui::ColorEdit4("Color", &m_ui.fill_color.x, ImGuiColorEditFlags_NoSidePreview | ImGuiColorEditFlags_NoInputs);
-                if (ImGui::RadioButton("Draw Texture", m_ui.draw_texture)) {
+
+                if (ImGui::RadioButton("Textured", m_ui.draw_texture)) {
                     m_ui.draw_texture = true;
                     m_ui.draw_filled = false;
                     m_ui.draw_empty = false;
                 }
+                ImGui::SameLine((m_ui.width / (f32)3));
+                ImGui::Checkbox("Perspective Correction", &m_ui.perspective_correction);
+
                 ImGui::Separator();
                 ImGui::Checkbox("Wireframe", &m_ui.draw_wireframe);
                 ImGui::Checkbox("Lighting", &m_ui.enable_lighting);
+                ImGui::Checkbox("Backface Culling", &m_ui.backface_culling);
                 ImGui::Checkbox("Fill Convention", &m_ui.enable_fill_convention);
 
                 ImGui::Separator();
@@ -149,8 +154,6 @@ void Window::draw_gui()
                 if (ImGui::Button("Reset Orientation")) {
                     orientation_event();
                 }
-
-                ImGui::Checkbox("Backface Culling", &m_ui.backface_culling);
             }
 
             if (ImGui::CollapsingHeader("Information")) {

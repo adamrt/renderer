@@ -11,6 +11,9 @@ enum class Projection {
 };
 
 struct UI {
+    UI(int width)
+        : width(width) {};
+
     bool rotate = true;
     bool rotate_x = false;
     bool rotate_y = true;
@@ -33,4 +36,6 @@ struct UI {
 
     int total_triangles = 0;
     int visible_triangles = 0;
+
+    int width = 0;
 };
