@@ -124,7 +124,6 @@ void Framebuffer::draw_triangle_textured(Triangle& t, Texture& tex)
     max_x = std::min({ max_x, m_width - 1 });
     max_y = std::min({ max_y, m_height - 1 });
 
-    Vec2 p;
     Vec2 v0 = a.xy();
     Vec2 v1 = b.xy();
     Vec2 v2 = c.xy();
@@ -134,31 +133,41 @@ void Framebuffer::draw_triangle_textured(Triangle& t, Texture& tex)
     f32 bias1 = Vec2::is_top_left(v2, v0) ? 0 : -0.0001;
     f32 bias2 = Vec2::is_top_left(v0, v1) ? 0 : -0.0001;
 
+    f32 w0_delta_col = v1.y - v2.y;
+    f32 w1_delta_col = v2.y - v0.y;
+    f32 w2_delta_col = v0.y - v1.y;
+
+    f32 w0_delta_row = v2.x - v1.x;
+    f32 w1_delta_row = v0.x - v2.x;
+    f32 w2_delta_row = v1.x - v0.x;
+
     f32 area = Vec2::edge_cross(v0, v1, v2);
 
-    for (p.y = min_y; p.y <= max_y; p.y++) {
-        for (p.x = min_x; p.x <= max_x; p.x++) {
+    Vec2 p0(min_x, min_y);
+    f32 w0_row = Vec2::edge_cross(v1, v2, p0);
+    f32 w1_row = Vec2::edge_cross(v2, v0, p0);
+    f32 w2_row = Vec2::edge_cross(v0, v1, p0);
 
-            // These are the opposing vertices to the side we want.
-            float w0 = Vec2::edge_cross(v1, v2, p);
-            float w1 = Vec2::edge_cross(v2, v0, p);
-            float w2 = Vec2::edge_cross(v0, v1, p);
+    if (m_ui.enable_fill_convention) {
+        w0_row += bias0;
+        w1_row += bias1;
+        w2_row += bias2;
+    }
 
-            if (m_ui.enable_fill_convention) {
-                w0 += bias0;
-                w1 += bias1;
-                w2 += bias2;
-            }
-
-            f32 alpha = w0 / area;
-            f32 beta = w1 / area;
-            f32 gamma = w2 / area;
-
-            if ((alpha >= 0) && (beta >= 0) && (gamma >= 0)) {
+    for (i32 y = min_y; y <= max_y; y++) {
+        f32 w0 = w0_row;
+        f32 w1 = w1_row;
+        f32 w2 = w2_row;
+        for (i32 x = min_x; x <= max_x; x++) {
+            bool is_inside = (w0 >= 0) && (w1 >= 0) && (w2 >= 0);
+            if (is_inside) {
+                f32 alpha = w0 / area;
+                f32 beta = w1 / area;
+                f32 gamma = w2 / area;
 
                 auto interpolated_reciprocal_w = (1 / a.w) * alpha + (1 / b.w) * beta + (1 / c.w) * gamma;
                 auto depth = 1.0f - interpolated_reciprocal_w;
-                if (depth < get_depth(p.x, p.y)) {
+                if (depth < get_depth(x, y)) {
 
                     Vec2 tex_coord {};
                     if (m_ui.perspective_correction) {
@@ -183,11 +192,17 @@ void Framebuffer::draw_triangle_textured(Triangle& t, Texture& tex)
                         color = color * t.light_intensity;
                     }
 
-                    draw_pixel(p.x, p.y, color);
-                    set_depth(p.x, p.y, depth);
+                    draw_pixel(x, y, color);
+                    set_depth(x, y, depth);
                 }
             }
+            w0 += w0_delta_col;
+            w1 += w1_delta_col;
+            w2 += w2_delta_col;
         }
+        w0_row += w0_delta_row;
+        w1_row += w1_delta_row;
+        w2_row += w2_delta_row;
     }
 }
 
