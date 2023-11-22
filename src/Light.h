@@ -4,6 +4,10 @@
 #include "Vector.h"
 
 struct Light {
-    Vec3 direction;
+    Vec3 position;
+    Color color;
+};
+
+struct AmbientLight {
     Color color;
 };

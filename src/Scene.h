@@ -22,11 +22,11 @@ public:
     Vec3 rotation = Vec3(0.0f, 0.0f, 0.0f);
     Vec3 translation = Vec3(0.0f, 0.0f, 0.0f);
 
-    std::vector<Triangle> to_render;
+    std::vector<Triangle> triangles_to_render;
 };
 
 struct Scene {
     std::vector<Model> models;
-    std::vector<PointLight> lights;
+    std::vector<Light> lights;
     AmbientLight ambient_light;
 };

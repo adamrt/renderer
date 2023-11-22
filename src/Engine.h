@@ -4,12 +4,13 @@
 #include "Camera.h"
 #include "Framebuffer.h"
 #include "Matrix.h"
+#include "Scene.h"
 #include "UI.h"
 #include "Window.h"
 
 class Engine {
 public:
-    Engine(Framebuffer& fb, Window& window, Camera& camera, UI& ui);
+    Engine(Framebuffer& fb, Window& window, Camera& camera, UI& ui, Scene& scene);
 
     void setup();
     void process_input();
@@ -28,6 +29,8 @@ private:
 
     u32 m_previous_frame_time = SDL_GetTicks();
     bool m_running = true;
+
+    Scene& m_scene;
 
     Mat4 m_projection_matrix;
 };

@@ -21,8 +21,4 @@ struct Mesh {
     std::vector<Vec3> normals;
     std::vector<Vec2> texcoords;
     std::vector<Face> faces;
-
-    Vec3 scale = Vec3(1.0f, 1.0f, 1.0f);
-    Vec3 rotation = Vec3(0.0f, 0.0f, 0.0f);
-    Vec3 translation = Vec3(0.0f, 0.0f, 0.0f);
 };
