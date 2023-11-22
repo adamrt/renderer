@@ -13,7 +13,7 @@ struct Camera {
 
     void orbit(f32 dx, f32 dy);
     void zoom(f32 d);
-    Vec3 eye() const;
+    Vec3 calculate_eye() const;
     void update();
 
     float distance = 5.0f;

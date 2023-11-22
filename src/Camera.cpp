@@ -32,21 +32,29 @@ void Camera::zoom(f32 d)
     distance = kclamp(distance + d, min_dist, max_dist);
 }
 
-Vec3 Camera::eye() const
+// I'm not sure if I understand the negation of x and z here, but it
+// gives me the results I want. If they aren't negated, then phi=0,
+// theta=0, distance=5 results in the camera being at (0,0,5) when we
+// want (0,0,-5).
+Vec3 Camera::calculate_eye() const
 {
     f32 lat = kradians(m_ui.camera_phi);
     f32 lng = kradians(m_ui.camera_theta);
 
-    const f32 x = distance * std::cos(lat) * std::sin(lng);
+    const f32 x = -distance * std::cos(lat) * std::sin(lng);
     const f32 y = distance * std::sin(lat);
-    const f32 z = distance * std::cos(lat) * std::cos(lng);
+    const f32 z = -distance * std::cos(lat) * std::cos(lng);
 
     return Vec3 { x, y, z };
 }
 
 void Camera::update()
 {
-    view_matrix = Mat4::look_at(eye(), Vec3 { 0.0f, 0.0f, 0.0f }, Vec3 { 0.0f, 1.0f, 0.0f });
+    const Vec3 up(0.0f, 1.0f, 0.0f);
+    const Vec3 target(0.0f, 0.0f, 0.0f);
+    const Vec3 pos = target + calculate_eye();
+
+    view_matrix = Mat4::look_at(pos, target, up);
 
     if (m_ui.projection == Projection::Perspective) {
         proj_matrix = static_perspective;
