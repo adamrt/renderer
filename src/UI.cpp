@@ -1,7 +1,8 @@
 #include "UI.h"
 
-UI::UI(int ui_width)
+UI::UI(int ui_width, Scene& scene)
     : m_width(ui_width)
+    , m_scene(scene)
 {
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();

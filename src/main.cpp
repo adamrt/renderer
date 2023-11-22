@@ -33,7 +33,7 @@ i32 main()
     scene.lights.push_back(light_b);
     scene.lights.push_back(light_r);
 
-    UI ui { (SCREEN_WIDTH / 3) };
+    UI ui { (SCREEN_WIDTH / 3), scene };
     Camera camera { ui };
     Framebuffer framebuffer(ui, (SCREEN_WIDTH / 3) * 2, SCREEN_HEIGHT);
     Window window(framebuffer, ui, SCREEN_WIDTH, SCREEN_HEIGHT);

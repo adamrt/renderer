@@ -12,6 +12,7 @@
 #include "imgui_internal.h"
 
 #include "AK.h"
+#include "Scene.h"
 #include "Vector.h"
 
 enum class Projection {
@@ -21,7 +22,7 @@ enum class Projection {
 
 class UI {
 public:
-    UI(int ui_width);
+    UI(int ui_width, Scene& scene);
     ~UI();
 
     std::function<void()> update_camera;
@@ -64,4 +65,5 @@ private:
     int m_fb_height = 0;
     int m_width = 0;
     ImGuiIO* m_io;
+    Scene& m_scene;
 };
