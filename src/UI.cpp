@@ -1,4 +1,5 @@
 #include "UI.h"
+#include "imgui.h"
 
 UI::UI(int ui_width, Scene& scene)
     : m_width(ui_width)
@@ -134,11 +135,6 @@ void UI::update()
                 ImGui::Checkbox("Perspective Correction", &perspective_correction);
 
                 ImGui::Separator();
-                ImGui::Checkbox("Lighting", &enable_lighting);
-                ImGui::ColorEdit4("Ambient Light", &ambient_light.x, ImGuiColorEditFlags_NoSidePreview | ImGuiColorEditFlags_NoInputs);
-                ImGui::SameLine((m_width / (f32)3));
-                ImGui::SliderFloat("Ambient Strength", &ambient_strength, 0.0f, 1.1f);
-                ImGui::Separator();
 
                 ImGui::Checkbox("Wireframe", &draw_wireframe);
                 ImGui::Checkbox("Backface Culling", &backface_culling);
@@ -157,6 +153,24 @@ void UI::update()
                 if (ImGui::Button("Reset Orientation")) {
                     orientation_event();
                 }
+            }
+
+            if (ImGui::CollapsingHeader("Lighting", ImGuiTreeNodeFlags_DefaultOpen)) {
+                ImGui::Checkbox("Enable Lighting", &enable_lighting);
+                ImGui::Separator();
+                ImGui::Text("Point Lights");
+                for (size_t i = 0; i < m_scene.lights.size(); i++) {
+                    ImGui::PushID(i);
+                    auto color = m_scene.lights[i].color.imvec4();
+                    if (ImGui::ColorEdit4("", &color.x, ImGuiColorEditFlags_NoSidePreview | ImGuiColorEditFlags_NoInputs)) {
+                        m_scene.lights[i].color = Color(color);
+                    }
+                    ImGui::SameLine();
+                    ImGui::SliderFloat3("Position", &m_scene.lights[i].position.x, -10.0f, 10.0f);
+                    ImGui::PopID();
+                }
+                ImGui::Separator();
+                ImGui::SliderFloat("Ambient Strength", &ambient_strength, 0.0f, 1.1f);
             }
 
             if (ImGui::CollapsingHeader("Information")) {
