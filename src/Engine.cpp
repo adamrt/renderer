@@ -24,11 +24,11 @@ Engine::Engine(Framebuffer& fb, Window& window, Camera& camera, UI& ui)
     , m_ui(ui)
 {
     // Callback for when the projection type changes in the GUI.
-    m_window.update_camera = [&]() {
+    m_ui.update_camera = [&]() {
         m_camera.update();
     };
 
-    m_window.orientation_event = [&]() {
+    m_ui.orientation_event = [&]() {
         reset_orientation();
     };
 }

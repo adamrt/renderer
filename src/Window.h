@@ -1,15 +1,8 @@
 #pragma once
 
-#include <functional>
-
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_video.h>
-
-#include "imgui.h"
-#include "imgui_impl_sdl2.h"
-#include "imgui_impl_sdlrenderer2.h"
-#include "imgui_internal.h"
 
 #include "Framebuffer.h"
 #include "UI.h"
@@ -23,9 +16,6 @@ public:
     ~Window();
 
     void render();
-
-    std::function<void()> update_camera;
-    std::function<void()> orientation_event;
 
     int width() const { return m_width; }
     int height() const { return m_height; }
@@ -42,6 +32,4 @@ private:
     SDL_Window* m_window = NULL;
     SDL_Renderer* m_renderer = NULL;
     SDL_Texture* m_texture = NULL;
-
-    ImGuiIO* m_io;
 };

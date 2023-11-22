@@ -1,6 +1,15 @@
 #pragma once
 
+#include <functional>
+#include <iostream>
+
+#include <SDL.h>
+#include <SDL_render.h>
+
 #include "imgui.h"
+#include "imgui_impl_sdl2.h"
+#include "imgui_impl_sdlrenderer2.h"
+#include "imgui_internal.h"
 
 #include "AK.h"
 #include "Vector.h"
@@ -10,11 +19,17 @@ enum class Projection {
     Orthographic = 1,
 };
 
-struct UI {
-    UI(int ui_width)
-        : width(ui_width)
-    {
-    }
+class UI {
+public:
+    UI(int ui_width);
+    ~UI();
+
+    std::function<void()> update_camera;
+    std::function<void()> orientation_event;
+
+    void init(SDL_Window* w, SDL_Renderer* r, SDL_Texture* t, int fb_width, int fb_height);
+    void render();
+    void update();
 
     bool rotate = false;
     bool rotate_x = false;
@@ -43,5 +58,10 @@ struct UI {
     int total_triangles = 0;
     int visible_triangles = 0;
 
-    int width = 0;
+private:
+    SDL_Texture* m_texture = nullptr;
+    int m_fb_width = 0;
+    int m_fb_height = 0;
+    int m_width = 0;
+    ImGuiIO* m_io;
 };
