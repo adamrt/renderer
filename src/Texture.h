@@ -3,11 +3,14 @@
 struct Texture {
 public:
     Texture(const char* filename);
+    Texture() {};
     ~Texture();
 
     // Prevent copy
     Texture(const Texture&) = delete;
     Texture& operator=(const Texture&) = delete;
+
+    bool is_valid() const { return m_data != nullptr; }
 
     int width() const { return m_width; }
     int height() const { return m_height; }

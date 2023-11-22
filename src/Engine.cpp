@@ -171,9 +171,12 @@ void Engine::update()
 
         Triangle triangle;
         triangle.points = proj_verts;
-        triangle.texcoords[0] = mesh.texcoords[face.ta - 1];
-        triangle.texcoords[1] = mesh.texcoords[face.tb - 1];
-        triangle.texcoords[2] = mesh.texcoords[face.tc - 1];
+
+        if (texture.is_valid()) {
+            triangle.texcoords[0] = mesh.texcoords[face.ta - 1];
+            triangle.texcoords[1] = mesh.texcoords[face.tb - 1];
+            triangle.texcoords[2] = mesh.texcoords[face.tc - 1];
+        }
 
         // Light
         triangle.light_intensity = -Vec3::dot(normal, light.direction);
@@ -193,7 +196,12 @@ void Engine::render()
     for (auto& t : triangles_to_render) {
 
         if (m_ui.draw_texture) {
-            m_framebuffer.draw_triangle_textured(t, texture);
+            if (texture.is_valid()) {
+                m_framebuffer.draw_triangle_textured(t, texture);
+            } else {
+                Color color(m_ui.fill_color);
+                m_framebuffer.draw_triangle_filled(t, color);
+            }
 
         } else if (m_ui.draw_filled) {
             Color color(m_ui.fill_color);
