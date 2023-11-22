@@ -16,7 +16,7 @@ struct UI {
     {
     }
 
-    bool rotate = true;
+    bool rotate = false;
     bool rotate_x = false;
     bool rotate_y = true;
     bool rotate_z = false;
@@ -37,8 +37,8 @@ struct UI {
     bool backface_culling = true;
 
     Projection projection = Projection::Perspective;
-    f32 camera_phi = 30.0f;
-    f32 camera_theta = 180.0f;
+    f32 camera_phi = 0.0f;
+    f32 camera_theta = 0.0f;
 
     int total_triangles = 0;
     int visible_triangles = 0;
