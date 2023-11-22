@@ -1,5 +1,6 @@
 #include <cstdio>
 #include <cstring>
+#include <iostream>
 #include <vector>
 
 #include "Mesh.h"
@@ -38,11 +39,21 @@ Mesh::Mesh(std::string filename)
             int vertex_indices[3];
             int texture_indices[3];
             int normal_indices[3];
-            sscanf(
-                line, "f %d/%d/%d %d/%d/%d %d/%d/%d",
-                &vertex_indices[0], &texture_indices[0], &normal_indices[0],
-                &vertex_indices[1], &texture_indices[1], &normal_indices[1],
-                &vertex_indices[2], &texture_indices[2], &normal_indices[2]);
+
+            if (std::strchr(line, '/')) {
+                sscanf(
+                    line, "f %d/%d/%d %d/%d/%d %d/%d/%d",
+                    &vertex_indices[0], &texture_indices[0], &normal_indices[0],
+                    &vertex_indices[1], &texture_indices[1], &normal_indices[1],
+                    &vertex_indices[2], &texture_indices[2], &normal_indices[2]);
+            } else {
+                sscanf(
+                    line, "f %d %d %d",
+                    &vertex_indices[0],
+                    &vertex_indices[1],
+                    &vertex_indices[2]);
+            }
+
             Face face = {};
             face.a = (uint32_t)vertex_indices[0];
             face.b = (uint32_t)vertex_indices[1];
