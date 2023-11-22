@@ -89,6 +89,16 @@ Color Color::operator*(const Color& rhs) const
     return (r << 24) | (g << 16) | (b << 8) | a;
 }
 
+ImVec4 Color::imvec4() const
+{
+    u8 r = (rgba >> 24) & 0xFF;
+    u8 g = (rgba >> 16) & 0xFF;
+    u8 b = (rgba >> 8) & 0xFF;
+    u8 a = rgba & 0xFF;
+
+    return ImVec4(r / 255.0f, g / 255.0f, b / 255.0f, a / 255.0f);
+}
+
 const Color Color::Black = { 0x000000FF };
 const Color Color::DarkGray = { 0x111111FF };
 const Color Color::LightGray = { 0x555555FF };
