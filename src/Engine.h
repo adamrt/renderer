@@ -30,6 +30,4 @@ private:
     bool m_running = true;
 
     Mat4 m_projection_matrix;
-
-    f32 zoom = 0.8f;
 };
