@@ -108,7 +108,7 @@ void Framebuffer::draw_triangle(i32 x0, i32 y0, i32 x1, i32 y1, i32 x2, i32 y2, 
     draw_line(x2, y2, x0, y0, color);
 }
 
-void Framebuffer::draw_triangle_textured(Triangle& t, Texture& tex)
+void Framebuffer::draw_triangle_textured(const Triangle& t, const Texture& tex)
 {
     Vec4 a = t.points[0], b = t.points[1], c = t.points[2];
     Vec2 at = t.texcoords[0], bt = t.texcoords[1], ct = t.texcoords[2];
@@ -225,7 +225,7 @@ void Framebuffer::draw_triangle_textured(Triangle& t, Texture& tex)
 }
 
 // draw_triangle_filled draws a filled triangle using the edge function algorithm
-void Framebuffer::draw_triangle_filled(Triangle& t, Color color)
+void Framebuffer::draw_triangle_filled(const Triangle& t, Color color)
 {
     if (m_ui.enable_lighting) {
         Color ambient(m_ui.ambient_light);
