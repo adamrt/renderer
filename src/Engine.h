@@ -10,7 +10,7 @@
 
 class Engine {
 public:
-    Engine(Framebuffer& fb, Window& window, Camera& camera, UI& ui, Scene& scene);
+    Engine(Window& window, Framebuffer& fb, Camera& camera, UI& ui, Scene& scene);
 
     void setup();
     void process_input();
@@ -22,15 +22,13 @@ public:
     void reset_orientation();
 
 private:
-    Framebuffer& m_framebuffer;
     Window& m_window;
+    Framebuffer& m_framebuffer;
     Camera& m_camera;
     UI& m_ui;
+    Scene& m_scene;
 
     u32 m_previous_frame_time = SDL_GetTicks();
     bool m_running = true;
-
-    Scene& m_scene;
-
     Mat4 m_projection_matrix;
 };

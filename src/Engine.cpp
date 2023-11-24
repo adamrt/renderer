@@ -11,9 +11,9 @@
 
 bool left_button_down = false;
 
-Engine::Engine(Framebuffer& fb, Window& window, Camera& camera, UI& ui, Scene& scene)
-    : m_framebuffer(fb)
-    , m_window(window)
+Engine::Engine(Window& window, Framebuffer& fb, Camera& camera, UI& ui, Scene& scene)
+    : m_window(window)
+    , m_framebuffer(fb)
     , m_camera(camera)
     , m_ui(ui)
     , m_scene(scene)

@@ -37,7 +37,7 @@ i32 main()
     Camera camera { ui };
     Framebuffer framebuffer(ui, (SCREEN_WIDTH / 3) * 2, SCREEN_HEIGHT);
     Window window(framebuffer, ui, SCREEN_WIDTH, SCREEN_HEIGHT);
-    Engine engine(framebuffer, window, camera, ui, scene);
+    Engine engine(window, framebuffer, camera, ui, scene);
 
     engine.setup();
     while (engine.is_running()) {
