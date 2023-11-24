@@ -1,22 +1,22 @@
 #pragma once
 
 #include <array>
-#include <vector>
 
 #include "Color.h"
 #include "Vector.h"
 
-// Triangle is a 2D triangle after scale, rotation, translation and
-// projection.
+struct Vertex {
+    Vec4 position;
+    Vec3 normal;
+    Vec2 uv;
+};
+
 struct Triangle {
-    Triangle();
-    Triangle(Vec4 a, Vec4 b, Vec4 c);
+    Triangle() {};
 
-    std::array<Vec4, 3> points;
-    std::array<Vec2, 3> texcoords;
-
+    std::array<Vertex, 3> vertices;
     Color light_sum;
 };
 
-bool should_cull(std::array<Vec4, 3> points);
+bool should_cull(std::array<Vertex, 3> vertices);
 Vec3 vertices_normal(const std::array<Vec3, 3>& points);

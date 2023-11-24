@@ -110,8 +110,8 @@ void Framebuffer::draw_triangle(i32 x0, i32 y0, i32 x1, i32 y1, i32 x2, i32 y2, 
 
 void Framebuffer::draw_triangle_textured(const Triangle& t, const Texture& tex)
 {
-    Vec4 a = t.points[0], b = t.points[1], c = t.points[2];
-    Vec2 at = t.texcoords[0], bt = t.texcoords[1], ct = t.texcoords[2];
+    Vec4 a = t.vertices[0].position, b = t.vertices[1].position, c = t.vertices[2].position;
+    Vec2 at = t.vertices[0].uv, bt = t.vertices[1].uv, ct = t.vertices[2].uv;
 
     i32 min_x = std::min({ a.x, b.x, c.x });
     i32 min_y = std::min({ a.y, b.y, c.y });
@@ -226,9 +226,9 @@ void Framebuffer::draw_triangle_filled(const Triangle& t, Color color)
         color = (color * m_ui.ambient_strength) + (t.light_sum * color);
     }
 
-    Vec4 a = t.points[0];
-    Vec4 b = t.points[1];
-    Vec4 c = t.points[2];
+    Vec4 a = t.vertices[0].position;
+    Vec4 b = t.vertices[1].position;
+    Vec4 c = t.vertices[2].position;
 
     i32 min_x = std::min({ a.x, b.x, c.x });
     i32 min_y = std::min({ a.y, b.y, c.y });

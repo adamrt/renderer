@@ -3,26 +3,16 @@
 #include "Color.h"
 #include "Triangle.h"
 
-Triangle::Triangle()
-    : points({})
-{
-}
-
-Triangle::Triangle(Vec4 a, Vec4 b, Vec4 c)
-    : points({ a, b, c })
-{
-}
-
 // should_cull returns a whether a triangle should be backface culled.
 //
 // This checks the winding order of the triangle.  If its CCW then you
 // can ignore this triangle since it would be back-facing.  This
 // method must be done after the vertices have been projected.
-bool should_cull(std::array<Vec4, 3> points)
+bool should_cull(std::array<Vertex, 3> vertices)
 {
-    Vec4 a = points[0];
-    Vec4 b = points[1];
-    Vec4 c = points[2];
+    Vec4 a = vertices[0].position;
+    Vec4 b = vertices[1].position;
+    Vec4 c = vertices[2].position;
 
     Vec4 ab = b - a;
     Vec4 ac = c - a;

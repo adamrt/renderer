@@ -121,10 +121,11 @@ void Engine::update()
         Mat4 world = Mat4::world(model.scale, model.rotation, model.translation);
 
         for (auto& face : model.mesh.faces) {
+
             auto face_verts = std::array<Vec3, 3> {
-                model.mesh.vertices[face.a - 1],
-                model.mesh.vertices[face.b - 1],
-                model.mesh.vertices[face.c - 1]
+                model.mesh.positions[face.positions[0] - 1],
+                model.mesh.positions[face.positions[1] - 1],
+                model.mesh.positions[face.positions[2] - 1],
             };
 
             auto trans_verts = std::array<Vec3, 3> {};
@@ -147,7 +148,7 @@ void Engine::update()
                 trans_verts[i] = m_camera.view_matrix * trans_verts[i];
             }
 
-            auto proj_verts = std::array<Vec4, 3> {};
+            Triangle triangle;
 
             for (i32 i = 0; i < 3; i++) {
                 Vec4 proj_vertex = m_camera.proj_matrix * trans_verts[i].xyzw();
@@ -172,21 +173,19 @@ void Engine::update()
                 proj_vertex.x += half_w;
                 proj_vertex.y += half_h;
 
-                proj_verts[i] = proj_vertex;
+                triangle.vertices[i].position = proj_vertex;
             }
 
-            if (m_ui.backface_culling && should_cull(proj_verts)) {
+            if (m_ui.backface_culling && should_cull(triangle.vertices)) {
                 continue;
             }
 
-            Triangle triangle;
             triangle.light_sum = light_sum;
-            triangle.points = proj_verts;
 
             if (model.texture.is_valid()) {
-                triangle.texcoords[0] = model.mesh.texcoords[face.ta - 1];
-                triangle.texcoords[1] = model.mesh.texcoords[face.tb - 1];
-                triangle.texcoords[2] = model.mesh.texcoords[face.tc - 1];
+                triangle.vertices[0].uv = model.mesh.texcoords[face.texcoords[0] - 1];
+                triangle.vertices[1].uv = model.mesh.texcoords[face.texcoords[1] - 1];
+                triangle.vertices[2].uv = model.mesh.texcoords[face.texcoords[2] - 1];
             }
 
             model.triangles_to_render.push_back(triangle);
@@ -220,9 +219,9 @@ void Engine::render()
 
             if (m_ui.draw_wireframe) {
                 m_framebuffer.draw_triangle(
-                    t.points[0].x, t.points[0].y,
-                    t.points[1].x, t.points[1].y,
-                    t.points[2].x, t.points[2].y,
+                    t.vertices[0].position.x, t.vertices[0].position.y,
+                    t.vertices[1].position.x, t.vertices[1].position.y,
+                    t.vertices[2].position.x, t.vertices[2].position.y,
                     Color::Purple);
             }
         }
