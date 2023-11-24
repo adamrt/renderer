@@ -5,8 +5,8 @@
 #include "AK.h"
 #include "Framebuffer.h"
 
-Framebuffer::Framebuffer(UI& ui, i32 width, i32 height)
-    : m_ui(ui)
+Framebuffer::Framebuffer(Camera& camera, i32 width, i32 height)
+    : m_camera(camera)
     , m_width(width)
     , m_height(height)
     , m_colorbuffer(m_width * m_height)
@@ -148,7 +148,7 @@ void Framebuffer::draw_triangle_textured(const Triangle& t, const Texture& tex)
     f32 w1_row = Vec2::edge_cross(v2, v0, p0);
     f32 w2_row = Vec2::edge_cross(v0, v1, p0);
 
-    if (m_ui.enable_fill_convention) {
+    if (enable_fill_convention) {
         w0_row += bias0;
         w1_row += bias1;
         w2_row += bias2;
@@ -167,15 +167,15 @@ void Framebuffer::draw_triangle_textured(const Triangle& t, const Texture& tex)
 
                 f32 depth = 0.0f;
                 f32 interpolated_reciprocal_w = 0.0f;
-                if (m_ui.projection == Projection::Perspective) {
-                    if (m_ui.perspective_correction) {
+                if (m_camera.projection == Projection::Perspective) {
+                    if (enable_perspective_correction) {
                         interpolated_reciprocal_w = (1 / a.w) * alpha + (1 / b.w) * beta + (1 / c.w) * gamma;
                         depth = 1.0f - interpolated_reciprocal_w;
                     } else {
                         depth = (1 / a.z) * alpha + (1 / b.z) * beta + (1 / c.z) * gamma;
                         depth = 1.0f - depth;
                     }
-                } else if (m_ui.projection == Projection::Orthographic) {
+                } else if (m_camera.projection == Projection::Orthographic) {
                     // NOTE: I'm not sure why we need the reciprocal of these, but we do.
                     depth = (1 / a.z) * alpha + (1 / b.z) * beta + (1 / c.z) * gamma;
                 }
@@ -183,7 +183,7 @@ void Framebuffer::draw_triangle_textured(const Triangle& t, const Texture& tex)
                 if (depth < get_depth(x, y)) {
 
                     Vec2 tex_coord {};
-                    if (m_ui.perspective_correction) {
+                    if (enable_perspective_correction) {
                         auto interpolated_u = (at.x / a.w) * alpha + (bt.x / b.w) * beta + (ct.x / c.w) * gamma;
                         auto interpolated_v = (at.y / a.w) * alpha + (bt.y / b.w) * beta + (ct.y / c.w) * gamma;
                         tex_coord.x = interpolated_u /= interpolated_reciprocal_w;
@@ -201,8 +201,8 @@ void Framebuffer::draw_triangle_textured(const Triangle& t, const Texture& tex)
                     u32 rgba = (raw[0] << 24) | (raw[1] << 16) | (raw[2] << 8) | raw[3];
 
                     Color color(rgba);
-                    if (m_ui.enable_lighting) {
-                        color = (color * m_ui.ambient_strength) + (t.light_sum * color);
+                    if (enable_lighting) {
+                        color = (color * ambient_strength) + (t.light_sum * color);
                     }
 
                     draw_pixel(x, y, color);
@@ -222,8 +222,8 @@ void Framebuffer::draw_triangle_textured(const Triangle& t, const Texture& tex)
 // draw_triangle_filled draws a filled triangle using the edge function algorithm
 void Framebuffer::draw_triangle_filled(const Triangle& t, Color color)
 {
-    if (m_ui.enable_lighting) {
-        color = (color * m_ui.ambient_strength) + (t.light_sum * color);
+    if (enable_lighting) {
+        color = (color * ambient_strength) + (t.light_sum * color);
     }
 
     Vec4 a = t.vertices[0].position;
@@ -261,7 +261,7 @@ void Framebuffer::draw_triangle_filled(const Triangle& t, Color color)
 
             if (w0 >= 0 && w1 >= 0 && w2 >= 0) {
 
-                if (m_ui.enable_fill_convention) {
+                if (enable_fill_convention) {
                     w0 += bias0;
                     w1 += bias1;
                     w2 += bias2;
@@ -272,15 +272,15 @@ void Framebuffer::draw_triangle_filled(const Triangle& t, Color color)
                 f32 gamma = w2 / area;
 
                 f32 depth = 0.0f;
-                if (m_ui.projection == Projection::Perspective) {
-                    if (m_ui.perspective_correction) {
+                if (m_camera.projection == Projection::Perspective) {
+                    if (enable_perspective_correction) {
                         auto interpolated_reciprocal_w = (1 / a.w) * alpha + (1 / b.w) * beta + (1 / c.w) * gamma;
                         depth = 1.0f - interpolated_reciprocal_w;
                     } else {
                         depth = (1 / a.z) * alpha + (1 / b.z) * beta + (1 / c.z) * gamma;
                         depth = 1.0f - depth;
                     }
-                } else if (m_ui.projection == Projection::Orthographic) {
+                } else if (m_camera.projection == Projection::Orthographic) {
                     // NOTE: I'm not sure why we need the reciprocal of these, but we do.
                     depth = (1 / a.z) * alpha + (1 / b.z) * beta + (1 / c.z) * gamma;
                 }

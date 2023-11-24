@@ -1,28 +1,16 @@
-#include "UI.h"
 #include "imgui.h"
 
-UI::UI(int ui_width, Scene& scene)
-    : m_width(ui_width)
+#include "UI.h"
+
+UI::UI(Window& window, Framebuffer& framebuffer, Camera& camera, Scene& scene)
+    : m_window(window)
+    , m_framebuffer(framebuffer)
+    , m_camera(camera)
     , m_scene(scene)
 {
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     m_io = &ImGui::GetIO();
-}
-
-UI::~UI()
-{
-
-    ImGui_ImplSDLRenderer2_Shutdown();
-    ImGui_ImplSDL2_Shutdown();
-    ImGui::DestroyContext();
-}
-
-void UI::init(SDL_Window* w, SDL_Renderer* r, SDL_Texture* t, int fb_width, int fb_height)
-{
-    m_texture = t;
-    m_fb_width = fb_width;
-    m_fb_height = fb_height;
 
     m_io->IniFilename = nullptr;
     m_io->LogFilename = nullptr;
@@ -30,8 +18,20 @@ void UI::init(SDL_Window* w, SDL_Renderer* r, SDL_Texture* t, int fb_width, int 
     m_io->ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
 
     ImGui::StyleColorsDark();
-    ImGui_ImplSDL2_InitForSDLRenderer(w, r);
-    ImGui_ImplSDLRenderer2_Init(r);
+    ImGui_ImplSDL2_InitForSDLRenderer(window.sdl_window(), window.sdl_renderer());
+    ImGui_ImplSDLRenderer2_Init(window.sdl_renderer());
+}
+
+i32 UI::width() const
+{
+    return m_window.width() - m_framebuffer.width();
+}
+
+UI::~UI()
+{
+    ImGui_ImplSDLRenderer2_Shutdown();
+    ImGui_ImplSDL2_Shutdown();
+    ImGui::DestroyContext();
 }
 
 void UI::render()
@@ -83,7 +83,7 @@ void UI::update()
         {
             ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
             ImGui::Begin("Render", nullptr, window_flags);
-            ImGui::Image(m_texture, ImVec2(m_fb_width, m_fb_height), ImVec2(0, 0), ImVec2(1, 1), ImColor(1.0f, 1.0f, 1.0f));
+            ImGui::Image(m_window.sdl_texture(), ImVec2(m_framebuffer.width(), m_framebuffer.height()), ImVec2(0, 0), ImVec2(1, 1), ImColor(1.0f, 1.0f, 1.0f));
             ImGui::End();
             ImGui::PopStyleVar();
         }
@@ -95,19 +95,15 @@ void UI::update()
 
             if (ImGui::CollapsingHeader("Camera", ImGuiTreeNodeFlags_DefaultOpen)) {
 
-                ImGui::Text("Camera Phi %f", camera_phi);
-                ImGui::SameLine((m_width / (f32)2));
-                ImGui::Text("Theta %f", camera_theta);
-
-                if (ImGui::RadioButton("Perspective", projection == Projection::Perspective)) {
-                    projection = Projection::Perspective;
-                    perspective_correction = true;
-                    update_camera();
+                if (ImGui::RadioButton("Perspective", m_camera.projection == Projection::Perspective)) {
+                    m_camera.projection = Projection::Perspective;
+                    m_camera.update();
+                    m_framebuffer.enable_perspective_correction = true;
                 }
-                if (ImGui::RadioButton("Orthographic", projection == Projection::Orthographic)) {
-                    projection = Projection::Orthographic;
-                    perspective_correction = false;
-                    update_camera();
+                if (ImGui::RadioButton("Orthographic", m_camera.projection == Projection::Orthographic)) {
+                    m_camera.projection = Projection::Orthographic;
+                    m_framebuffer.enable_perspective_correction = false;
+                    m_camera.update();
                 }
             }
             if (ImGui::CollapsingHeader("Model", ImGuiTreeNodeFlags_DefaultOpen)) {
@@ -123,7 +119,7 @@ void UI::update()
                     draw_filled = true;
                     draw_empty = false;
                 }
-                ImGui::SameLine((m_width / (f32)3));
+                ImGui::SameLine((width() / (f32)3));
                 ImGui::ColorEdit4("Color", &fill_color.x, ImGuiColorEditFlags_NoSidePreview | ImGuiColorEditFlags_NoInputs);
 
                 if (ImGui::RadioButton("Textured", draw_texture)) {
@@ -131,14 +127,14 @@ void UI::update()
                     draw_filled = false;
                     draw_empty = false;
                 }
-                ImGui::SameLine((m_width / (f32)3));
-                ImGui::Checkbox("Perspective Correction", &perspective_correction);
+                ImGui::SameLine((width() / (f32)3));
+                ImGui::Checkbox("Perspective Correction", &m_framebuffer.enable_perspective_correction);
 
                 ImGui::Separator();
 
                 ImGui::Checkbox("Wireframe", &draw_wireframe);
                 ImGui::Checkbox("Backface Culling", &backface_culling);
-                ImGui::Checkbox("Fill Convention", &enable_fill_convention);
+                ImGui::Checkbox("Fill Convention", &m_framebuffer.enable_fill_convention);
 
                 ImGui::Separator();
                 // Rotation Buttons
@@ -156,7 +152,7 @@ void UI::update()
             }
 
             if (ImGui::CollapsingHeader("Lighting", ImGuiTreeNodeFlags_DefaultOpen)) {
-                ImGui::Checkbox("Enable Lighting", &enable_lighting);
+                ImGui::Checkbox("Enable Lighting", &m_framebuffer.enable_lighting);
                 ImGui::Separator();
                 ImGui::Text("Point Lights");
                 for (size_t i = 0; i < m_scene.lights.size(); i++) {
@@ -170,11 +166,11 @@ void UI::update()
                     ImGui::PopID();
                 }
                 ImGui::Separator();
-                ImGui::SliderFloat("Ambient Strength", &ambient_strength, 0.0f, 1.1f);
+                ImGui::SliderFloat("Ambient Strength", &m_framebuffer.ambient_strength, 0.0f, 1.1f);
             }
 
             if (ImGui::CollapsingHeader("Information")) {
-                ImGui::Text("%dx%d framebuffer", m_fb_width, m_fb_height);
+                ImGui::Text("%dx%d framebuffer", m_framebuffer.width(), m_framebuffer.height());
                 ImGui::Text("Left handed system");
                 ImGui::Text("Row major matrices");
                 ImGui::Text("Clockwise vertex winding");

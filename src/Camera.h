@@ -1,29 +1,38 @@
 #pragma once
 
 #include "Matrix.h"
-#include "UI.h"
 #include "Vector.h"
 
 const f32 ZNEAR = 0.01f;
 const f32 ZFAR = 100.0f;
 
+enum class Projection {
+    Perspective = 0,
+    Orthographic = 1,
+};
+
 // Camera is an orbital camera
 struct Camera {
-    Camera(UI& ui);
+    Camera(f32 aspect);
 
     void orbit(f32 dx, f32 dy);
     void zoom(f32 d);
     Vec3 calculate_eye() const;
     void update();
 
-    float distance = 5.0f;
+    Mat4 projection_matrix() const;
+    Mat4 view_matrix() const;
 
-    Mat4 view_matrix;
-    Mat4 proj_matrix;
+    Projection projection;
+    Mat4 perspective;
+    Mat4 orthographic;
 
-    Mat4 static_perspective;
+    Mat4 view;
 
-    f32 aspect = 800.0f / 800.0f;
+    f32 distance = 5.0f;
+    f32 fov = K_PI / 3.0f;
 
-    UI& m_ui;
+    f32 aspect;
+    f32 theta;
+    f32 phi;
 };

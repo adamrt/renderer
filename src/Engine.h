@@ -8,6 +8,9 @@
 #include "UI.h"
 #include "Window.h"
 
+constexpr int FPS = 60;
+constexpr int FRAME_TARGET_TIME = (1000 / FPS);
+
 class Engine {
 public:
     Engine(Window& window, Framebuffer& fb, Camera& camera, UI& ui, Scene& scene);

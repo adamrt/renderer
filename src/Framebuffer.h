@@ -3,15 +3,16 @@
 #include <cstdint>
 #include <vector>
 
+#include "Camera.h"
 #include "Color.h"
 #include "Texture.h"
 #include "Triangle.h"
-#include "UI.h"
 #include "Vector.h"
 
 class Framebuffer {
+
 public:
-    Framebuffer(UI& ui, i32 width, i32 height);
+    Framebuffer(Camera& camera, i32 width, i32 height);
 
     i32 width() const { return m_width; }
     i32 height() const { return m_height; }
@@ -34,8 +35,13 @@ public:
     void draw_triangle_filled(const Triangle& t, Color color);
     void draw_triangle_textured(const Triangle& t, const Texture& tex);
 
+    bool enable_perspective_correction = true;
+    bool enable_fill_convention = true;
+    bool enable_lighting = true;
+    f32 ambient_strength = 0.8f;
+
 private:
-    UI& m_ui;
+    Camera& m_camera;
     i32 m_width;
     i32 m_height;
     std::vector<Color> m_colorbuffer;

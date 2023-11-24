@@ -16,8 +16,11 @@
 #include "UI.h"
 #include "Window.h"
 
-const i32 SCREEN_WIDTH = 1200;
-const i32 SCREEN_HEIGHT = 800;
+const i32 WINDOW_WIDTH = 1200;
+const i32 WINDOW_HEIGHT = 800;
+const i32 FB_WIDTH = (WINDOW_WIDTH / 3) * 2;
+const i32 FB_HEIGHT = WINDOW_HEIGHT;
+const f32 FB_ASPECT = FB_WIDTH / (f32)FB_HEIGHT;
 
 i32 main()
 {
@@ -33,10 +36,10 @@ i32 main()
     scene.lights.push_back(light_b);
     scene.lights.push_back(light_r);
 
-    UI ui { (SCREEN_WIDTH / 3), scene };
-    Camera camera { ui };
-    Framebuffer framebuffer(ui, (SCREEN_WIDTH / 3) * 2, SCREEN_HEIGHT);
-    Window window(framebuffer, ui, SCREEN_WIDTH, SCREEN_HEIGHT);
+    Camera camera { FB_ASPECT };
+    Framebuffer framebuffer(camera, FB_WIDTH, FB_HEIGHT);
+    Window window(framebuffer, WINDOW_WIDTH, WINDOW_HEIGHT);
+    UI ui { window, framebuffer, camera, scene };
     Engine engine(window, framebuffer, camera, ui, scene);
 
     engine.setup();

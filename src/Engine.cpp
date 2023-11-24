@@ -19,10 +19,6 @@ Engine::Engine(Window& window, Framebuffer& fb, Camera& camera, UI& ui, Scene& s
     , m_scene(scene)
 {
     // Callback for when the projection type changes in the GUI.
-    m_ui.update_camera = [&]() {
-        m_camera.update();
-    };
-
     m_ui.orientation_event = [&]() {
         reset_orientation();
     };
@@ -145,15 +141,15 @@ void Engine::update()
             }
 
             for (i32 i = 0; i < 3; i++) {
-                trans_verts[i] = m_camera.view_matrix * trans_verts[i];
+                trans_verts[i] = m_camera.view * trans_verts[i];
             }
 
             Triangle triangle;
 
             for (i32 i = 0; i < 3; i++) {
-                Vec4 proj_vertex = m_camera.proj_matrix * trans_verts[i].xyzw();
+                Vec4 proj_vertex = m_camera.projection_matrix() * trans_verts[i].xyzw();
 
-                if (m_ui.projection == Projection::Perspective) {
+                if (m_camera.projection == Projection::Perspective) {
                     if (proj_vertex.w != 0.0f) {
                         proj_vertex.x /= proj_vertex.w;
                         proj_vertex.y /= proj_vertex.w;
@@ -227,6 +223,8 @@ void Engine::render()
         }
     }
 
+    m_window.update_texture();
+    m_ui.render();
     m_window.render();
 }
 
