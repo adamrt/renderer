@@ -68,8 +68,10 @@ void UI::update()
             ImGui::DockBuilderAddNode(dock_id);
             ImGui::DockBuilderSetNodeSize(dock_id, ImGui::GetContentRegionAvail());
 
+            f32 ui_width = (m_window.width() - (f32)m_framebuffer.width()) / m_window.width();
+
             ImGuiID dock_id_left;
-            ImGuiID dock_id_right = ImGui::DockBuilderSplitNode(dock_id, ImGuiDir_Right, 0.33f, NULL, &dock_id_left);
+            ImGuiID dock_id_right = ImGui::DockBuilderSplitNode(dock_id, ImGuiDir_Right, ui_width, NULL, &dock_id_left);
 
             ImGui::DockBuilderDockWindow("Render", dock_id_left);
             ImGui::DockBuilderDockWindow("Control", dock_id_right);
