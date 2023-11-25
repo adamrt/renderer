@@ -15,10 +15,10 @@ Color::Color(u32 color)
 Color::Color(ImVec4 color)
     : rgba { 0x000000FF }
 {
-    uint8_t r = static_cast<uint8_t>(color.x * 255.0f + 0.5f);
-    uint8_t g = static_cast<uint8_t>(color.y * 255.0f + 0.5f);
-    uint8_t b = static_cast<uint8_t>(color.z * 255.0f + 0.5f);
-    uint8_t a = static_cast<uint8_t>(color.w * 255.0f + 0.5f);
+    u8 r = static_cast<u8>(color.x * 255.0f + 0.5f);
+    u8 g = static_cast<u8>(color.y * 255.0f + 0.5f);
+    u8 b = static_cast<u8>(color.z * 255.0f + 0.5f);
+    u8 a = static_cast<u8>(color.w * 255.0f + 0.5f);
 
     rgba = (r << 24) | (g << 16) | (b << 8) | a;
 }
@@ -65,7 +65,7 @@ Color Color::operator+(const Color& rhs) const
     u8 g = std::min(static_cast<u32>(lhs_g + rhs_g), 255u);
     u8 b = std::min(static_cast<u32>(lhs_b + rhs_b), 255u);
 
-    return (r << 24) | (g << 16) | (b << 8) | a;
+    return Color((r << 24) | (g << 16) | (b << 8) | a);
 }
 
 Color Color::operator*(const Color& rhs) const
@@ -86,7 +86,7 @@ Color Color::operator*(const Color& rhs) const
     u8 g = (lhs_g * rhs_g) / 255;
     u8 b = (lhs_b * rhs_b) / 255;
 
-    return (r << 24) | (g << 16) | (b << 8) | a;
+    return Color((r << 24) | (g << 16) | (b << 8) | a);
 }
 
 ImVec4 Color::imvec4() const
