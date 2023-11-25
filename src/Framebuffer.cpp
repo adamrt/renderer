@@ -293,3 +293,95 @@ void Framebuffer::draw_triangle_filled(const Triangle& t, Color color)
         }
     }
 }
+
+void Framebuffer::draw_triangle_normals(const Triangle& t)
+{
+    Vec4 a = t.vertices[0].position;
+    Vec4 b = t.vertices[1].position;
+    Vec4 c = t.vertices[2].position;
+
+    i32 min_x = std::min({ a.x, b.x, c.x });
+    i32 min_y = std::min({ a.y, b.y, c.y });
+    i32 max_x = std::max({ a.x, b.x, c.x });
+    i32 max_y = std::max({ a.y, b.y, c.y });
+
+    // Clamp possible values to the framebuffer so we don't overdraw.
+    min_x = std::max({ min_x, 0 });
+    min_y = std::max({ min_y, 0 });
+    max_x = std::min({ max_x, m_width - 1 });
+    max_y = std::min({ max_y, m_height - 1 });
+
+    Vec2 p;
+    Vec2 v0 = a.xy();
+    Vec2 v1 = b.xy();
+    Vec2 v2 = c.xy();
+
+    // Fill convention
+    f32 bias0 = Vec2::is_top_left(v1, v2) ? 0 : -0.0001;
+    f32 bias1 = Vec2::is_top_left(v2, v0) ? 0 : -0.0001;
+    f32 bias2 = Vec2::is_top_left(v0, v1) ? 0 : -0.0001;
+
+    f32 area = Vec2::edge_cross(v0, v1, v2);
+
+    for (p.y = min_y; p.y <= max_y; p.y++) {
+        for (p.x = min_x; p.x <= max_x; p.x++) {
+            f32 w0 = Vec2::edge_cross(v1, v2, p);
+            f32 w1 = Vec2::edge_cross(v2, v0, p);
+            f32 w2 = Vec2::edge_cross(v0, v1, p);
+
+            if (w0 >= 0 && w1 >= 0 && w2 >= 0) {
+
+                if (enable_fill_convention) {
+                    w0 += bias0;
+                    w1 += bias1;
+                    w2 += bias2;
+                }
+
+                f32 alpha = w0 / area;
+                f32 beta = w1 / area;
+                f32 gamma = w2 / area;
+
+                f32 depth = 0.0f;
+                if (m_camera.projection == Projection::Perspective) {
+                    if (enable_perspective_correction) {
+                        auto interpolated_reciprocal_w = (1 / a.w) * alpha + (1 / b.w) * beta + (1 / c.w) * gamma;
+                        depth = 1.0f - interpolated_reciprocal_w;
+                    } else {
+                        depth = (1 / a.z) * alpha + (1 / b.z) * beta + (1 / c.z) * gamma;
+                        depth = 1.0f - depth;
+                    }
+                } else if (m_camera.projection == Projection::Orthographic) {
+                    // NOTE: I'm not sure why we need the reciprocal of these, but we do.
+                    depth = (1 / a.z) * alpha + (1 / b.z) * beta + (1 / c.z) * gamma;
+                }
+
+                if (depth < get_depth(p.x, p.y)) {
+                    Vec3 na = t.vertices[0].normal;
+                    Vec3 nb = t.vertices[1].normal;
+                    Vec3 nc = t.vertices[2].normal;
+
+                    f32 x, y, z;
+                    if (enable_smooth_shading) {
+                        // Per pixel
+                        x = (alpha)*na.x + (beta)*nb.x + (gamma)*nc.x;
+                        y = (alpha)*na.y + (beta)*nb.y + (gamma)*nc.y;
+                        z = (alpha)*na.z + (beta)*nb.z + (gamma)*nc.z;
+                    } else {
+                        // Flat shaded
+                        x = (na.x + nb.x + nc.x) / 3.0f;
+                        y = (na.y + nb.y + nc.y) / 3.0f;
+                        z = (na.z + nb.z + nc.z) / 3.0f;
+                    }
+
+                    u8 r = static_cast<u8>((x + 1.0) / 2.0 * 255.0);
+                    u8 g = static_cast<u8>((y + 1.0) / 2.0 * 255.0);
+                    u8 b = static_cast<u8>((z + 1.0) / 2.0 * 255.0);
+
+                    Color color((r << 24) | (g << 16) | (b << 8) | 0xFF);
+                    draw_pixel(p.x, p.y, color);
+                    set_depth(p.x, p.y, depth);
+                }
+            }
+        }
+    }
+}

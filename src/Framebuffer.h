@@ -33,12 +33,15 @@ public:
     void draw_rect(i32 x, i32 y, i32 w, i32 h, Color color);
     void draw_triangle(i32 x0, i32 y0, i32 x1, i32 y1, i32 x2, i32 y2, Color color);
     void draw_triangle_filled(const Triangle& t, Color color);
+    void draw_triangle_normals(const Triangle& t);
     void draw_triangle_textured(const Triangle& t, const Texture& tex);
 
     bool enable_perspective_correction = true;
     bool enable_fill_convention = true;
     bool enable_lighting = true;
     f32 ambient_strength = 0.8f;
+
+    bool enable_smooth_shading = false;
 
 private:
     Camera& m_camera;

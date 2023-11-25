@@ -114,24 +114,35 @@ void UI::update()
                     draw_texture = false;
                     draw_filled = false;
                     draw_empty = true;
+                    draw_normals = false;
                 }
 
                 if (ImGui::RadioButton("Filled", draw_filled)) {
                     draw_texture = false;
                     draw_filled = true;
                     draw_empty = false;
+                    draw_normals = false;
                 }
                 ImGui::SameLine((width() / (f32)3));
                 ImGui::ColorEdit4("Color", &fill_color.x, ImGuiColorEditFlags_NoSidePreview | ImGuiColorEditFlags_NoInputs);
+
+                if (ImGui::RadioButton("Normals", draw_normals)) {
+                    draw_texture = false;
+                    draw_empty = false;
+                    draw_filled = false;
+                    draw_normals = true;
+                }
+                ImGui::SameLine((width() / (f32)3));
+                ImGui::Checkbox("Smooth Shading", &m_framebuffer.enable_smooth_shading);
 
                 if (ImGui::RadioButton("Textured", draw_texture)) {
                     draw_texture = true;
                     draw_filled = false;
                     draw_empty = false;
+                    draw_normals = false;
                 }
                 ImGui::SameLine((width() / (f32)3));
                 ImGui::Checkbox("Perspective Correction", &m_framebuffer.enable_perspective_correction);
-
                 ImGui::Separator();
 
                 ImGui::Checkbox("Wireframe", &draw_wireframe);

@@ -217,6 +217,8 @@ void Engine::render()
             } else if (m_ui.draw_filled) {
                 Color color(m_ui.fill_color);
                 m_framebuffer.draw_triangle_filled(t, color);
+            } else if (m_ui.draw_normals) {
+                m_framebuffer.draw_triangle_normals(t);
             }
 
             if (m_ui.draw_wireframe) {

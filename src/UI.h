@@ -36,6 +36,7 @@ public:
 
     bool draw_texture = true;
     bool draw_filled = false;
+    bool draw_normals = false;
     ImVec4 fill_color = { 1.0f, 1.0f, 1.0f, 1.0f };
 
     bool draw_empty = false;
