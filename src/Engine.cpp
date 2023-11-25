@@ -184,6 +184,12 @@ void Engine::update()
                 triangle.vertices[2].uv = model.mesh.texcoords[face.texcoords[2] - 1];
             }
 
+            if (model.mesh.normals.size() > 0) {
+                triangle.vertices[0].normal = model.mesh.normals[face.normals[0] - 1];
+                triangle.vertices[1].normal = model.mesh.normals[face.normals[1] - 1];
+                triangle.vertices[2].normal = model.mesh.normals[face.normals[2] - 1];
+            }
+
             model.triangles_to_render.push_back(triangle);
         }
     }

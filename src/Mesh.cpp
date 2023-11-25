@@ -24,9 +24,9 @@ Mesh::Mesh(std::string filename)
             }
             positions.push_back(position);
         }
-        if (strncmp(line, "n ", 2) == 0) {
+        if (strncmp(line, "vn ", 2) == 0) {
             Vec3 normal {};
-            if (sscanf(line, "n %f %f %f", &normal.x, &normal.y, &normal.z) != 3) {
+            if (sscanf(line, "vn %f %f %f", &normal.x, &normal.y, &normal.z) != 3) {
                 std::cerr << "Error reading normal" << std::endl;
             }
             normals.push_back(normal);
