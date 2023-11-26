@@ -16,11 +16,16 @@
 #include "UI.h"
 #include "Window.h"
 
-const i32 WINDOW_WIDTH = 1200;
-const i32 WINDOW_HEIGHT = 800;
-const i32 FB_WIDTH = (WINDOW_WIDTH / 3) * 2;
-const i32 FB_HEIGHT = WINDOW_HEIGHT;
-const f32 FB_ASPECT = FB_WIDTH / (f32)FB_HEIGHT;
+const bool FULLSCREEN = false;
+constexpr i32 WINDOW_WIDTH = FULLSCREEN ? 2560 : 2560 / 2;
+constexpr i32 WINDOW_HEIGHT = FULLSCREEN ? 1440 : 1440 / 2;
+
+const i32 FB_SCALE = FULLSCREEN ? 2 : 1;
+const i32 FB_WIDTH = ((WINDOW_WIDTH / 4) * 3) / FB_SCALE;
+const i32 FB_HEIGHT = WINDOW_HEIGHT / FB_SCALE;
+const f32 FB_ASPECT = (f32)FB_HEIGHT / FB_WIDTH;
+
+constexpr u32 FPS = 60;
 
 i32 main()
 {
@@ -37,12 +42,13 @@ i32 main()
     scene.lights.push_back(light_r);
 
     Camera camera { FB_ASPECT };
-    Framebuffer framebuffer(camera, FB_WIDTH, FB_HEIGHT);
-    Window window(framebuffer, WINDOW_WIDTH, WINDOW_HEIGHT);
+    Framebuffer framebuffer(camera, FB_WIDTH, FB_HEIGHT, FB_SCALE);
+    Window window(framebuffer, WINDOW_WIDTH, WINDOW_HEIGHT, FULLSCREEN);
     UI ui { window, framebuffer, camera, scene };
     Engine engine(window, framebuffer, camera, ui, scene);
 
     engine.setup();
+    engine.set_fps(FPS);
     while (engine.is_running()) {
         engine.process_input();
         engine.update();

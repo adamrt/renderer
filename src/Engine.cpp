@@ -54,21 +54,21 @@ void Engine::process_input()
             }
             break;
         case SDL_MOUSEBUTTONDOWN:
-            if (mx < m_framebuffer.width() && my < m_framebuffer.height()) {
+            if (mx < m_framebuffer.scaled_width() && my < m_framebuffer.scaled_height()) {
                 if (event.button.button == SDL_BUTTON_LEFT) {
                     left_button_down = true;
                 }
             }
             break;
         case SDL_MOUSEBUTTONUP:
-            if (mx < m_framebuffer.width() && my < m_framebuffer.height()) {
+            if (mx < m_framebuffer.scaled_width() && my < m_framebuffer.scaled_height()) {
                 if (event.button.button == SDL_BUTTON_LEFT) {
                     left_button_down = false;
                 }
             }
             break;
         case SDL_MOUSEMOTION:
-            if (mx < m_framebuffer.width() && my < m_framebuffer.height()) {
+            if (mx < m_framebuffer.scaled_width() && my < m_framebuffer.scaled_height()) {
                 if (left_button_down) {
                     m_ui.rotate = false;
                     m_camera.orbit(event.motion.xrel * 0.25f, event.motion.yrel * 0.25f);
@@ -77,7 +77,7 @@ void Engine::process_input()
             }
             break;
         case SDL_MOUSEWHEEL:
-            if (mx < m_framebuffer.width() && my < m_framebuffer.height()) {
+            if (mx < m_framebuffer.scaled_width() && my < m_framebuffer.scaled_height()) {
                 m_camera.zoom(-event.wheel.preciseY);
                 m_camera.update();
             }
@@ -88,9 +88,9 @@ void Engine::process_input()
 
 void Engine::update()
 {
-    i32 delay = FRAME_TARGET_TIME - (SDL_GetTicks() - m_previous_frame_time);
+    i32 delay = target_frame_time() - (SDL_GetTicks() - m_previous_frame_time);
 
-    if (delay > 0 && delay <= FRAME_TARGET_TIME) {
+    if (delay > 0 && delay <= target_frame_time()) {
         SDL_Delay(delay);
     }
 

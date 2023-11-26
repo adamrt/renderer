@@ -12,10 +12,13 @@
 class Framebuffer {
 
 public:
-    Framebuffer(Camera& camera, i32 width, i32 height);
+    Framebuffer(Camera& camera, i32 width, i32 height, i32 scale);
 
     i32 width() const { return m_width; }
     i32 height() const { return m_height; }
+    i32 scaled_width() const { return m_width * m_scale; }
+    i32 scaled_height() const { return m_height * m_scale; }
+    i32 scale() const { return m_scale; }
     f32 aspect() const { return (f32)m_height / (f32)m_width; }
 
     const std::vector<Color>& colorbuffer() const { return m_colorbuffer; }
@@ -47,6 +50,7 @@ private:
     Camera& m_camera;
     i32 m_width;
     i32 m_height;
+    i32 m_scale;
     std::vector<Color> m_colorbuffer;
     std::vector<f32> m_depthbuffer;
 };

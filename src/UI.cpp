@@ -24,7 +24,7 @@ UI::UI(Window& window, Framebuffer& framebuffer, Camera& camera, Scene& scene)
 
 i32 UI::width() const
 {
-    return m_window.width() - m_framebuffer.width();
+    return m_window.width() - m_framebuffer.scaled_width();
 }
 
 UI::~UI()
@@ -68,7 +68,7 @@ void UI::update()
             ImGui::DockBuilderAddNode(dock_id);
             ImGui::DockBuilderSetNodeSize(dock_id, ImGui::GetContentRegionAvail());
 
-            f32 ui_width = (m_window.width() - (f32)m_framebuffer.width()) / m_window.width();
+            f32 ui_width = (m_window.width() - (f32)m_framebuffer.scaled_width()) / m_window.width();
 
             ImGuiID dock_id_left;
             ImGuiID dock_id_right = ImGui::DockBuilderSplitNode(dock_id, ImGuiDir_Right, ui_width, NULL, &dock_id_left);
@@ -85,7 +85,7 @@ void UI::update()
         {
             ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
             ImGui::Begin("Render", nullptr, window_flags);
-            ImGui::Image(m_window.sdl_texture(), ImVec2(m_framebuffer.width(), m_framebuffer.height()), ImVec2(0, 0), ImVec2(1, 1), ImColor(1.0f, 1.0f, 1.0f));
+            ImGui::Image(m_window.sdl_texture(), ImVec2(m_framebuffer.scaled_width(), m_framebuffer.scaled_height()), ImVec2(0, 0), ImVec2(1, 1), ImColor(1.0f, 1.0f, 1.0f));
             ImGui::End();
             ImGui::PopStyleVar();
         }

@@ -5,10 +5,11 @@
 #include "AK.h"
 #include "Framebuffer.h"
 
-Framebuffer::Framebuffer(Camera& camera, i32 width, i32 height)
+Framebuffer::Framebuffer(Camera& camera, i32 width, i32 height, i32 scale)
     : m_camera(camera)
     , m_width(width)
     , m_height(height)
+    , m_scale(scale)
     , m_colorbuffer(m_width * m_height)
     , m_depthbuffer(m_width * m_height)
 {

@@ -8,7 +8,7 @@
 
 class Window {
 public:
-    Window(Framebuffer& framebuffer, i32 width, i32 height);
+    Window(Framebuffer& framebuffer, i32 width, i32 height, bool fullscreen);
     ~Window();
 
     void update_texture();

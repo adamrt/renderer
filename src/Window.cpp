@@ -1,9 +1,10 @@
-#include <iostream>
-
-#include "AK.h"
 #include "Window.h"
+#include "AK.h"
+#include "SDL_rect.h"
+#include "SDL_render.h"
+#include "SDL_video.h"
 
-Window::Window(Framebuffer& framebuffer, i32 width, i32 height)
+Window::Window(Framebuffer& framebuffer, i32 width, i32 height, bool fullscreen)
     : m_framebuffer(framebuffer)
     , m_width(width)
     , m_height(height)
@@ -15,7 +16,11 @@ Window::Window(Framebuffer& framebuffer, i32 width, i32 height)
 
     SDL_SetHint(SDL_HINT_IME_SHOW_UI, "1");
 
-    m_window = SDL_CreateWindow("Heretic", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, m_width, m_height, SDL_WINDOW_SHOWN);
+    u32 flags = SDL_WINDOW_SHOWN;
+    if (fullscreen)
+        flags |= SDL_WINDOW_FULLSCREEN;
+
+    m_window = SDL_CreateWindow("Heretic", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, m_width, m_height, flags);
 
     // Create a SDL renderer.
     // - SDL_RENDERER_PRESENTVSYNC isn't included because it caps the
@@ -37,6 +42,9 @@ Window::Window(Framebuffer& framebuffer, i32 width, i32 height)
 void Window::update_texture()
 {
     SDL_UpdateTexture(m_texture, NULL, m_framebuffer.colorbuffer().data(), m_framebuffer.width() * sizeof(u32));
+    auto source = SDL_Rect { 0, 0, m_framebuffer.width(), m_framebuffer.height() };
+    auto destination = SDL_Rect { 0, 0, m_framebuffer.scaled_width(), m_framebuffer.scaled_height() };
+    SDL_RenderCopy(m_renderer, m_texture, &source, &destination);
 }
 
 void Window::render()

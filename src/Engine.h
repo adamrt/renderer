@@ -8,9 +8,6 @@
 #include "UI.h"
 #include "Window.h"
 
-constexpr int FPS = 60;
-constexpr int FRAME_TARGET_TIME = (1000 / FPS);
-
 class Engine {
 public:
     Engine(Window& window, Framebuffer& fb, Camera& camera, UI& ui, Scene& scene);
@@ -19,6 +16,9 @@ public:
     void process_input();
     void update();
     void render();
+
+    void set_fps(u32 fps) { m_target_fps = fps; }
+    f32 target_frame_time() const { return (f32)1000.0 / m_target_fps; }
 
     bool is_running(void) { return m_running; }
 
@@ -31,6 +31,7 @@ private:
     UI& m_ui;
     Scene& m_scene;
 
+    u32 m_target_fps;
     u32 m_previous_frame_time = SDL_GetTicks();
     bool m_running = true;
     Mat4 m_projection_matrix;
