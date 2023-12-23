@@ -13,6 +13,11 @@ Mesh::Mesh(std::string filename)
         return;
     }
 
+    std::vector<Vec3> positions;
+    std::vector<Vec3> normals;
+    std::vector<Vec2> texcoords;
+    std::vector<Face> faces;
+
     char line[1024];
 
     while (fgets(line, 1024, file)) {
@@ -44,9 +49,9 @@ Mesh::Mesh(std::string filename)
 
             if (std::strchr(line, '/')) {
                 if (sscanf(line, "f %u/%u/%u %u/%u/%u %u/%u/%u",
-                        &f.positions[0], &f.texcoords[0], &f.normals[0],
-                        &f.positions[1], &f.texcoords[1], &f.normals[1],
-                        &f.positions[2], &f.texcoords[2], &f.normals[2])
+                        &f.positions[0], &f.uvs[0], &f.normals[0],
+                        &f.positions[1], &f.uvs[1], &f.normals[1],
+                        &f.positions[2], &f.uvs[2], &f.normals[2])
                     != 9) {
                     std::cerr << "Error reading face" << std::endl;
                 }
@@ -59,6 +64,16 @@ Mesh::Mesh(std::string filename)
 
             faces.push_back(f);
         }
+    }
+
+    for (auto const& face : faces) {
+        Triangle t = {};
+        for (u32 i = 0; i < 3; i++) {
+            t.vertices[i].position = positions[face.positions[i] - 1].xyzw();
+            t.vertices[i].normal = normals[face.normals[i] - 1];
+            t.vertices[i].uv = texcoords[face.uvs[i] - 1];
+        }
+        triangles.push_back(t);
     }
 
     fclose(file);

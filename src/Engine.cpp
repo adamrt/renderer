@@ -29,7 +29,7 @@ void Engine::setup()
 
     i32 triangles = 0;
     for (auto& model : m_scene.models) {
-        triangles += model.mesh.faces.size();
+        triangles += model.mesh.triangles.size();
     }
     m_ui.total_triangles = triangles;
     m_camera.update();
@@ -116,26 +116,20 @@ void Engine::update()
 
         Mat4 world = Mat4::world(model.scale, model.rotation, model.translation);
 
-        for (auto& face : model.mesh.faces) {
-
-            auto face_verts = std::array<Vec3, 3> {
-                model.mesh.positions[face.positions[0] - 1],
-                model.mesh.positions[face.positions[1] - 1],
-                model.mesh.positions[face.positions[2] - 1],
-            };
+        for (auto& tri : model.mesh.triangles) {
 
             auto trans_verts = std::array<Vec3, 3> {};
             for (i32 i = 0; i < 3; i++) {
-                trans_verts[i] = world * face_verts[i];
+                trans_verts[i] = world * tri.vertices[i].position.xyz();
             }
 
-            Vec3 norm = vertices_normal(trans_verts);
+            Vec3 triangle_normal = vertices_normal(trans_verts);
 
             Color diffuse;
             Color light_sum(0.0f);
             for (auto& light : m_scene.lights) {
                 Vec3 light_dir = (light.position - trans_verts[0]).normalized();
-                f32 diffuse_intensity = std::max(Vec3::dot(norm, light_dir), 0.0f);
+                f32 diffuse_intensity = std::max(Vec3::dot(triangle_normal, light_dir), 0.0f);
                 Color diffuse = light.color * diffuse_intensity;
                 light_sum = light_sum + diffuse;
             }
@@ -179,16 +173,14 @@ void Engine::update()
             triangle.light_sum = light_sum;
 
             if (model.texture.is_valid()) {
-                triangle.vertices[0].uv = model.mesh.texcoords[face.texcoords[0] - 1];
-                triangle.vertices[1].uv = model.mesh.texcoords[face.texcoords[1] - 1];
-                triangle.vertices[2].uv = model.mesh.texcoords[face.texcoords[2] - 1];
+                triangle.vertices[0].uv = tri.vertices[0].uv;
+                triangle.vertices[1].uv = tri.vertices[1].uv;
+                triangle.vertices[2].uv = tri.vertices[2].uv;
             }
 
-            if (model.mesh.normals.size() > 0) {
-                triangle.vertices[0].normal = model.mesh.normals[face.normals[0] - 1];
-                triangle.vertices[1].normal = model.mesh.normals[face.normals[1] - 1];
-                triangle.vertices[2].normal = model.mesh.normals[face.normals[2] - 1];
-            }
+            triangle.vertices[0].normal = tri.vertices[0].normal;
+            triangle.vertices[1].normal = tri.vertices[1].normal;
+            triangle.vertices[2].normal = tri.vertices[2].normal;
 
             model.triangles_to_render.push_back(triangle);
         }

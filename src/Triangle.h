@@ -4,12 +4,7 @@
 
 #include "Color.h"
 #include "Vector.h"
-
-struct Vertex {
-    Vec4 position;
-    Vec3 normal;
-    Vec2 uv;
-};
+#include "Vertex.h"
 
 struct Triangle {
     Triangle() {};
