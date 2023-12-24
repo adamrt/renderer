@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.18)
 project(
-  Heretic
+  Renderer
   VERSION     0.1
-  DESCRIPTION "Final Fantasy Tactics Tooling"
+  DESCRIPTION "3D Software Renderer"
   LANGUAGES   CXX)
 
 # Using C++11 standard to allow building on PSVita.
@@ -20,7 +20,7 @@ file(GLOB IMGUI_SOURCES "lib/imgui/*.h" "lib/imgui/*.cpp")
 add_library(imgui ${IMGUI_SOURCES} lib/imgui/imgui.cpp)
 target_include_directories(imgui PUBLIC ${SDL2_INCLUDE_DIRS})
 
-add_executable(heretic
+add_executable(renderer
   src/main.cpp
   src/Camera.cpp
   src/Color.cpp
@@ -33,6 +33,6 @@ add_executable(heretic
   src/UI.cpp
   src/Vector.cpp
   src/Window.cpp)
-target_include_directories(heretic PRIVATE ${SDL2_INCLUDE_DIRS} lib/imgui/ lib/stb/)
-target_link_libraries(heretic ${SDL2_LIBRARIES} imgui)
-target_compile_options(heretic PRIVATE -Werror -Wall -Wextra -Wpedantic)
+target_include_directories(renderer PRIVATE ${SDL2_INCLUDE_DIRS} lib/imgui/ lib/stb/)
+target_link_libraries(renderer ${SDL2_LIBRARIES} imgui)
+target_compile_options(renderer PRIVATE -Werror -Wall -Wextra -Wpedantic)

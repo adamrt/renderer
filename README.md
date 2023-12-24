@@ -1,4 +1,4 @@
-# Heretic
+# Renderer
 
 This is a 3D software renderer using the CPU and SDL2 to draw individual pixels. No OpenGL/Vulkan/GPU.
 
