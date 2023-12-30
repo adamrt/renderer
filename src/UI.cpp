@@ -159,7 +159,7 @@ void UI::update()
                 ImGui::SameLine();
                 ImGui::Checkbox("Z", &rotate_z);
                 ImGui::SameLine();
-                if (ImGui::Button("Reset Orientation")) {
+                if (ImGui::Button("Reset")) {
                     orientation_event();
                 }
             }
