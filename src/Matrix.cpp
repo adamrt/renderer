@@ -140,7 +140,10 @@ Mat4 Mat4::world(const Vec3& s, const Vec3& r, const Vec3& t)
     Mat4 scale = Mat4::scale(s);
     Mat4 rotation = Mat4::rotation(r);
     Mat4 translation = Mat4::translation(t);
-    Mat4 world = translation * rotation * scale;
+
+    // Row-major and post-multiplication (M * v) uses TRS.
+    // TRS is the same as (S * R * T) * v because of associativity.
+    Mat4 world = scale * rotation * translation;
     return world;
 }
 
