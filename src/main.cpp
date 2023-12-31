@@ -16,14 +16,15 @@
 #include "UI.h"
 #include "Window.h"
 
-constexpr bool FULLSCREEN = true;
-constexpr i32 FB_SCALE = 1;
-constexpr i32 WINDOW_WIDTH = FULLSCREEN ? 2560 : 2560 / FB_SCALE;
-constexpr i32 WINDOW_HEIGHT = FULLSCREEN ? 1440 : 1440 / FB_SCALE;
+constexpr bool FULLSCREEN = false;
+constexpr i32 WINDOW_WIDTH = FULLSCREEN ? 2560 : (1024 / 3) * 4;
+constexpr i32 WINDOW_HEIGHT = FULLSCREEN ? 1440 : 768;
 
-const i32 FB_WIDTH = ((WINDOW_WIDTH / 4) * 3) / FB_SCALE;
-const i32 FB_HEIGHT = WINDOW_HEIGHT / FB_SCALE;
-const f32 FB_ASPECT = (f32)FB_HEIGHT / FB_WIDTH;
+// Currently always using 1:1 ratio since performance is fine for small models.
+constexpr i32 FB_SCALE = FULLSCREEN ? 1 : 1;
+constexpr i32 FB_WIDTH = ((WINDOW_WIDTH / 4) * 3) / FB_SCALE;
+constexpr i32 FB_HEIGHT = WINDOW_HEIGHT / FB_SCALE;
+constexpr f32 FB_ASPECT = (f32)FB_HEIGHT / FB_WIDTH;
 
 constexpr u32 FPS = 60;
 
