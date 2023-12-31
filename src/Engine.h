@@ -31,8 +31,8 @@ private:
     UI& m_ui;
     Scene& m_scene;
 
-    u32 m_target_fps;
-    u32 m_previous_frame_time = SDL_GetTicks();
-    bool m_running = true;
-    Mat4 m_projection_matrix;
+    u32 m_target_fps { 30 };
+    u32 m_previous_frame_time { SDL_GetTicks() };
+    bool m_running { true };
+    Mat4 m_projection_matrix {};
 };

@@ -7,7 +7,8 @@
 struct Vec4;
 
 struct Vec2 {
-    f32 x, y;
+    f32 x {};
+    f32 y {};
 
     Vec2();
     Vec2(f32 x, f32 y);
@@ -22,7 +23,9 @@ struct Vec2 {
 };
 
 struct Vec3 {
-    f32 x, y, z;
+    f32 x {};
+    f32 y {};
+    f32 z {};
 
     Vec3();
     Vec3(f32 x, f32 y, f32 z);
@@ -43,7 +46,10 @@ struct Vec3 {
 };
 
 struct Vec4 {
-    f32 x, y, z, w;
+    f32 x {};
+    f32 y {};
+    f32 z {};
+    f32 w {};
 
     Vec4();
     Vec4(f32 x, f32 y, f32 z, f32 w);

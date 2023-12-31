@@ -29,23 +29,23 @@ public:
     void update();
     void render();
 
-    bool rotate = false;
-    bool rotate_x = false;
-    bool rotate_y = true;
-    bool rotate_z = false;
+    bool rotate { false };
+    bool rotate_x { false };
+    bool rotate_y { true };
+    bool rotate_z { false };
 
-    bool draw_texture = true;
-    bool draw_filled = false;
-    bool draw_normals = false;
-    ImVec4 fill_color = { 1.0f, 1.0f, 1.0f, 1.0f };
+    bool draw_texture { true };
+    bool draw_filled { false };
+    bool draw_normals { false };
+    ImVec4 fill_color { 1.0f, 1.0f, 1.0f, 1.0f };
 
-    bool draw_empty = false;
+    bool draw_empty { false };
 
-    bool draw_wireframe = false;
-    bool backface_culling = true;
+    bool draw_wireframe { false };
+    bool backface_culling { true };
 
-    int total_triangles = 0;
-    int visible_triangles = 0;
+    int total_triangles {};
+    int visible_triangles {};
 
 private:
     Window& m_window;
@@ -53,5 +53,5 @@ private:
     Camera& m_camera;
     Scene& m_scene;
 
-    ImGuiIO* m_io;
+    ImGuiIO* m_io { nullptr };
 };

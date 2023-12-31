@@ -39,18 +39,17 @@ public:
     void draw_triangle_normals(const Triangle& t);
     void draw_triangle_textured(const Triangle& t, const Texture& tex);
 
-    bool enable_perspective_correction = true;
-    bool enable_fill_convention = true;
-    bool enable_lighting = true;
-    f32 ambient_strength = 0.8f;
-
-    bool enable_smooth_shading = false;
+    bool enable_perspective_correction { true };
+    bool enable_fill_convention { true };
+    bool enable_lighting { true };
+    bool enable_smooth_shading { false };
+    f32 ambient_strength { 0.8f };
 
 private:
     Camera& m_camera;
-    i32 m_width;
-    i32 m_height;
-    i32 m_scale;
-    std::vector<Color> m_colorbuffer;
-    std::vector<f32> m_depthbuffer;
+    i32 m_width {};
+    i32 m_height {};
+    i32 m_scale {};
+    std::vector<Color> m_colorbuffer {};
+    std::vector<f32> m_depthbuffer {};
 };

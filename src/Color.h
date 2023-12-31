@@ -5,7 +5,7 @@
 #include "AK.h"
 
 struct Color {
-    u32 rgba;
+    u32 rgba {};
 
     Color();
     Color(u32 color);

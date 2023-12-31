@@ -1,4 +1,4 @@
-#pragma once
+ #pragma once
 
 #include "Matrix.h"
 #include "Vector.h"
@@ -23,16 +23,15 @@ struct Camera {
     Mat4 projection_matrix() const;
     Mat4 view_matrix() const;
 
-    Projection projection;
-    Mat4 perspective;
-    Mat4 orthographic;
+    Projection projection {};
+    Mat4 perspective {};
+    Mat4 orthographic {};
+    Mat4 view {};
 
-    Mat4 view;
+    f32 distance {5.0f};
+    f32 fov {K_PI / 3.0f};
 
-    f32 distance = 5.0f;
-    f32 fov = K_PI / 3.0f;
-
-    f32 aspect;
-    f32 theta;
-    f32 phi;
+    f32 aspect {};
+    f32 theta {};
+    f32 phi {};
 };

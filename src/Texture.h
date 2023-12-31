@@ -14,15 +14,15 @@ public:
 
     bool is_valid() const { return m_data != nullptr; }
 
-    int width() const { return m_width; }
-    int height() const { return m_height; }
-    int channels() const { return m_channels; }
+    i32 width() const { return m_width; }
+    i32 height() const { return m_height; }
+    i32 channels() const { return m_channels; }
     u8* data() const { return m_data; }
 
 private:
-    u8* m_data = nullptr;
+    u8* m_data { nullptr };
 
-    int m_width = 0;
-    int m_height = 0;
-    int m_channels = 0;
+    i32 m_width {};
+    i32 m_height {};
+    i32 m_channels {};
 };
