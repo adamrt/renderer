@@ -109,16 +109,6 @@ void UI::update()
                 }
             }
             if (ImGui::CollapsingHeader("Model", ImGuiTreeNodeFlags_DefaultOpen)) {
-                if (ImGui::Button("Original Scale/Translation")) {
-                    m_scene.models[0].translation = Vec3(0.0f, 0.0f, 0.0f);
-                    m_scene.models[0].scale = Vec3(1.0f, 1.0f, 1.0f);
-                }
-                ImGui::SameLine((width() / (f32)3));
-                if (ImGui::Button("Normalized Scale/Translation")) {
-                    m_scene.models[0].scale = m_scene.models[0].mesh.normalized_scale();
-                    m_scene.models[0].translation = m_scene.models[0].mesh.center_translation();
-                }
-
                 // Surface
                 if (ImGui::RadioButton("Empty", draw_empty)) {
                     draw_texture = false;
@@ -158,6 +148,16 @@ void UI::update()
                 ImGui::Checkbox("Wireframe", &draw_wireframe);
                 ImGui::Checkbox("Backface Culling", &backface_culling);
                 ImGui::Checkbox("Fill Convention", &m_framebuffer.enable_fill_convention);
+
+                if (ImGui::Checkbox("Auto Scaled and Centered", &auto_scaled_and_centered)) {
+                    if (auto_scaled_and_centered) {
+                        m_scene.models[0].scale = m_scene.models[0].mesh.normalized_scale();
+                        m_scene.models[0].translation = m_scene.models[0].mesh.center_translation();
+                    } else {
+                        m_scene.models[0].translation = Vec3(0.0f, 0.0f, 0.0f);
+                        m_scene.models[0].scale = Vec3(1.0f, 1.0f, 1.0f);
+                    }
+                }
 
                 ImGui::Separator();
                 // Rotation Buttons

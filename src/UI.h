@@ -43,6 +43,7 @@ public:
 
     bool draw_wireframe { false };
     bool backface_culling { true };
+    bool auto_scaled_and_centered { true };
 
     int total_triangles {};
     int visible_triangles {};
