@@ -1,13 +1,18 @@
 #include "Camera.h"
 #include "AK.h"
 
-Camera::Camera(f32 aspect)
-    : aspect(aspect)
+Camera::Camera(i32 width, i32 height, f32 fov, f32 near, f32 far)
+    : width(width)
+    , height(height)
+    , aspect((f32)height / width)
+    , fov(fov)
+    , near(near)
+    , far(far)
 {
     // The perspective projection matrix is static, so we can calculate it once.
     // The orthographic projection matrix is dynamic, so we need to calculate if distance changes.
     projection = Projection::Perspective;
-    perspective = Mat4::perspective(fov, aspect, ZNEAR, ZFAR);
+    perspective = Mat4::perspective(fov, aspect, near, far);
 };
 
 Mat4 Camera::projection_matrix() const
@@ -41,7 +46,7 @@ void Camera::orbit(f32 dx, f32 dy)
 
 void Camera::zoom(f32 d)
 {
-    const f32 min_dist = 2.5f;
+    const f32 min_dist = 0.1f;
     const f32 max_dist = 25.0f;
     distance = kclamp(distance + d, min_dist, max_dist);
 }
@@ -80,6 +85,6 @@ void Camera::update()
         // zoomed at roughly the same level.
         const auto w = 1.0 * (distance / 2.0);
         const auto h = 1.0 * aspect * (distance / 2.0);
-        orthographic = Mat4::orthographic(-w, w, -h, h, ZNEAR, ZFAR);
+        orthographic = Mat4::orthographic(-w, w, -h, h, near, far);
     }
 }

@@ -1,10 +1,7 @@
- #pragma once
+#pragma once
 
 #include "Matrix.h"
 #include "Vector.h"
-
-const f32 ZNEAR = 0.01f;
-const f32 ZFAR = 100.0f;
 
 enum class Projection {
     Perspective = 0,
@@ -13,7 +10,7 @@ enum class Projection {
 
 // Camera is an orbital camera
 struct Camera {
-    Camera(f32 aspect);
+    Camera(i32 width, i32 height, f32 fov, f32 near, f32 far);
 
     void orbit(f32 dx, f32 dy);
     void zoom(f32 d);
@@ -28,10 +25,14 @@ struct Camera {
     Mat4 orthographic {};
     Mat4 view {};
 
-    f32 distance {5.0f};
-    f32 fov {K_PI / 3.0f};
-
+    i32 width {};
+    i32 height {};
     f32 aspect {};
+    f32 fov {};
+    f32 near {};
+    f32 far {};
+
+    f32 distance { 5.0f };
     f32 theta {};
     f32 phi {};
 };

@@ -24,9 +24,11 @@ constexpr i32 WINDOW_HEIGHT = FULLSCREEN ? 1440 : 768;
 constexpr i32 FB_SCALE = FULLSCREEN ? 1 : 1;
 constexpr i32 FB_WIDTH = ((WINDOW_WIDTH / 4) * 3) / FB_SCALE;
 constexpr i32 FB_HEIGHT = WINDOW_HEIGHT / FB_SCALE;
-constexpr f32 FB_ASPECT = (f32)FB_HEIGHT / FB_WIDTH;
 
 constexpr u32 FPS = 60;
+constexpr f32 FOV_Y = K_PI / 3.0f;
+constexpr f32 ZNEAR = 0.01f;
+constexpr f32 ZFAR = 100.0f;
 
 i32 main()
 {
@@ -42,7 +44,7 @@ i32 main()
     scene.lights.push_back(light_b);
     scene.lights.push_back(light_r);
 
-    Camera camera { FB_ASPECT };
+    Camera camera { FB_WIDTH, FB_HEIGHT, FOV_Y, ZNEAR, ZFAR };
     Framebuffer framebuffer(camera, FB_WIDTH, FB_HEIGHT, FB_SCALE);
     Window window(framebuffer, WINDOW_WIDTH, WINDOW_HEIGHT, FULLSCREEN);
     UI ui { window, framebuffer, camera, scene };
