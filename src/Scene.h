@@ -9,13 +9,18 @@
 
 class Model {
 public:
-    Model(const Mesh& mesh, const Texture& texture)
+    Model(Mesh& mesh, const Texture& texture)
         : mesh(mesh)
         , texture(texture)
     {
+        // Scale and translate the model initially so there aren't
+        // massive models taking up the entire viewport. The UI has
+        // functionality to revert to the original scale/translation.
+        scale = mesh.normalized_scale();
+        translation = mesh.center_translation();
     }
 
-    const Mesh& mesh;
+    Mesh& mesh;
     const Texture& texture;
 
     Vec3 scale = Vec3(1.0f, 1.0f, 1.0f);

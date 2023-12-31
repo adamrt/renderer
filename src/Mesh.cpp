@@ -1,6 +1,7 @@
 #include <cstdio>
 #include <cstring>
 #include <iostream>
+#include <limits>
 #include <vector>
 
 #include "Mesh.h"
@@ -78,3 +79,70 @@ Mesh::Mesh(std::string filename)
 
     fclose(file);
 }
+
+// normalized_scale returns a Vec3 that can be used to scale the mesh
+// to (-1, 1) on each coordinate.
+Vec3 Mesh::normalized_scale() const
+{
+    if (triangles.empty()) {
+        return Vec3(1.0f, 1.0f, 1.0f);
+    }
+
+    f32 min_x = std::numeric_limits<f32>::max();
+    f32 max_x = std::numeric_limits<f32>::min();
+    f32 min_y = std::numeric_limits<f32>::max();
+    f32 max_y = std::numeric_limits<f32>::min();
+    f32 min_z = std::numeric_limits<f32>::max();
+    f32 max_z = std::numeric_limits<f32>::min();
+
+    for (const auto& triangle : triangles) {
+        for (const auto& vertex : triangle.vertices) {
+            min_x = std::min(min_x, vertex.position.x);
+            max_x = std::max(max_x, vertex.position.x);
+            min_y = std::min(min_y, vertex.position.y);
+            max_y = std::max(max_y, vertex.position.y);
+            min_z = std::min(min_z, vertex.position.z);
+            max_z = std::max(max_z, vertex.position.z);
+        }
+    }
+
+    f32 size_x = max_x - min_x;
+    f32 size_y = max_y - min_y;
+    f32 size_z = max_z - min_z;
+
+    f32 largest_dimension = std::max({ size_x, size_y, size_z });
+    f32 scaling_factor = 2.0f / largest_dimension;
+
+    return Vec3(scaling_factor, scaling_factor, scaling_factor);
+}
+
+// center_translation returns a Vec3 that can be used to translate the
+// mesh to the center of (0, 0).
+Vec3 Mesh::center_translation() const
+{
+    f32 min_x = std::numeric_limits<f32>::max();
+    f32 max_x = std::numeric_limits<f32>::min();
+    f32 min_y = std::numeric_limits<f32>::max();
+    f32 max_y = std::numeric_limits<f32>::min();
+    f32 min_z = std::numeric_limits<f32>::max();
+    f32 max_z = std::numeric_limits<f32>::min();
+
+    for (auto& t : triangles) {
+        for (int i = 0; i < 3; i++) {
+            // Min
+            min_x = std::min(t.vertices[i].position.x, min_x);
+            min_y = std::min(t.vertices[i].position.y, min_y);
+            min_z = std::min(t.vertices[i].position.z, min_z);
+            // max
+            max_x = std::max(t.vertices[i].position.x, max_x);
+            max_y = std::max(t.vertices[i].position.y, max_y);
+            max_z = std::max(t.vertices[i].position.z, max_z);
+        }
+    }
+
+    f32 x = -(max_x + min_x) / 2.0;
+    f32 y = -(max_y + min_y) / 2.0;
+    f32 z = -(max_z + min_z) / 2.0;
+
+    return Vec3(x, y, z);
+};

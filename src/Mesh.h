@@ -12,6 +12,8 @@ struct Mesh {
     Mesh(const std::string filename);
 
     std::vector<Triangle> triangles;
+    Vec3 normalized_scale() const;
+    Vec3 center_translation() const;
 };
 
 // Face has 3 vertices, each with 3 indices (position, normal, uv).
