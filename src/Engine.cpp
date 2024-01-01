@@ -88,6 +88,9 @@ void Engine::process_input()
 
 void Engine::update()
 {
+
+    m_ui.visible_triangles = 0;
+
     i32 delay = target_frame_time() - (SDL_GetTicks() - m_previous_frame_time);
 
     if (delay > 0 && delay <= target_frame_time()) {
@@ -184,9 +187,8 @@ void Engine::update()
 
             model.triangles_to_render.push_back(triangle);
         }
+        m_ui.visible_triangles += model.triangles_to_render.size();
     }
-
-    m_ui.visible_triangles = 0; // triangles_to_render.size();
 }
 
 void Engine::render()
