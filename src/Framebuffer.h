@@ -40,7 +40,6 @@ public:
     void draw_triangle_textured(const Triangle& t, const Texture& tex);
 
     bool enable_perspective_correction { true };
-    bool enable_fill_convention { true };
     bool enable_lighting { true };
     bool enable_smooth_shading { false };
     f32 ambient_strength { 0.8f };

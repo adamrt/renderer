@@ -149,11 +149,9 @@ void Framebuffer::draw_triangle_textured(const Triangle& t, const Texture& tex)
     f32 w1_row = Vec2::edge_cross(v2, v0, p0);
     f32 w2_row = Vec2::edge_cross(v0, v1, p0);
 
-    if (enable_fill_convention) {
-        w0_row += bias0;
-        w1_row += bias1;
-        w2_row += bias2;
-    }
+    w0_row += bias0;
+    w1_row += bias1;
+    w2_row += bias2;
 
     for (i32 y = min_y; y <= max_y; y++) {
         f32 w0 = w0_row;
@@ -267,11 +265,9 @@ void Framebuffer::draw_triangle_filled(const Triangle& t, Color color)
 
             if (w0 >= 0 && w1 >= 0 && w2 >= 0) {
 
-                if (enable_fill_convention) {
-                    w0 += bias0;
-                    w1 += bias1;
-                    w2 += bias2;
-                }
+                w0 += bias0;
+                w1 += bias1;
+                w2 += bias2;
 
                 f32 alpha = w0 / area;
                 f32 beta = w1 / area;
@@ -337,11 +333,9 @@ void Framebuffer::draw_triangle_normals(const Triangle& t)
 
             if (w0 >= 0 && w1 >= 0 && w2 >= 0) {
 
-                if (enable_fill_convention) {
-                    w0 += bias0;
-                    w1 += bias1;
-                    w2 += bias2;
-                }
+                w0 += bias0;
+                w1 += bias1;
+                w2 += bias2;
 
                 f32 alpha = w0 / area;
                 f32 beta = w1 / area;

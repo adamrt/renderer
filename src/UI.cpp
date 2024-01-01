@@ -147,7 +147,6 @@ void UI::update()
 
                 ImGui::Checkbox("Wireframe", &draw_wireframe);
                 ImGui::Checkbox("Backface Culling", &backface_culling);
-                ImGui::Checkbox("Fill Convention", &m_framebuffer.enable_fill_convention);
 
                 if (ImGui::Checkbox("Auto Scaled and Centered", &auto_scaled_and_centered)) {
                     if (auto_scaled_and_centered) {
