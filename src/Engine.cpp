@@ -78,7 +78,8 @@ void Engine::process_input()
             break;
         case SDL_MOUSEWHEEL:
             if (mx < m_framebuffer.scaled_width() && my < m_framebuffer.scaled_height()) {
-                m_camera.zoom(-event.wheel.preciseY);
+                auto amount = -event.wheel.y / 3.0f;
+                m_camera.zoom(amount);
                 m_camera.update();
             }
             break;
