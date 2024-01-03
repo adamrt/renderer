@@ -205,8 +205,10 @@ void Framebuffer::draw_triangle_textured(const Triangle& t, const Texture& tex)
                     u32 rgba = (raw[0] << 24) | (raw[1] << 16) | (raw[2] << 8) | raw[3];
 
                     Color color(rgba);
-                    if (enable_lighting) {
+                    if (enable_ambient_light) {
                         color = (color * ambient_strength) + (t.light_sum * color);
+                    } else {
+                        color = (t.light_sum * color);
                     }
 
                     draw_pixel(x, y, color);
@@ -226,8 +228,10 @@ void Framebuffer::draw_triangle_textured(const Triangle& t, const Texture& tex)
 // draw_triangle_filled draws a filled triangle using the edge function algorithm
 void Framebuffer::draw_triangle_filled(const Triangle& t, Color color)
 {
-    if (enable_lighting) {
+    if (enable_ambient_light) {
         color = (color * ambient_strength) + (t.light_sum * color);
+    } else {
+        color = (t.light_sum * color);
     }
 
     Vec4 a = t.vertices[0].position;

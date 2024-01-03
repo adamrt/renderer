@@ -131,6 +131,9 @@ void Engine::update()
             Color diffuse;
             Color light_sum(0.0f);
             for (auto& light : m_scene.lights) {
+                if (!light.enabled)
+                    continue;
+
                 Vec3 light_dir = (light.position - trans_verts[0]).normalized();
                 f32 diffuse_intensity = std::max(Vec3::dot(triangle_normal, light_dir), 0.0f);
                 Color diffuse = light.color * diffuse_intensity;

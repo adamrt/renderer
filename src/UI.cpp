@@ -123,10 +123,11 @@ void UI::update()
                     draw_empty = false;
                     draw_normals = false;
                 }
-                if (draw_filled) {
-                    ImGui::SameLine((width() / (f32)3));
-                    ImGui::ColorEdit4("Color", &fill_color.x, ImGuiColorEditFlags_NoSidePreview | ImGuiColorEditFlags_NoInputs);
-                }
+                ImGui::SameLine((width() / (f32)3));
+
+                ImGui::BeginDisabled(!draw_filled);
+                ImGui::ColorEdit4("Color", &fill_color.x, ImGuiColorEditFlags_NoSidePreview | ImGuiColorEditFlags_NoInputs);
+                ImGui::EndDisabled();
 
                 if (ImGui::RadioButton("Normals", draw_normals)) {
                     draw_texture = false;
@@ -134,10 +135,11 @@ void UI::update()
                     draw_filled = false;
                     draw_normals = true;
                 }
-                if (draw_normals) {
-                    ImGui::SameLine((width() / (f32)3));
-                    ImGui::Checkbox("Smooth Shading", &m_framebuffer.enable_smooth_shading);
-                }
+                ImGui::SameLine((width() / (f32)3));
+
+                ImGui::BeginDisabled(!draw_normals);
+                ImGui::Checkbox("Smooth Shading", &m_framebuffer.enable_smooth_shading);
+                ImGui::EndDisabled();
 
                 if (ImGui::RadioButton("Textured", draw_texture)) {
                     draw_texture = true;
@@ -147,10 +149,10 @@ void UI::update()
                     m_framebuffer.enable_perspective_correction = true;
                 }
 
-                if (draw_texture) {
-                    ImGui::SameLine((width() / (f32)3));
-                    ImGui::Checkbox("Perspective Correction", &m_framebuffer.enable_perspective_correction);
-                }
+                ImGui::SameLine((width() / (f32)3));
+                ImGui::BeginDisabled(!draw_texture || m_camera.projection != Projection::Perspective);
+                ImGui::Checkbox("Perspective Correction", &m_framebuffer.enable_perspective_correction);
+                ImGui::EndDisabled();
 
                 ImGui::Separator();
 
@@ -183,21 +185,25 @@ void UI::update()
             }
 
             if (ImGui::CollapsingHeader("Lighting", ImGuiTreeNodeFlags_DefaultOpen)) {
-                ImGui::Checkbox("Enable Lighting", &m_framebuffer.enable_lighting);
                 ImGui::Separator();
                 ImGui::Text("Point Lights");
                 for (size_t i = 0; i < m_scene.lights.size(); i++) {
                     ImGui::PushID(i);
+                    ImGui::Checkbox("", &m_scene.lights[i].enabled);
+                    ImGui::SameLine();
                     auto color = m_scene.lights[i].color.imvec4();
                     if (ImGui::ColorEdit4("", &color.x, ImGuiColorEditFlags_NoSidePreview | ImGuiColorEditFlags_NoInputs)) {
                         m_scene.lights[i].color = Color(color);
                     }
                     ImGui::SameLine();
-                    ImGui::SliderFloat3("Position", &m_scene.lights[i].position.x, -10.0f, 10.0f);
+                    ImGui::SliderFloat3("Pos", &m_scene.lights[i].position.x, -10.0f, 10.0f);
                     ImGui::PopID();
                 }
                 ImGui::Separator();
-                ImGui::SliderFloat("Ambient Strength", &m_framebuffer.ambient_strength, 0.0f, 1.1f);
+                ImGui::Text("Ambient");
+                ImGui::Checkbox("", &m_framebuffer.enable_ambient_light);
+                ImGui::SameLine();
+                ImGui::SliderFloat("Strength", &m_framebuffer.ambient_strength, 0.0f, 1.1f);
             }
 
             if (ImGui::CollapsingHeader("Information")) {
