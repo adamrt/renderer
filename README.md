@@ -5,3 +5,5 @@ This is a 3D software renderer using the CPU and SDL2 to draw individual pixels.
 To run: `./run.sh`
 
 You can use full screen by changing `FULLSCREEN` to `true` in `src/main.cpp`.
+
+<img src="./screenshot.png" alt="Screenshot" />
