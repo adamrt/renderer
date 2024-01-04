@@ -25,16 +25,15 @@ constexpr i32 FB_SCALE = FULLSCREEN ? 1 : 1;
 constexpr i32 FB_WIDTH = ((WINDOW_WIDTH / 4) * 3) / FB_SCALE;
 constexpr i32 FB_HEIGHT = WINDOW_HEIGHT / FB_SCALE;
 
-constexpr u32 FPS = 60;
 constexpr f32 FOV_Y = K_PI / 3.0f;
 constexpr f32 ZNEAR = 0.01f;
 constexpr f32 ZFAR = 100.0f;
 
 i32 main()
 {
-    Mesh mesh("res/drone.obj");
-    Texture texture("res/drone.png");
-    Model model(mesh, texture);
+    Mesh mesh { "res/drone.obj" };
+    Texture texture { "res/drone.png" };
+    Model model { mesh, texture };
 
     Light light_b { Vec3(2.0f, 0.0f, 0.0f), Color::Blue };
     Light light_r { Vec3(-2.0f, 0.0f, 0.0f), Color::Red };
@@ -45,13 +44,11 @@ i32 main()
     scene.lights.push_back(light_r);
 
     Camera camera { FB_WIDTH, FB_HEIGHT, FOV_Y, ZNEAR, ZFAR };
-    Framebuffer framebuffer(camera, FB_WIDTH, FB_HEIGHT, FB_SCALE);
-    Window window(framebuffer, WINDOW_WIDTH, WINDOW_HEIGHT, FULLSCREEN);
+    Framebuffer framebuffer { camera, FB_WIDTH, FB_HEIGHT, FB_SCALE };
+    Window window { framebuffer, WINDOW_WIDTH, WINDOW_HEIGHT, FULLSCREEN };
     UI ui { window, framebuffer, camera, scene };
-    Engine engine(window, framebuffer, camera, ui, scene);
+    Engine engine { window, framebuffer, camera, ui, scene };
 
-    engine.setup();
-    engine.set_fps(FPS);
     while (engine.is_running()) {
         engine.process_input();
         engine.update();

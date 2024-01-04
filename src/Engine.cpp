@@ -22,10 +22,6 @@ Engine::Engine(Window& window, Framebuffer& fb, Camera& camera, UI& ui, Scene& s
     m_ui.orientation_event = [&]() {
         reset_orientation();
     };
-}
-
-void Engine::setup()
-{
 
     i32 triangles = 0;
     for (auto& model : m_scene.models) {
