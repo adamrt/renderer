@@ -44,26 +44,64 @@ Mesh::Mesh(std::string filename)
             }
             texcoords.push_back(texcoord);
         }
-        // Texture coordinate information
         if (strncmp(line, "f ", 2) == 0) {
-            Face f = {};
-
+            int count = std::count(line, line + strlen(line), '/');
             if (std::strchr(line, '/')) {
-                if (sscanf(line, "f %u/%u/%u %u/%u/%u %u/%u/%u",
-                        &f.positions[0], &f.uvs[0], &f.normals[0],
-                        &f.positions[1], &f.uvs[1], &f.normals[1],
-                        &f.positions[2], &f.uvs[2], &f.normals[2])
-                    != 9) {
-                    std::cerr << "Error reading face" << std::endl;
+                if (count == 6) { // Triangle
+                    Face f = {};
+                    if (sscanf(line, "f %u/%u/%u %u/%u/%u %u/%u/%u",
+                            &f.positions[0], &f.uvs[0], &f.normals[0],
+                            &f.positions[1], &f.uvs[1], &f.normals[1],
+                            &f.positions[2], &f.uvs[2], &f.normals[2])
+                        != 9) {
+                        std::cerr << "Error reading face" << std::endl;
+                    }
+                    faces.push_back(f);
+                } else if (count == 8) { // Quad
+                    u32 p[4], uv[4], n[4];
+                    if (sscanf(line, "f %u/%u/%u %u/%u/%u %u/%u/%u %u/%u/%u",
+                            &p[0], &uv[0], &n[0], &p[1], &uv[1], &n[1],
+                            &p[2], &uv[2], &n[2], &p[3], &uv[3], &n[3])
+                        != 12) {
+                        std::cerr << "Error reading face" << std::endl;
+                    }
+                    // First triangle
+                    Face fa = {};
+                    fa.positions[0] = p[0];
+                    fa.uvs[0] = uv[0];
+                    fa.normals[0] = n[0];
+                    fa.positions[1] = p[1];
+                    fa.uvs[1] = uv[1];
+                    fa.normals[1] = n[1];
+                    fa.positions[2] = p[2];
+                    fa.uvs[2] = uv[2];
+                    fa.normals[2] = n[2];
+                    faces.push_back(fa);
+
+                    // Second triangle
+                    Face fb = {};
+                    fb.positions[0] = p[0];
+                    fb.uvs[0] = uv[0];
+                    fb.normals[0] = n[0];
+                    fb.positions[1] = p[2];
+                    fb.uvs[1] = uv[2];
+                    fb.normals[1] = n[2];
+                    fb.positions[2] = p[3];
+                    fb.uvs[2] = uv[3];
+                    fb.normals[2] = n[3];
+                    faces.push_back(fb);
+                } else {
+                    std::cerr << "Unknown face format: " << count << line << std::endl;
                 }
             } else {
+                Face f = {};
                 if (sscanf(line, "f %u %u %u", &f.positions[0], &f.positions[1], &f.positions[2])
                     != 3) {
                     std::cerr << "Error reading face" << std::endl;
                 }
-            }
 
-            faces.push_back(f);
+                faces.push_back(f);
+            }
         }
     }
 

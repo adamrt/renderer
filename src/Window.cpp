@@ -20,7 +20,7 @@ Window::Window(Framebuffer& framebuffer, i32 width, i32 height, bool fullscreen)
     if (fullscreen)
         flags |= SDL_WINDOW_FULLSCREEN;
 
-    m_window = SDL_CreateWindow("Heretic", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, m_width, m_height, flags);
+    m_window = SDL_CreateWindow("Renderer", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, m_width, m_height, flags);
 
     // Create a SDL renderer.
     // - SDL_RENDERER_PRESENTVSYNC isn't included because it caps the
