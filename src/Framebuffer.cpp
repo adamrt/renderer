@@ -191,11 +191,6 @@ void Framebuffer::draw_triangle_textured(const Triangle& t, const Texture& tex)
                         tex_coord = (at * alpha) + (bt * beta) + (ct * gamma);
                     }
 
-                    // FIXME: This check is required because we aren't doing screen clipping yet.
-                    if (tex_coord.x < 0.0f || tex_coord.x > 1.0f || tex_coord.y < 0.0f || tex_coord.y > 1.0f) {
-                        continue;
-                    }
-
                     i32 tex_x = static_cast<int>(tex_coord.x * tex.width());
                     i32 tex_y = static_cast<int>(tex_coord.y * tex.height());
 
