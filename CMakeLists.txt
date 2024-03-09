@@ -15,7 +15,6 @@ set(CMAKE_BUILD_TYPE RelWithDebInfo)
 
 find_package(SDL2 REQUIRED)
 
-set(IMGUI_PATH  "lib/imgui/")
 file(GLOB IMGUI_SOURCES "lib/imgui/*.h" "lib/imgui/*.cpp")
 add_library(imgui ${IMGUI_SOURCES} lib/imgui/imgui.cpp)
 target_include_directories(imgui PUBLIC ${SDL2_INCLUDE_DIRS})
